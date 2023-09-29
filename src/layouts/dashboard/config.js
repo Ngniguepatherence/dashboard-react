@@ -10,7 +10,7 @@ import { SvgIcon } from '@mui/material';
 
 export const items = [
   {
-    title: 'Overview',
+    title: 'Accueil',
     path: '/',
     icon: (
       <SvgIcon fontSize="small">
@@ -19,7 +19,7 @@ export const items = [
     )
   },
   {
-    title: 'Customers',
+    title: 'Membres',
     path: '/customers',
     icon: (
       <SvgIcon fontSize="small">
@@ -28,7 +28,7 @@ export const items = [
     )
   },
   {
-    title: 'Companies',
+    title: 'Projets',
     path: '/companies',
     icon: (
       <SvgIcon fontSize="small">
@@ -37,7 +37,25 @@ export const items = [
     )
   },
   {
-    title: 'Account',
+    title: 'Finances',
+    path: '/finances',
+    icon: (
+      <SvgIcon fontSize="small">
+        <XCircleIcon />
+      </SvgIcon>
+    )
+  },
+  {
+    title: 'Evenements',
+    path: '/evenements',
+    icon: (
+      <SvgIcon fontSize="small">
+        <XCircleIcon />
+      </SvgIcon>
+    )
+  },
+  {
+    title: 'Compte',
     path: '/account',
     icon: (
       <SvgIcon fontSize="small">
@@ -46,7 +64,7 @@ export const items = [
     )
   },
   {
-    title: 'Settings',
+    title: 'Parametres',
     path: '/settings',
     icon: (
       <SvgIcon fontSize="small">
@@ -55,7 +73,7 @@ export const items = [
     )
   },
   {
-    title: 'Login',
+    title: 'Connexion',
     path: '/auth/login',
     icon: (
       <SvgIcon fontSize="small">
@@ -64,7 +82,7 @@ export const items = [
     )
   },
   {
-    title: 'Register',
+    title: 'Creation de compte',
     path: '/auth/register',
     icon: (
       <SvgIcon fontSize="small">
@@ -73,7 +91,7 @@ export const items = [
     )
   },
   {
-    title: 'Error',
+    title: 'Erreur',
     path: '/404',
     icon: (
       <SvgIcon fontSize="small">

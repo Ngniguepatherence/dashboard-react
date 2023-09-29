@@ -7,7 +7,7 @@ const Page = () => (
   <>
     <Head>
       <title>
-        404 | Devias Kit
+        404 | Association GTR
       </title>
     </Head>
     <Box
@@ -48,15 +48,15 @@ const Page = () => (
             sx={{ mb: 3 }}
             variant="h3"
           >
-            404: The page you are looking for isn’t here
+            404: La page que vous cherchez existe pas!
           </Typography>
           <Typography
             align="center"
             color="text.secondary"
             variant="body1"
           >
-            You either tried some shady route or you came here by mistake.
-            Whichever it is, try using the navigation
+            Vous avez soit mal interprete la route ou alors est arive la par erreur
+            Quelquen soit, esssayez dactualiser ou retournez a la page precedente
           </Typography>
           <Button
             component={NextLink}
@@ -69,7 +69,7 @@ const Page = () => (
             sx={{ mt: 3 }}
             variant="contained"
           >
-            Go back to dashboard
+            Retour au tableau de bord
           </Button>
         </Box>
       </Container>

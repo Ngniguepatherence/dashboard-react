@@ -71,7 +71,7 @@ const Page = () => {
     <>
       <Head>
         <title>
-          Login | Devias Kit
+          Login | Association GTR
         </title>
       </Head>
       <Box
@@ -103,7 +103,7 @@ const Page = () => {
                 color="text.secondary"
                 variant="body2"
               >
-                Don&apos;t have an account?
+                Je n&apos;ai pas encore de compte!
                 &nbsp;
                 <Link
                   component={NextLink}
@@ -111,7 +111,7 @@ const Page = () => {
                   underline="hover"
                   variant="subtitle2"
                 >
-                  Register
+                  s&apos;eroller
                 </Link>
               </Typography>
             </Stack>
@@ -125,8 +125,8 @@ const Page = () => {
                 value="email"
               />
               <Tab
-                label="Phone Number"
-                value="phoneNumber"
+                label="Numero de telephone"
+                value="numero de teleephone"
               />
             </Tabs>
             {method === 'email' && (
@@ -150,7 +150,7 @@ const Page = () => {
                     error={!!(formik.touched.password && formik.errors.password)}
                     fullWidth
                     helperText={formik.touched.password && formik.errors.password}
-                    label="Password"
+                    label="mot de passe"
                     name="password"
                     onBlur={formik.handleBlur}
                     onChange={formik.handleChange}
@@ -159,7 +159,7 @@ const Page = () => {
                   />
                 </Stack>
                 <FormHelperText sx={{ mt: 1 }}>
-                  Optionally you can skip.
+                  Optionellement vous pouvez sauter
                 </FormHelperText>
                 {formik.errors.submit && (
                   <Typography
@@ -177,7 +177,7 @@ const Page = () => {
                   type="submit"
                   variant="contained"
                 >
-                  Continue
+                  Continuer
                 </Button>
                 <Button
                   fullWidth
@@ -185,16 +185,13 @@ const Page = () => {
                   sx={{ mt: 3 }}
                   onClick={handleSkip}
                 >
-                  Skip authentication
+                  Sauter l&apos;authentification
                 </Button>
                 <Alert
                   color="primary"
                   severity="info"
                   sx={{ mt: 3 }}
                 >
-                  <div>
-                    You can use <b>demo@devias.io</b> and password <b>Password123!</b>
-                  </div>
                 </Alert>
               </form>
             )}
@@ -204,10 +201,10 @@ const Page = () => {
                   sx={{ mb: 1 }}
                   variant="h6"
                 >
-                  Not available in the demo
+                  Pas disponible
                 </Typography>
                 <Typography color="text.secondary">
-                  To prevent unnecessary costs we disabled this feature in the demo.
+                  Pour eviter une facturation unitile nous l&apos;avons desactiver.
                 </Typography>
               </div>
             )}

@@ -36,10 +36,10 @@ export const OverviewLatestOrders = (props) => {
             <TableHead>
               <TableRow>
                 <TableCell>
-                  Order
+                  Projet
                 </TableCell>
                 <TableCell>
-                  Customer
+                  Initiateur
                 </TableCell>
                 <TableCell sortDirection="desc">
                   Date
@@ -91,7 +91,7 @@ export const OverviewLatestOrders = (props) => {
           size="small"
           variant="text"
         >
-          View all
+          Tout voir
         </Button>
       </CardActions>
     </Card>

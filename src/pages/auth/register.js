@@ -48,7 +48,7 @@ const Page = () => {
     <>
       <Head>
         <title>
-          Register | Devias Kit
+          Creer un Compte | Association GTR
         </title>
       </Head>
       <Box
@@ -73,13 +73,13 @@ const Page = () => {
               sx={{ mb: 3 }}
             >
               <Typography variant="h4">
-                Register
+                S&apos;enroller
               </Typography>
               <Typography
                 color="text.secondary"
                 variant="body2"
               >
-                Already have an account?
+                Vous avez deja un compte?
                 &nbsp;
                 <Link
                   component={NextLink}
@@ -87,7 +87,7 @@ const Page = () => {
                   underline="hover"
                   variant="subtitle2"
                 >
-                  Log in
+                  se connecter
                 </Link>
               </Typography>
             </Stack>
@@ -100,7 +100,7 @@ const Page = () => {
                   error={!!(formik.touched.name && formik.errors.name)}
                   fullWidth
                   helperText={formik.touched.name && formik.errors.name}
-                  label="Name"
+                  label="Nom"
                   name="name"
                   onBlur={formik.handleBlur}
                   onChange={formik.handleChange}
@@ -121,7 +121,7 @@ const Page = () => {
                   error={!!(formik.touched.password && formik.errors.password)}
                   fullWidth
                   helperText={formik.touched.password && formik.errors.password}
-                  label="Password"
+                  label="mot de passe"
                   name="password"
                   onBlur={formik.handleBlur}
                   onChange={formik.handleChange}
@@ -145,7 +145,7 @@ const Page = () => {
                 type="submit"
                 variant="contained"
               >
-                Continue
+                Continuer
               </Button>
             </form>
           </div>

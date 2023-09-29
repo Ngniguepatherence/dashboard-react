@@ -67,7 +67,7 @@ const data = [
     avatar: '/assets/avatars/avatar-anika-visser.png',
     createdAt: subDays(subHours(now, 11), 2).getTime(),
     email: 'anika.visser@association.org',
-    name: 'Anika',
+    name: 'Adonise',
     phone: '908-691-3242'
   },
   {
@@ -156,7 +156,7 @@ const data = [
   }
 ];
 
-const useCustomers = (page, rowsPerPage) => {
+const useEvents = (page, rowsPerPage) => {
   return useMemo(
     () => {
       return applyPagination(data, page, rowsPerPage);
@@ -165,7 +165,7 @@ const useCustomers = (page, rowsPerPage) => {
   );
 };
 
-const useCustomerIds = (customers) => {
+const useEventIds = (customers) => {
   return useMemo(
     () => {
       return customers.map((customer) => customer.id);
@@ -177,8 +177,8 @@ const useCustomerIds = (customers) => {
 const Page = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const customers = useCustomers(page, rowsPerPage);
-  const customersIds = useCustomerIds(customers);
+  const customers = useEvents(page, rowsPerPage);
+  const customersIds = useEventIds(customers);
   const customersSelection = useSelection(customersIds);
 
   const handlePageChange = useCallback(
@@ -199,7 +199,7 @@ const Page = () => {
     <>
       <Head>
         <title>
-          Membres | Assocition GTR
+          Evenements | Assocition GTR
         </title>
       </Head>
       <Box
@@ -218,7 +218,7 @@ const Page = () => {
             >
               <Stack spacing={1}>
                 <Typography variant="h4">
-                  Membres
+                  Evenements
                 </Typography>
                 <Stack
                   alignItems="center"
@@ -233,7 +233,7 @@ const Page = () => {
                       </SvgIcon>
                     )}
                   >
-                    Importer
+                    Importer listes des evenements
                   </Button>
                   <Button
                     color="inherit"
@@ -243,7 +243,7 @@ const Page = () => {
                       </SvgIcon>
                     )}
                   >
-                    Exporter
+                    Exporter listes evenements
                   </Button>
                 </Stack>
               </Stack>
@@ -256,7 +256,7 @@ const Page = () => {
                   )}
                   variant="contained"
                 >
-                  Ajouter
+                  Ajouter des evenements
                 </Button>
               </div>
             </Stack>

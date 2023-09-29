@@ -121,10 +121,10 @@ export const OverviewSales = (props) => {
               </SvgIcon>
             )}
           >
-            Sync
+            Synchronisation
           </Button>
         )}
-        title="Sales"
+        title="Taux de cotisation"
       />
       <CardContent>
         <Chart
@@ -146,7 +146,7 @@ export const OverviewSales = (props) => {
           )}
           size="small"
         >
-          Overview
+          Apercu
         </Button>
       </CardActions>
     </Card>

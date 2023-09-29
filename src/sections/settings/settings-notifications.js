@@ -95,7 +95,7 @@ export const SettingsNotifications = () => {
         <Divider />
         <CardActions sx={{ justifyContent: 'flex-end' }}>
           <Button variant="contained">
-            Save
+            Sauvegarder
           </Button>
         </CardActions>
       </Card>
