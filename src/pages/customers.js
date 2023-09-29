@@ -218,14 +218,14 @@ const Page = () => {
             >
               <Stack spacing={1}>
                 <Typography variant="h4">
-                  Membres
+                  Membres Pouapeu
                 </Typography>
                 <Stack
                   alignItems="center"
                   direction="row"
                   spacing={1}
                 >
-                  <Button
+                  {/* <Button
                     color="inherit"
                     startIcon={(
                       <SvgIcon fontSize="small">
@@ -234,7 +234,7 @@ const Page = () => {
                     )}
                   >
                     Importer
-                  </Button>
+                  </Button> */}
                   <Button
                     color="inherit"
                     startIcon={(
@@ -248,7 +248,7 @@ const Page = () => {
                 </Stack>
               </Stack>
               <div>
-                <Button
+                {/* <Button
                   startIcon={(
                     <SvgIcon fontSize="small">
                       <PlusIcon />
@@ -257,7 +257,7 @@ const Page = () => {
                   variant="contained"
                 >
                   Ajouter
-                </Button>
+                </Button> */}
               </div>
             </Stack>
             <CustomersSearch />

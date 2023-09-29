@@ -101,7 +101,7 @@ const Page = () => (
           >
             <OverviewTraffic
               chartSeries={[63, 15, 22]}
-              labels={['Desktop', 'Tablet', 'Phone']}
+              labels={['Tontine', 'Meeting', 'Assistance']}
               sx={{ height: '100%' }}
             />
           </Grid>
@@ -115,31 +115,31 @@ const Page = () => (
                 {
                   id: '5ece2c077e39da27658aa8a9',
                   image: '/assets/products/product-1.png',
-                  name: 'Healthcare Erbology',
+                  name: 'Voir bebe de Tagne',
                   updatedAt: subHours(now, 6).getTime()
                 },
                 {
                   id: '5ece2c0d16f70bff2cf86cd8',
                   image: '/assets/products/product-2.png',
-                  name: 'Makeup Lancome Rouge',
+                  name: 'Mariage de Julien et de Julie',
                   updatedAt: subDays(subHours(now, 8), 2).getTime()
                 },
                 {
                   id: 'b393ce1b09c1254c3a92c827',
                   image: '/assets/products/product-5.png',
-                  name: 'Skincare Soja CO',
+                  name: 'Retour au pays',
                   updatedAt: subDays(subHours(now, 1), 1).getTime()
                 },
                 {
                   id: 'a6ede15670da63f49f752c89',
                   image: '/assets/products/product-6.png',
-                  name: 'Makeup Lipstick',
+                  name: 'Fetes de Fin d\'annees',
                   updatedAt: subDays(subHours(now, 3), 3).getTime()
                 },
                 {
                   id: 'bcad5524fe3a2f8f8620ceda',
                   image: '/assets/products/product-7.png',
-                  name: 'Healthcare Ritual',
+                  name: 'Deuil de Martin',
                   updatedAt: subDays(subHours(now, 5), 6).getTime()
                 }
               ]}
@@ -161,7 +161,7 @@ const Page = () => (
                     name: 'Ekaterina Tankova'
                   },
                   createdAt: 1555016400000,
-                  status: 'pending'
+                  status: 'En Cours..'
                 },
                 {
                   id: '9eaa1c7dd4433f413c308ce2',

@@ -17,44 +17,44 @@ const data = [
   {
     id: '5e887ac47eed253091be10cb',
     address: {
-      city: 'Sud',
+      city: 'John',
       country: 'Cameroon',
-      state: 'Bertoua',
+      state: '',
       street: '2849 Fulton Street'
     },
     avatar: '/assets/avatars/avatar-carson-darrin.png',
     createdAt: subDays(subHours(now, 7), 1).getTime(),
-    email: 'carson.darrin@association.org',
+    email: 'Anniversaire du bebe de Johnson',
     name: 'Carson',
-    phone: '+237-676-839-83'
+    phone: 'Yaounde'
   },
   {
     id: '5e887b209c28ac3dd97f6db5',
     address: {
-      city: 'Sud-ouest',
+      city: 'Adrien',
       country: 'Cameroon',
-      state: 'limbe',
+      state: 'July',
       street: '1865  Pleasant Hill Road'
     },
     avatar: '/assets/avatars/avatar-fran-perez.png',
     createdAt: subDays(subHours(now, 1), 2).getTime(),
-    email: 'fran.perez@association.org',
+    email: 'Mariage Officielle de Adrien et de July le 14 Octobre 2023',
     name: 'Fran Perez',
-    phone: '+237-678-338-28'
+    phone: 'Douala Cameroun'
   },
   {
     id: '5e887b7602bdbc4dbb234b27',
     address: {
-      city: 'Nord ouest',
-      country: 'Cameroon',
-      state: 'Bamenda',
+      city: 'Edouard',
+      country: '',
+      state: '',
       street: '4894  Lakeland Park Drive'
     },
     avatar: '/assets/avatars/avatar-jie-yan-song.png',
     createdAt: subDays(subHours(now, 4), 2).getTime(),
-    email: 'jie.yan.song@association.org',
+    email: 'Obseque d\'un membre de la famille',
     name: 'Njie wilfried',
-    phone: '+237-788-998-763'
+    phone: 'Bangou'
   },
   {
     id: '5e86809283e28b96d2d38537',
