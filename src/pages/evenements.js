@@ -7,7 +7,7 @@ import PlusIcon from '@heroicons/react/24/solid/PlusIcon';
 import { Box, Button, Container, Stack, SvgIcon, Typography } from '@mui/material';
 import { useSelection } from 'src/hooks/use-selection';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
-import { CustomersTable } from 'src/sections/customer/customers-table';
+import { EventsTable } from 'src/sections/evenements/events-table';
 import { CustomersSearch } from 'src/sections/customer/customers-search';
 import { applyPagination } from 'src/utils/apply-pagination';
 
@@ -165,21 +165,21 @@ const useEvents = (page, rowsPerPage) => {
   );
 };
 
-const useEventIds = (customers) => {
+const useEventIds = (events) => {
   return useMemo(
     () => {
-      return customers.map((customer) => customer.id);
+      return events.map((event) => event.id);
     },
-    [customers]
+    [events]
   );
 };
 
 const Page = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const customers = useEvents(page, rowsPerPage);
-  const customersIds = useEventIds(customers);
-  const customersSelection = useSelection(customersIds);
+  const events = useEvents(page, rowsPerPage);
+  const eventsIds = useEventIds(events);
+  const eventsSelection = useSelection(eventsIds);
 
   const handlePageChange = useCallback(
     (event, value) => {
@@ -229,16 +229,6 @@ const Page = () => {
                     color="inherit"
                     startIcon={(
                       <SvgIcon fontSize="small">
-                        <ArrowUpOnSquareIcon />
-                      </SvgIcon>
-                    )}
-                  >
-                    Importer listes des evenements
-                  </Button>
-                  <Button
-                    color="inherit"
-                    startIcon={(
-                      <SvgIcon fontSize="small">
                         <ArrowDownOnSquareIcon />
                       </SvgIcon>
                     )}
@@ -261,18 +251,18 @@ const Page = () => {
               </div>
             </Stack>
             <CustomersSearch />
-            <CustomersTable
+            <EventsTable
               count={data.length}
-              items={customers}
-              onDeselectAll={customersSelection.handleDeselectAll}
-              onDeselectOne={customersSelection.handleDeselectOne}
+              items={events}
+              onDeselectAll={eventsSelection.handleDeselectAll}
+              onDeselectOne={eventsSelection.handleDeselectOne}
               onPageChange={handlePageChange}
               onRowsPerPageChange={handleRowsPerPageChange}
-              onSelectAll={customersSelection.handleSelectAll}
-              onSelectOne={customersSelection.handleSelectOne}
+              onSelectAll={eventsSelection.handleSelectAll}
+              onSelectOne={eventsSelection.handleSelectOne}
               page={page}
               rowsPerPage={rowsPerPage}
-              selected={customersSelection.selected}
+              selected={eventsSelection.selected}
             />
           </Stack>
         </Container>
