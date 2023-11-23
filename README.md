@@ -1,48 +1,29 @@
-## [Material Kit - React](https://material-kit-react.devias.io/) [![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social&logo=twitter)](https://twitter.com/intent/tweet?text=%F0%9F%9A%A8Devias%20Freebie%20Alert%20-%20An%20awesome%20ready-to-use%20register%20page%20made%20with%20%23material%20%23react%0D%0Ahttps%3A%2F%2Fdevias.io%20%23createreactapp%20%23devias%20%23material%20%23freebie%20%40devias-io)
+## [Pouapeu - React](https://pouapeu.vercel.com/) 
 
 ![license](https://img.shields.io/badge/license-MIT-blue.svg)
 
 [![Material Kit - React](https://github.com/devias-io/material-kit-react/blob/main/public/assets/thumbnail.png)](https://material-kit-react.devias.io/)
 
-> Free React Admin Dashboard made with [MUI's](https://mui.com/?ref=devias-io)
+> React Admin Dashboard made with [MUI's](https://mui.com/?ref=devias-io)
 > components, [React](https://reactjs.org/?ref=devias-io) and of
 > course [Next.js](https://github.com/vercel/next.js/?ref=devias-io) to boost your app development
 > process!
 
 ## Demo
 
-- [Dashboard Page](https://material-kit-react.devias.io)
-- [Companies Page](https://material-kit-react.devias.io/companies)
-- [Customers Page](https://material-kit-react.devias.io/customers)
-- [Account Page](https://material-kit-react.devias.io/account)
-- [Settings Page](https://material-kit-react.devias.io/settings)
-- [Login Page](https://material-kit-react.devias.io/auth/login)
-- [Register Page](https://material-kit-react.devias.io/auth/register)
+- [Dashboard Page](https://pouapeu.vercel.com/)
+- [Companies Page](https://pouapeu.vercel.com/companies)
+- [Customers Page](https://pouapeu.vercel.com/customers)
+- [Account Page](https://pouapeu.vercel.com/account)
+- [Settings Page](https://pouapeu.vercel.com/settings)
+- [Login Page](https://pouapeu.vercel.com/auth/login)
+- [Register Page](https://pouapeu.vercel.com/auth/register)
 
-## Free Figma Community File
-
-- [Duplicate File](https://www.figma.com/community/file/1039837897183395483/Devias-Dashboard-Design-Library-Kit)
-
-## Upgrade to PRO Version
-
-We also have a pro version of this product which bundles even more pages and components if you want
-to save more time and design efforts :)
-
-| Free Version (this one) | [Material Kit Pro - React](https://mui.com/store/items/devias-kit-pro/)  |
-|-------------------------|:-------------------------------------------------------------------------|
-| **9** Demo Pages        | **40+** demo pages                                                       
-| ✔ Mocked Authentication | ✔ Authentication with **Amplify**, **Auth0**, **JWT** and **Firebase**   
-| -                       | ✔ Dark & light mode                                                      
-| -                       | ✔ CRA version                                                            
-| -                       | ✔ TypeScript version - for Standard Plus and Extended license            
-| -                       | ✔ Design files (sketch & figma) - for Standard Plus and Extended license 
-| -                       | ✔ Complete users flows                                                   
 
 ## Quick start
 
-- [Download from Github](https://github.com/devias-io/material-kit-react/archive/master.zip)
-  or [Download from Devias](https://devias.io/products/material-kit-react) or clone the
-  repo: `git clone https://github.com/devias-io/material-kit-react.git`
+- [Download from Github](https://github.com/Ngniguepatherence/dashboard-react/archive/refs/heads/main.zip)  or clone the
+  repo: `git clone https://github.com/Ngniguepatherence/dashboard-react.git`
 
 - Make sure your Node.js and npm versions are up to date for `React 18`
 
@@ -84,26 +65,24 @@ material-kit-react
 		├── account.js
 		├── companies.js
 		├── customers.js
+		├── evenements.js
+		├── finances.js
 		├── index.js
-		├── products.js
 		└── settings.js
 		└──  auth
 			├── login.js
 			└── register.js
 ```
 
-## Resources
-
-- More freebies like this one: <https://devias.io>
 
 ## Reporting Issues:
 
-- [Github Issues Page](https://github.com/devias-io/react-material-dashboard/issues?ref=devias-io)
+- [Github Issues Page](https://github.com/Ngniguepatherence/dashboard-react/issues?ref=Ngniguepatherence)
 
 ## License
 
-- Licensed under MIT (https://github.com/devias-io/react-material-dashboard/blob/master/LICENSE.md)
+- Licensed under MIT (https://github.com/Ngniguepatherence/dashboard-react/blob/master/LICENSE.md)
 
 ## Contact Us
 
-- Email Us: support@deviasio.zendesk.com
+- Email Us: therence@arescreative.fr
