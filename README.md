@@ -1,8 +1,8 @@
-## [Pouapeu - React](https://pouapeu.vercel.com/) 
+## [Pouapeu - React](https://pouapeu.vercel.app/) 
 
 ![license](https://img.shields.io/badge/license-MIT-blue.svg)
 
-[![Material Kit - React](https://github.com/devias-io/material-kit-react/blob/main/public/assets/thumbnail.png)](https://material-kit-react.devias.io/)
+[![Material Kit - React](https://github.com/Ngniguepatherence/dashboard-react/blob/main/public/assets/thumbnail.png)](https://material-kit-react.devias.io/)
 
 > React Admin Dashboard made with [MUI's](https://mui.com/?ref=devias-io)
 > components, [React](https://reactjs.org/?ref=devias-io) and of
@@ -11,13 +11,13 @@
 
 ## Demo
 
-- [Dashboard Page](https://pouapeu.vercel.com/)
-- [Companies Page](https://pouapeu.vercel.com/companies)
-- [Customers Page](https://pouapeu.vercel.com/customers)
-- [Account Page](https://pouapeu.vercel.com/account)
-- [Settings Page](https://pouapeu.vercel.com/settings)
-- [Login Page](https://pouapeu.vercel.com/auth/login)
-- [Register Page](https://pouapeu.vercel.com/auth/register)
+- [Dashboard Page](https://pouapeu.vercel.app/)
+- [Companies Page](https://pouapeu.vercel.app/companies)
+- [Customers Page](https://pouapeu.vercel.app/customers)
+- [Account Page](https://pouapeu.vercel.app/account)
+- [Settings Page](https://pouapeu.vercel.app/settings)
+- [Login Page](https://pouapeu.vercel.app/auth/login)
+- [Register Page](https://pouapeu.vercel.app/auth/register)
 
 
 ## Quick start
