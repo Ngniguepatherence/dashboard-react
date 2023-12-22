@@ -259,11 +259,13 @@ const Page = () => {
                   )}
                   >
                     <Link
-                      color='inherit'
+                      style={{ color: 'white', textDecoration: 'none' }}
+                      color='white'
                       component={NextLink}
-                      underline="hover"
-                      variant="subtitle2" href="/addmembers">
-                      Ajouter
+                      underline="none"
+                      variant="subtitle2" 
+                      href="/addmembers">
+                      Ajouter un membre
                     </Link>
                 </Button> }
               </div>
