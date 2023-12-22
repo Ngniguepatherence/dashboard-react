@@ -71,7 +71,7 @@ const Page = () => {
     <>
       <Head>
         <title>
-          Login | Association GTR
+          Connection | Pouapeu
         </title>
       </Head>
       <Box
@@ -97,7 +97,7 @@ const Page = () => {
               sx={{ mb: 3 }}
             >
               <Typography variant="h4">
-                Login
+                Connexion
               </Typography>
               <Typography
                 color="text.secondary"
@@ -111,7 +111,7 @@ const Page = () => {
                   underline="hover"
                   variant="subtitle2"
                 >
-                  s&apos;eroller
+                  s&apos;enroller
                 </Link>
               </Typography>
             </Stack>
@@ -123,10 +123,6 @@ const Page = () => {
               <Tab
                 label="Email"
                 value="email"
-              />
-              <Tab
-                label="Numero de telephone"
-                value="numero de teleephone"
               />
             </Tabs>
             {method === 'email' && (
@@ -158,9 +154,6 @@ const Page = () => {
                     value={formik.values.password}
                   />
                 </Stack>
-                <FormHelperText sx={{ mt: 1 }}>
-                  Optionellement vous pouvez sauter
-                </FormHelperText>
                 {formik.errors.submit && (
                   <Typography
                     color="error"
@@ -170,6 +163,16 @@ const Page = () => {
                     {formik.errors.submit}
                   </Typography>
                 )}
+                
+                <Link
+                  component={NextLink}
+                  href=""
+                  underline="hover"
+                  variant="subtitle2"
+                  className='p-4'
+                >
+                  mot de passe oublie
+                </Link>
                 <Button
                   fullWidth
                   size="large"
@@ -178,14 +181,6 @@ const Page = () => {
                   variant="contained"
                 >
                   Continuer
-                </Button>
-                <Button
-                  fullWidth
-                  size="large"
-                  sx={{ mt: 3 }}
-                  onClick={handleSkip}
-                >
-                  Sauter l&apos;authentification
                 </Button>
                 <Alert
                   color="primary"

@@ -199,7 +199,7 @@ const Page = () => {
     <>
       <Head>
         <title>
-          Membres | Assocition GTR
+          Membres | Pouapeu
         </title>
       </Head>
       <Box

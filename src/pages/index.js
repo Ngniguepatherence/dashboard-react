@@ -17,7 +17,7 @@ const Page = () => (
   <>
     <Head>
       <title>
-        Accueil | Association GTR
+        Accueil | Pouapeu
       </title>
     </Head>
     <Box
