@@ -1,8 +1,9 @@
 import { useCallback, useMemo, useState } from 'react';
 import Head from 'next/head';
 import { subDays, subHours } from 'date-fns';
+import Link from 'next/link';
+import NextLink from 'next/link';
 import ArrowDownOnSquareIcon from '@heroicons/react/24/solid/ArrowDownOnSquareIcon';
-import ArrowUpOnSquareIcon from '@heroicons/react/24/solid/ArrowUpOnSquareIcon';
 import PlusIcon from '@heroicons/react/24/solid/PlusIcon';
 import { Box, Button, Container, Stack, SvgIcon, Typography } from '@mui/material';
 import { useSelection } from 'src/hooks/use-selection';
@@ -195,6 +196,7 @@ const Page = () => {
     []
   );
 
+
   return (
     <>
       <Head>
@@ -248,16 +250,22 @@ const Page = () => {
                 </Stack>
               </Stack>
               <div>
-                {/* <Button
+                { <Button
+                  variant="contained" 
                   startIcon={(
-                    <SvgIcon fontSize="small">
+                  <SvgIcon fontSize="small">
                       <PlusIcon />
-                    </SvgIcon>
+                  </SvgIcon>
                   )}
-                  variant="contained"
-                >
-                  Ajouter
-                </Button> */}
+                  >
+                    <Link
+                      color='inherit'
+                      component={NextLink}
+                      underline="hover"
+                      variant="subtitle2" href="/addmembers">
+                      Ajouter
+                    </Link>
+                </Button> }
               </div>
             </Stack>
             <CustomersSearch />
