@@ -95,10 +95,7 @@ export const Layout = (props) => {
             >
               Platform a but non lucratifs de suivie de cotisation et assistance pour les etudiants de la promotion GTR
             </Typography>
-            <img
-              alt=""
-              src="/assets/auth-illustration.svg"
-            />
+            
           </Box>
         </Grid>
       </Grid>

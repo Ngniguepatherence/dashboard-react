@@ -3,12 +3,12 @@ import Head from 'next/head';
 import NextLink from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useFormik } from 'formik';
+import axios from 'axios';
 import * as Yup from 'yup';
 import {
   Alert,
   Box,
   Button,
-  FormHelperText,
   Link,
   Stack,
   Tab,
@@ -16,13 +16,14 @@ import {
   TextField,
   Typography
 } from '@mui/material';
-import { useAuth } from 'src/hooks/use-auth';
+// import { useAuth } from 'src/hooks/use-auth';
 import { Layout as AuthLayout } from 'src/layouts/auth/layout';
 
 const Page = () => {
   const router = useRouter();
-  const auth = useAuth();
+  // const auth = useAuth();
   const [method, setMethod] = useState('email');
+
   const formik = useFormik({
     initialValues: {
       email: 'demo@devias.io',
@@ -32,7 +33,6 @@ const Page = () => {
     validationSchema: Yup.object({
       email: Yup
         .string()
-        .email('Must be a valid email')
         .max(255)
         .required('Email is required'),
       password: Yup
@@ -42,8 +42,18 @@ const Page = () => {
     }),
     onSubmit: async (values, helpers) => {
       try {
-        await auth.signIn(values.email, values.password);
-        router.push('/');
+        const response = await axios.post('http://localhost:5000/api/users/login', {
+          email: values.email,
+          password: values.password,
+        }
+        );
+        if (response.status === 200) {
+          console.log('Connexion réussie !');
+          router.push('/');
+          // Rediriger ou effectuer d'autres actions après la connexion réussie
+        } else {
+          console.error('Échec de la connexion');
+        }
       } catch (err) {
         helpers.setStatus({ success: false });
         helpers.setErrors({ submit: err.message });
@@ -59,13 +69,7 @@ const Page = () => {
     []
   );
 
-  const handleSkip = useCallback(
-    () => {
-      auth.skip();
-      router.push('/');
-    },
-    [auth, router]
-  );
+  
 
   return (
     <>
@@ -76,7 +80,7 @@ const Page = () => {
       </Head>
       <Box
         sx={{
-          backgroundColor: 'background.paper',
+          // backgroundColor: 'background.paper',
           flex: '1 1 auto',
           alignItems: 'center',
           display: 'flex',
@@ -99,36 +103,8 @@ const Page = () => {
               <Typography variant="h4">
                 Login
               </Typography>
-              <Typography
-                color="text.secondary"
-                variant="body2"
-              >
-                Je n&apos;ai pas encore de compte!
-                &nbsp;
-                <Link
-                  component={NextLink}
-                  href="/auth/register"
-                  underline="hover"
-                  variant="subtitle2"
-                >
-                  s&apos;eroller
-                </Link>
-              </Typography>
+              
             </Stack>
-            <Tabs
-              onChange={handleMethodChange}
-              sx={{ mb: 3 }}
-              value={method}
-            >
-              <Tab
-                label="Email"
-                value="email"
-              />
-              <Tab
-                label="Numero de telephone"
-                value="numero de teleephone"
-              />
-            </Tabs>
             {method === 'email' && (
               <form
                 noValidate
@@ -143,14 +119,14 @@ const Page = () => {
                     name="email"
                     onBlur={formik.handleBlur}
                     onChange={formik.handleChange}
-                    type="email"
+                    // type="email" 
                     value={formik.values.email}
                   />
                   <TextField
                     error={!!(formik.touched.password && formik.errors.password)}
                     fullWidth
                     helperText={formik.touched.password && formik.errors.password}
-                    label="mot de passe"
+                    label="Mot de passe"
                     name="password"
                     onBlur={formik.handleBlur}
                     onChange={formik.handleChange}
@@ -158,9 +134,16 @@ const Page = () => {
                     value={formik.values.password}
                   />
                 </Stack>
-                <FormHelperText sx={{ mt: 1 }}>
-                  Optionellement vous pouvez sauter
-                </FormHelperText>
+                <Link
+                  component={NextLink}
+                  href="/auth/reset_password"
+                  underline="hover"
+                  variant="subtitle2"
+                  
+                >
+                   Mot de passe oublie
+                </Link>
+                
                 {formik.errors.submit && (
                   <Typography
                     color="error"
@@ -177,37 +160,36 @@ const Page = () => {
                   type="submit"
                   variant="contained"
                 >
-                  Continuer
+                  Connexion
                 </Button>
+                <Typography
+                color="text.secondary"
+                variant="body2"
+              >
+                J&apos;aimerai faire partie de l&apos;association!
+                &nbsp;
+                <Link
+                  component={NextLink}
+                  href="/auth/register"
+                  underline="hover"
+                  variant="subtitle2"
+                >
+                  s&apos;erroller
+                </Link>
+              </Typography>
                 <Button
                   fullWidth
                   size="large"
                   sx={{ mt: 3 }}
-                  onClick={handleSkip}
+                  
                 >
-                  Sauter l&apos;authentification
+                  Connexion avec Google
                 </Button>
-                <Alert
-                  color="primary"
-                  severity="info"
-                  sx={{ mt: 3 }}
-                >
-                </Alert>
+                
               </form>
+              
             )}
-            {method === 'phoneNumber' && (
-              <div>
-                <Typography
-                  sx={{ mb: 1 }}
-                  variant="h6"
-                >
-                  Pas disponible
-                </Typography>
-                <Typography color="text.secondary">
-                  Pour eviter une facturation unitile nous l&apos;avons desactiver.
-                </Typography>
-              </div>
-            )}
+            
           </div>
         </Box>
       </Box>

@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import Head from 'next/head';
 import { subDays, subHours } from 'date-fns';
 import ArrowDownOnSquareIcon from '@heroicons/react/24/solid/ArrowDownOnSquareIcon';
@@ -10,158 +10,158 @@ import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
 import { CustomersTable } from 'src/sections/customer/customers-table';
 import { CustomersSearch } from 'src/sections/customer/customers-search';
 import { applyPagination } from 'src/utils/apply-pagination';
-
+import TextField from '@mui/material/TextField';
 const now = new Date();
 
-const data = [
-  {
-    id: '5e887ac47eed253091be10cb',
-    address: {
-      city: 'Sud',
-      country: 'Cameroon',
-      state: 'Bertoua',
-      street: '2849 Fulton Street'
-    },
-    avatar: '/assets/avatars/avatar-carson-darrin.png',
-    createdAt: subDays(subHours(now, 7), 1).getTime(),
-    email: 'carson.darrin@association.org',
-    name: 'Carson',
-    phone: '+237-676-839-83'
-  },
-  {
-    id: '5e887b209c28ac3dd97f6db5',
-    address: {
-      city: 'Sud-ouest',
-      country: 'Cameroon',
-      state: 'limbe',
-      street: '1865  Pleasant Hill Road'
-    },
-    avatar: '/assets/avatars/avatar-fran-perez.png',
-    createdAt: subDays(subHours(now, 1), 2).getTime(),
-    email: 'fran.perez@association.org',
-    name: 'Fran Perez',
-    phone: '+237-678-338-28'
-  },
-  {
-    id: '5e887b7602bdbc4dbb234b27',
-    address: {
-      city: 'Nord ouest',
-      country: 'Cameroon',
-      state: 'Bamenda',
-      street: '4894  Lakeland Park Drive'
-    },
-    avatar: '/assets/avatars/avatar-jie-yan-song.png',
-    createdAt: subDays(subHours(now, 4), 2).getTime(),
-    email: 'jie.yan.song@association.org',
-    name: 'Njie wilfried',
-    phone: '+237-788-998-763'
-  },
-  {
-    id: '5e86809283e28b96d2d38537',
-    address: {
-      city: 'Paris',
-      country: 'France',
-      name: 'Anika Visser',
-      street: '4158  Hedge Street'
-    },
-    avatar: '/assets/avatars/avatar-anika-visser.png',
-    createdAt: subDays(subHours(now, 11), 2).getTime(),
-    email: 'anika.visser@association.org',
-    name: 'Anika',
-    phone: '908-691-3242'
-  },
-  {
-    id: '5e86805e2bafd54f66cc95c3',
-    address: {
-      city: 'San Diego',
-      country: 'USA',
-      state: 'California',
-      street: '75247'
-    },
-    avatar: '/assets/avatars/avatar-miron-vitold.png',
-    createdAt: subDays(subHours(now, 7), 3).getTime(),
-    email: 'miron.vitold@association.org',
-    name: 'fingon tralala',
-    phone: '972-333-4106'
-  },
-  {
-    id: '5e887a1fbefd7938eea9c981',
-    address: {
-      city: 'Berkeley',
-      country: 'USA',
-      state: 'California',
-      street: '317 Angus Road'
-    },
-    avatar: '/assets/avatars/avatar-penjani-inyene.png',
-    createdAt: subDays(subHours(now, 5), 4).getTime(),
-    email: 'penjani.inyene@association.org',
-    name: 'elodie',
-    phone: '858-602-3409'
-  },
-  {
-    id: '5e887d0b3d090c1b8f162003',
-    address: {
-      city: 'Carson City',
-      country: 'USA',
-      state: 'Nevada',
-      street: '2188  Armbrester Drive'
-    },
-    avatar: '/assets/avatars/avatar-omar-darboe.png',
-    createdAt: subDays(subHours(now, 15), 4).getTime(),
-    email: 'omar.darobe@association.org',
-    name: 'silas',
-    phone: '415-907-2647'
-  },
-  {
-    id: '5e88792be2d4cfb4bf0971d9',
-    address: {
-      city: 'Douala',
-      country: 'Cameroon',
-      state: 'Nord',
-      street: '1798  Hickory Ridge Drive'
-    },
-    avatar: '/assets/avatars/avatar-siegbert-gottfried.png',
-    createdAt: subDays(subHours(now, 2), 5).getTime(),
-    email: 'siegbert.gottfried@association.org',
-    name: 'Siegbert Gottfried',
-    phone: '+237-678-822-22'
-  },
-  {
-    id: '5e8877da9a65442b11551975',
-    address: {
-      city: 'Douala',
-      country: 'Cameroon',
-      state: 'Yaounde',
-      street: '3934  Wildrose Lane'
-    },
-    avatar: '/assets/avatars/avatar-iulia-albu.png',
-    createdAt: subDays(subHours(now, 8), 6).getTime(),
-    email: 'iulia.albu@association.org',
-    name: 'Iulia Albu',
-    phone: '+237-555-444-33'
-  },
-  {
-    id: '5e8680e60cba5019c5ca6fda',
-    address: {
-      city: 'Douala',
-      country: 'Cameroon',
-      state: 'Littoral',
-      street: 'des avocats'
-    },
-    avatar: '/assets/avatars/avatar-nasimiyu-danai.png',
-    createdAt: subDays(subHours(now, 1), 9).getTime(),
-    email: 'jeanfelix@association.org',
-    name: 'Jean felix',
-    phone: '+237-666-64-56'
-  }
-];
+// const data = [
+//   {
+//     id: '5e887ac47eed253091be10cb',
+//     address: {
+//       city: 'Sud',
+//       country: 'Cameroon',
+//       state: 'Bertoua',
+//       street: '2849 Fulton Street'
+//     },
+//     avatar: '/assets/avatars/avatar-carson-darrin.png',
+//     createdAt: subDays(subHours(now, 7), 1).getTime(),
+//     email: 'carson.darrin@association.org',
+//     name: 'Carson',
+//     phone: '+237-676-839-83'
+//   },
+//   {
+//     id: '5e887b209c28ac3dd97f6db5',
+//     address: {
+//       city: 'Sud-ouest',
+//       country: 'Cameroon',
+//       state: 'limbe',
+//       street: '1865  Pleasant Hill Road'
+//     },
+//     avatar: '/assets/avatars/avatar-fran-perez.png',
+//     createdAt: subDays(subHours(now, 1), 2).getTime(),
+//     email: 'fran.perez@association.org',
+//     name: 'Fran Perez',
+//     phone: '+237-678-338-28'
+//   },
+//   {
+//     id: '5e887b7602bdbc4dbb234b27',
+//     address: {
+//       city: 'Nord ouest',
+//       country: 'Cameroon',
+//       state: 'Bamenda',
+//       street: '4894  Lakeland Park Drive'
+//     },
+//     avatar: '/assets/avatars/avatar-jie-yan-song.png',
+//     createdAt: subDays(subHours(now, 4), 2).getTime(),
+//     email: 'jie.yan.song@association.org',
+//     name: 'Njie wilfried',
+//     phone: '+237-788-998-763'
+//   },
+//   {
+//     id: '5e86809283e28b96d2d38537',
+//     address: {
+//       city: 'Paris',
+//       country: 'France',
+//       name: 'Anika Visser',
+//       street: '4158  Hedge Street'
+//     },
+//     avatar: '/assets/avatars/avatar-anika-visser.png',
+//     createdAt: subDays(subHours(now, 11), 2).getTime(),
+//     email: 'anika.visser@association.org',
+//     name: 'Anika',
+//     phone: '908-691-3242'
+//   },
+//   {
+//     id: '5e86805e2bafd54f66cc95c3',
+//     address: {
+//       city: 'San Diego',
+//       country: 'USA',
+//       state: 'California',
+//       street: '75247'
+//     },
+//     avatar: '/assets/avatars/avatar-miron-vitold.png',
+//     createdAt: subDays(subHours(now, 7), 3).getTime(),
+//     email: 'miron.vitold@association.org',
+//     name: 'fingon tralala',
+//     phone: '972-333-4106'
+//   },
+//   {
+//     id: '5e887a1fbefd7938eea9c981',
+//     address: {
+//       city: 'Berkeley',
+//       country: 'USA',
+//       state: 'California',
+//       street: '317 Angus Road'
+//     },
+//     avatar: '/assets/avatars/avatar-penjani-inyene.png',
+//     createdAt: subDays(subHours(now, 5), 4).getTime(),
+//     email: 'penjani.inyene@association.org',
+//     name: 'elodie',
+//     phone: '858-602-3409'
+//   },
+//   {
+//     id: '5e887d0b3d090c1b8f162003',
+//     address: {
+//       city: 'Carson City',
+//       country: 'USA',
+//       state: 'Nevada',
+//       street: '2188  Armbrester Drive'
+//     },
+//     avatar: '/assets/avatars/avatar-omar-darboe.png',
+//     createdAt: subDays(subHours(now, 15), 4).getTime(),
+//     email: 'omar.darobe@association.org',
+//     name: 'silas',
+//     phone: '415-907-2647'
+//   },
+//   {
+//     id: '5e88792be2d4cfb4bf0971d9',
+//     address: {
+//       city: 'Douala',
+//       country: 'Cameroon',
+//       state: 'Nord',
+//       street: '1798  Hickory Ridge Drive'
+//     },
+//     avatar: '/assets/avatars/avatar-siegbert-gottfried.png',
+//     createdAt: subDays(subHours(now, 2), 5).getTime(),
+//     email: 'siegbert.gottfried@association.org',
+//     name: 'Siegbert Gottfried',
+//     phone: '+237-678-822-22'
+//   },
+//   {
+//     id: '5e8877da9a65442b11551975',
+//     address: {
+//       city: 'Douala',
+//       country: 'Cameroon',
+//       state: 'Yaounde',
+//       street: '3934  Wildrose Lane'
+//     },
+//     avatar: '/assets/avatars/avatar-iulia-albu.png',
+//     createdAt: subDays(subHours(now, 8), 6).getTime(),
+//     email: 'iulia.albu@association.org',
+//     name: 'Iulia Albu',
+//     phone: '+237-555-444-33'
+//   },
+//   {
+//     id: '5e8680e60cba5019c5ca6fda',
+//     address: {
+//       city: 'Douala',
+//       country: 'Cameroon',
+//       state: 'Littoral',
+//       street: 'des avocats'
+//     },
+//     avatar: '/assets/avatars/avatar-nasimiyu-danai.png',
+//     createdAt: subDays(subHours(now, 1), 9).getTime(),
+//     email: 'jeanfelix@association.org',
+//     name: 'Jean felix',
+//     phone: '+237-666-64-56'
+//   }
+// ];
 
-const useCustomers = (page, rowsPerPage) => {
+const useCustomers = (data, page, rowsPerPage) => {
   return useMemo(
     () => {
       return applyPagination(data, page, rowsPerPage);
     },
-    [page, rowsPerPage]
+    [data, page, rowsPerPage]
   );
 };
 
@@ -177,9 +177,40 @@ const useCustomerIds = (customers) => {
 const Page = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const customers = useCustomers(page, rowsPerPage);
+  const [data, setData] = useState([]);
+  const customers = useCustomers(data, page, rowsPerPage);
   const customersIds = useCustomerIds(customers);
   const customersSelection = useSelection(customersIds);
+  const [isAdding, setIsAdding] = useState(false);
+  const [newCustomerData, setNewCustomerData] = useState({
+    id: '',
+    address: {
+      city: '',
+      country: '',
+      state: '',
+      street: '',
+    },
+    avatar: '',
+    createdAt: new Date().toISOString(), // Utilisez la date actuelle comme exemple
+    email: '',
+    name: '',
+    phone: '',
+  });
+
+
+  useEffect(() =>{
+    const fetchData = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/api/profiles');
+        const result = await response.json();
+        setData(result);
+      }
+      catch(error) {
+        console.error('Error fetching data: ',error);
+      }
+    };
+    fetchData();
+  },[]);
 
   const handlePageChange = useCallback(
     (event, value) => {
@@ -194,6 +225,50 @@ const Page = () => {
     },
     []
   );
+
+  const handleAddButtonClick = () => {
+    setIsAdding(true);
+  };
+
+  const handleFormInputChange = (e) => {
+    const { name, value } = e.target;
+    setNewCustomerData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  const handleFormSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      // Envoyez les données du nouveau client au serveur
+      await axios.post('http://localhost:5000/api/profiles', newCustomerData);
+
+      // Réinitialisez les données du nouveau client et désactivez le mode ajout
+      setNewCustomerData({
+        id: '',
+        address: {
+          city: '',
+          country: '',
+          state: '',
+          street: '',
+        },
+        avatar: '',
+        createdAt: new Date().toISOString(),
+        email: '',
+        name: '',
+        phone: '',
+      });
+      setIsAdding(false);
+
+      // Rafraîchissez les données en rechargeant la liste des clients
+      const response = await axios.get('http://localhost:5000/api/profiles');
+      setData(response.data);
+    } catch (error) {
+      console.error('Error adding new customer:', error);
+    }
+  };
 
   return (
     <>
@@ -248,7 +323,7 @@ const Page = () => {
                 </Stack>
               </Stack>
               <div>
-                {/* <Button
+                <Button onClick={handleAddButtonClick}
                   startIcon={(
                     <SvgIcon fontSize="small">
                       <PlusIcon />
@@ -257,8 +332,99 @@ const Page = () => {
                   variant="contained"
                 >
                   Ajouter
-                </Button> */}
+                </Button>
               </div>
+            </Stack>
+            <Stack direction="row" justifyContent="space-between"
+            spacing={4}>
+              {isAdding ? (
+                <form onSubmit={handleFormSubmit}>
+                  <Typography variant="h6">Ajouter un nouveau client</Typography>
+                  <TextField
+            label="ID"
+            variant="outlined"
+            name="id"
+            value={newCustomerData.id}
+            onChange={handleFormInputChange}
+            fullWidth
+            margin="normal"
+          />
+          <TextField
+            label="Nom"
+            variant="outlined"
+            name="name"
+            value={newCustomerData.name}
+            onChange={handleFormInputChange}
+            fullWidth
+            margin="normal"
+          />
+          <TextField
+            label="Email"
+            variant="outlined"
+            name="email"
+            type="email"
+            value={newCustomerData.email}
+            onChange={handleFormInputChange}
+            fullWidth
+            margin="normal"
+          />
+          <TextField
+            label="Téléphone"
+            variant="outlined"
+            name="phone"
+            value={newCustomerData.phone}
+            onChange={handleFormInputChange}
+            fullWidth
+            margin="normal"
+          />
+          <TextField
+            label="Avatar URL"
+            variant="outlined"
+            name="avatar"
+            value={newCustomerData.avatar}
+            onChange={handleFormInputChange}
+            fullWidth
+            margin="normal"
+          />
+          <TextField
+            label="City"
+            variant="outlined"
+            name="address.city"
+            value={newCustomerData.address.city}
+            onChange={handleFormInputChange}
+            fullWidth
+            margin="normal"
+          />
+          <TextField
+            label="Country"
+            variant="outlined"
+            name="address.country"
+            value={newCustomerData.address.country}
+            onChange={handleFormInputChange}
+            fullWidth
+            margin="normal"
+          />
+          <TextField
+            label="State"
+            variant="outlined"
+            name="address.state"
+            value={newCustomerData.address.state}
+            onChange={handleFormInputChange}
+            fullWidth
+            margin="normal"
+          />
+          <TextField
+            label="Street"
+            variant="outlined"
+            name="address.street"
+            value={newCustomerData.address.street}
+            onChange={handleFormInputChange}
+            fullWidth
+            margin="normal"
+          />
+                  <Button type="submit" >Ajouter</Button>
+                </form>
+              ) : (<></>)}
             </Stack>
             <CustomersSearch />
             <CustomersTable
