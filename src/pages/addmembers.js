@@ -5,8 +5,7 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { Box, Button, Link, Stack, TextField, Typography } from '@mui/material';
 import { useAuth } from 'src/hooks/use-auth';
-import { Layout as AuthLayout } from 'src/layouts/auth/layout';
-import axios from 'axios';
+import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
 
 const Page = () => {
   const router = useRouter();
@@ -14,7 +13,10 @@ const Page = () => {
   const formik = useFormik({
     initialValues: {
       email: '',
-      profession: '',
+      name: '',
+      tel: '',
+      adresse: '',
+      password: '',
       submit: null
     },
     validationSchema: Yup.object({
@@ -23,22 +25,26 @@ const Page = () => {
         .email('Must be a valid email')
         .max(255)
         .required('Email is required'),
-      phone: Yup
+      name: Yup
         .string()
         .max(255)
-        .required('Phone Number is required'),
+        .required('Name is required'),
+      password: Yup
+        .string()
+        .max(255)
+        .required('Password is required'),
+      adresse: Yup
+        .string()
+        .max(255)
+        .required('adresse is required'),
+      tel: Yup
+        .string()
+        .max(255)
+        .required('phone number is required')
     }),
     onSubmit: async (values, helpers) => {
       try {
-       
-        if(response.data.success){
-          await auth.signIn(values.email, values.phone);
-          router.push('/');
-        }else {
-          helpers.setStatus({ success: false });
-        helpers.setErrors({ submit: response.data.message });
-        helpers.setSubmitting(false);
-        }
+        await auth.signUp(values.email, values.name, values.adresse, values.tel, values.password);
         router.push('/');
       } catch (err) {
         helpers.setStatus({ success: false });
@@ -52,7 +58,7 @@ const Page = () => {
     <>
       <Head>
         <title>
-          Creer un Compte | Pouapeu
+          Ajouter un membre | Pouapeu
         </title>
       </Head>
       <Box
@@ -77,40 +83,84 @@ const Page = () => {
               sx={{ mb: 3 }}
             >
               <Typography variant="h4">
-                Demande d'adhesion a l'association
+                Ajouter un nouvel membre
               </Typography>
-              
+              <Typography
+                color="text.secondary"
+                variant="body2"
+              >
+                Ajoutez un nouvel membre a l'association?
+              </Typography>
             </Stack>
             <form
               noValidate
               onSubmit={formik.handleSubmit}
             >
               <Stack spacing={3}>
-                
+                <TextField
+                  error={!!(formik.touched.name && formik.errors.name)}
+                  fullWidth
+                  helperText={formik.touched.name && formik.errors.name}
+                  label="Nom"
+                  name="name"
+                  onBlur={formik.handleBlur}
+                  onChange={formik.handleChange}
+                  value={formik.values.name}
+                />
+
                 <TextField
                   error={!!(formik.touched.email && formik.errors.email)}
                   fullWidth
                   helperText={formik.touched.email && formik.errors.email}
-
-                  label="Veuillez laisser votre addresse email"
-
+                  label="Adresse Mail"
                   name="email"
                   onBlur={formik.handleBlur}
                   onChange={formik.handleChange}
                   type="email"
                   value={formik.values.email}
                 />
+
                 <TextField
-                  error={!!(formik.touched.phone && formik.errors.phone)}
+                  error={!!(formik.touched.tel && formik.errors.tel)}
                   fullWidth
-                  helperText={formik.touched.phone && formik.errors.phone}
-                  label="Veuillez laisser votre numero de telephone"
-                  name="phone"
+                  helperText={formik.touched.tel && formik.errors.tel}
+                  label="numero de telephone"
+                  name="tel"
                   onBlur={formik.handleBlur}
                   onChange={formik.handleChange}
-                  value={formik.values.phone}
+                  type="tel"
+                  value={formik.values.tel}
                 />
                 
+                <TextField
+                  error={!!(formik.touched.adresse && formik.errors.adresse)}
+                  fullWidth
+                  helperText={formik.touched.adresse && formik.errors.adresse}
+                  label="adresse"
+                  name="adresse"
+                  onBlur={formik.handleBlur}
+                  onChange={formik.handleChange}
+                  type="adresse"
+                  value={formik.values.adresse}
+                />
+
+                <TextField
+                  error={!!(formik.touched.password && formik.errors.password)}
+                  fullWidth
+                  helperText={formik.touched.password && formik.errors.password}
+                  label="mot de passe"
+                  name="password"
+                  onBlur={formik.handleBlur}
+                  onChange={formik.handleChange}
+                  type="password"
+                  value={formik.values.password}
+                />
+                <Typography
+                    color="text.secondary"
+                    variant="body2"
+                >
+                    Le mot de passe mentionne sera utilise par l'utilisateur pour s'authentifier.
+                </Typography>
               </Stack>
               {formik.errors.submit && (
                 <Typography
@@ -128,25 +178,9 @@ const Page = () => {
                 type="submit"
                 variant="contained"
               >
-                Valider
+                Ajouter
               </Button>
             </form>
-            <Typography
-                color="text.secondary"
-                variant="body2"
-                sx={{ mt: 3 }}
-              >
-                Vous avez deja un compte?
-                &nbsp;
-                <Link
-                  component={NextLink}
-                  href="/auth/login"
-                  underline="hover"
-                  variant="subtitle2"
-                >
-                  se connecter
-                </Link>
-              </Typography>
           </div>
         </Box>
       </Box>
@@ -154,10 +188,11 @@ const Page = () => {
   );
 };
 
+
 Page.getLayout = (page) => (
-  <AuthLayout>
-    {page}
-  </AuthLayout>
+    <DashboardLayout>
+      {page}
+    </DashboardLayout>
 );
 
 export default Page;

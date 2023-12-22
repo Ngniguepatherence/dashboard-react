@@ -199,7 +199,7 @@ const Page = () => {
     <>
       <Head>
         <title>
-          Evenements | Assocition GTR
+          Evenements | Pouapeu
         </title>
       </Head>
       <Box

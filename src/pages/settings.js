@@ -8,7 +8,7 @@ const Page = () => (
   <>
     <Head>
       <title>
-        Parametres | Association GTR
+        Parametres | Pouapeu
       </title>
     </Head>
     <Box
