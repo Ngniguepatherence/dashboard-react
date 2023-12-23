@@ -76,7 +76,7 @@ const Page = () => {
               sx={{ mb: 3 }}
             >
               <Typography variant="h4">
-                Demande d'adhesion a l'association
+                Demande d&apos;adhesion a l&apos;association
               </Typography>
               
             </Stack>

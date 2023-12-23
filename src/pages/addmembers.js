@@ -89,7 +89,7 @@ const Page = () => {
                 color="text.secondary"
                 variant="body2"
               >
-                Ajoutez un nouvel membre a l'association?
+                Ajoutez un nouvel membre a l&apos;association?
               </Typography>
             </Stack>
             <form
