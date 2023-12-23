@@ -4,13 +4,14 @@ import { subDays, subHours } from 'date-fns';
 import ArrowDownOnSquareIcon from '@heroicons/react/24/solid/ArrowDownOnSquareIcon';
 import ArrowUpOnSquareIcon from '@heroicons/react/24/solid/ArrowUpOnSquareIcon';
 import PlusIcon from '@heroicons/react/24/solid/PlusIcon';
-import { Box, Button, Container, Stack, SvgIcon, Typography } from '@mui/material';
+import { Box, Button, Container, Stack, SvgIcon, Typography, Link } from '@mui/material';
 import { useSelection } from 'src/hooks/use-selection';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
 import { CustomersTable } from 'src/sections/customer/customers-table';
 import { CustomersSearch } from 'src/sections/customer/customers-search';
 import { applyPagination } from 'src/utils/apply-pagination';
 import TextField from '@mui/material/TextField';
+import NextLink from 'next/link';
 const now = new Date();
 
 // const data = [
@@ -323,7 +324,14 @@ const Page = () => {
                 </Stack>
               </Stack>
               <div>
-                <Button onClick={handleAddButtonClick}
+              <Link
+                  component={NextLink}
+                  href="/addmembers"
+                  underline="hover"
+                  variant="subtitle2"
+                  
+                >
+                  <Button onClick={handleAddButtonClick}
                   startIcon={(
                     <SvgIcon fontSize="small">
                       <PlusIcon />
@@ -333,99 +341,11 @@ const Page = () => {
                 >
                   Ajouter
                 </Button>
+                </Link>
+                
               </div>
             </Stack>
-            <Stack direction="row" justifyContent="space-between"
-            spacing={4}>
-              {isAdding ? (
-                <form onSubmit={handleFormSubmit}>
-                  <Typography variant="h6">Ajouter un nouveau client</Typography>
-                  <TextField
-            label="ID"
-            variant="outlined"
-            name="id"
-            value={newCustomerData.id}
-            onChange={handleFormInputChange}
-            fullWidth
-            margin="normal"
-          />
-          <TextField
-            label="Nom"
-            variant="outlined"
-            name="name"
-            value={newCustomerData.name}
-            onChange={handleFormInputChange}
-            fullWidth
-            margin="normal"
-          />
-          <TextField
-            label="Email"
-            variant="outlined"
-            name="email"
-            type="email"
-            value={newCustomerData.email}
-            onChange={handleFormInputChange}
-            fullWidth
-            margin="normal"
-          />
-          <TextField
-            label="Téléphone"
-            variant="outlined"
-            name="phone"
-            value={newCustomerData.phone}
-            onChange={handleFormInputChange}
-            fullWidth
-            margin="normal"
-          />
-          <TextField
-            label="Avatar URL"
-            variant="outlined"
-            name="avatar"
-            value={newCustomerData.avatar}
-            onChange={handleFormInputChange}
-            fullWidth
-            margin="normal"
-          />
-          <TextField
-            label="City"
-            variant="outlined"
-            name="address.city"
-            value={newCustomerData.address.city}
-            onChange={handleFormInputChange}
-            fullWidth
-            margin="normal"
-          />
-          <TextField
-            label="Country"
-            variant="outlined"
-            name="address.country"
-            value={newCustomerData.address.country}
-            onChange={handleFormInputChange}
-            fullWidth
-            margin="normal"
-          />
-          <TextField
-            label="State"
-            variant="outlined"
-            name="address.state"
-            value={newCustomerData.address.state}
-            onChange={handleFormInputChange}
-            fullWidth
-            margin="normal"
-          />
-          <TextField
-            label="Street"
-            variant="outlined"
-            name="address.street"
-            value={newCustomerData.address.street}
-            onChange={handleFormInputChange}
-            fullWidth
-            margin="normal"
-          />
-                  <Button type="submit" >Ajouter</Button>
-                </form>
-              ) : (<></>)}
-            </Stack>
+            
             <CustomersSearch />
             <CustomersTable
               count={data.length}
