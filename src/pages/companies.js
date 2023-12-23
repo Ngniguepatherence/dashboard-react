@@ -180,14 +180,15 @@ const Page = () => {
               container
               spacing={3}
             >
-              {projets.map((company) => (
+              {projets.map((company,index) => (
+                
                 <Grid
                   xs={12}
                   md={6}
                   lg={4}
-                  key={company.id}
+                  key={index}
                 >
-                  <CompanyCard company={company} />
+                  <CompanyCard company={company} onClik/>
                 </Grid>
               ))}
             </Grid>

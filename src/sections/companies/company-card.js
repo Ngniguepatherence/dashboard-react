@@ -3,18 +3,30 @@ import ArrowDownOnSquareIcon from '@heroicons/react/24/solid/ArrowDownOnSquareIc
 import ClockIcon from '@heroicons/react/24/solid/ClockIcon';
 import AvatarIcon from '@heroicons/react/24/solid/UserCircleIcon';
 import { Avatar, Box, Card, CardContent, Divider, Stack, SvgIcon, Typography } from '@mui/material';
+import { useRouter } from 'next/router';
 
 export const CompanyCard = (props) => {
-  const { company, show } = props;
+  const { company} = props;
+  const router =  useRouter();
+
+  const handleCardClick = () => {
+    router.push(`/company-details?companyId=${company._id}`);
+    console.log(company.id);
+    console.log(company.title);
+    console.log(company.description);
+    console.log(company.responsable);
+    console.log(company.logo);
+  }
 
   return (
+    
     <Card
-      onClick={show}
       sx={{
         display: 'flex',
         flexDirection: 'column',
         height: '100%'
       }}
+      onClick={handleCardClick}
     >
       <CardContent>
         <Box
