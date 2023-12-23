@@ -1,13 +1,15 @@
 import PropTypes from 'prop-types';
 import ArrowDownOnSquareIcon from '@heroicons/react/24/solid/ArrowDownOnSquareIcon';
 import ClockIcon from '@heroicons/react/24/solid/ClockIcon';
+import AvatarIcon from '@heroicons/react/24/solid/UserCircleIcon';
 import { Avatar, Box, Card, CardContent, Divider, Stack, SvgIcon, Typography } from '@mui/material';
 
 export const CompanyCard = (props) => {
-  const { company } = props;
+  const { company, show } = props;
 
   return (
     <Card
+      onClick={show}
       sx={{
         display: 'flex',
         flexDirection: 'column',
@@ -59,14 +61,14 @@ export const CompanyCard = (props) => {
             color="action"
             fontSize="small"
           >
-            <ClockIcon />
+            <AvatarIcon />
           </SvgIcon>
           <Typography
             color="text.secondary"
             display="inline"
             variant="body2"
           >
-            Mises a jour il y&apos;a de cela 2hr
+            Charger du projet: {company.responsable}
           </Typography>
         </Stack>
       </Stack>
