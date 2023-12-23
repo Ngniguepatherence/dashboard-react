@@ -75,7 +75,7 @@ const Page = () => {
     <>
       <Head>
         <title>
-          Connection | Pouapeu
+          Login | Association GTR
         </title>
       </Head>
       <Box
@@ -101,9 +101,8 @@ const Page = () => {
               sx={{ mb: 3 }}
             >
               <Typography variant="h4">
-                Connexion
+                Login
               </Typography>
-
               
             </Stack>
             {method === 'email' && (
@@ -135,7 +134,6 @@ const Page = () => {
                     value={formik.values.password}
                   />
                 </Stack>
-
                 <Link
                   component={NextLink}
                   href="/auth/reset_password"
@@ -146,7 +144,6 @@ const Page = () => {
                    Mot de passe oublie
                 </Link>
                 
-
                 {formik.errors.submit && (
                   <Typography
                     color="error"
@@ -156,16 +153,6 @@ const Page = () => {
                     {formik.errors.submit}
                   </Typography>
                 )}
-                
-                <Link
-                  component={NextLink}
-                  href=""
-                  underline="hover"
-                  variant="subtitle2"
-                  className='p-4'
-                >
-                  mot de passe oublie
-                </Link>
                 <Button
                   fullWidth
                   size="large"
@@ -175,7 +162,6 @@ const Page = () => {
                 >
                   Connexion
                 </Button>
-
                 <Typography
                 color="text.secondary"
                 variant="body2"
@@ -200,7 +186,6 @@ const Page = () => {
                   Connexion avec Google
                 </Button>
                 
-
               </form>
               
             )}

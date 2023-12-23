@@ -52,7 +52,7 @@ const Page = () => {
     <>
       <Head>
         <title>
-          Creer un Compte | Pouapeu
+          Creer un Compte | Association GTR
         </title>
       </Head>
       <Box
@@ -91,9 +91,7 @@ const Page = () => {
                   error={!!(formik.touched.email && formik.errors.email)}
                   fullWidth
                   helperText={formik.touched.email && formik.errors.email}
-
                   label="Veuillez laisser votre addresse email"
-
                   name="email"
                   onBlur={formik.handleBlur}
                   onChange={formik.handleChange}

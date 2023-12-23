@@ -1,9 +1,8 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import Head from 'next/head';
 import { subDays, subHours } from 'date-fns';
-import Link from 'next/link';
-import NextLink from 'next/link';
 import ArrowDownOnSquareIcon from '@heroicons/react/24/solid/ArrowDownOnSquareIcon';
+import ArrowUpOnSquareIcon from '@heroicons/react/24/solid/ArrowUpOnSquareIcon';
 import PlusIcon from '@heroicons/react/24/solid/PlusIcon';
 import { Box, Button, Container, Stack, SvgIcon, Typography } from '@mui/material';
 import { useSelection } from 'src/hooks/use-selection';
@@ -227,7 +226,6 @@ const Page = () => {
     []
   );
 
-
   const handleAddButtonClick = () => {
     setIsAdding(true);
   };
@@ -272,12 +270,11 @@ const Page = () => {
     }
   };
 
-
   return (
     <>
       <Head>
         <title>
-          Membres | Pouapeu
+          Membres | Assocition GTR
         </title>
       </Head>
       <Box
@@ -326,20 +323,16 @@ const Page = () => {
                 </Stack>
               </Stack>
               <div>
-
                 <Button onClick={handleAddButtonClick}
-
                   startIcon={(
-                  <SvgIcon fontSize="small">
+                    <SvgIcon fontSize="small">
                       <PlusIcon />
-                  </SvgIcon>
+                    </SvgIcon>
                   )}
-
                   variant="contained"
                 >
                   Ajouter
                 </Button>
-
               </div>
             </Stack>
             <Stack direction="row" justifyContent="space-between"

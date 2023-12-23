@@ -77,7 +77,7 @@ export const SideNav = (props) => {
                 color="neutral.400"
                 variant="body2"
               >
-                Pouapeu
+                GTR
               </Typography>
             </div>
             <SvgIcon

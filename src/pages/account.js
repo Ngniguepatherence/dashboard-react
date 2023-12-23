@@ -8,7 +8,7 @@ const Page = () => (
   <>
     <Head>
       <title>
-        Compte | Pouapeus
+        Compte | Asssociation GTR
       </title>
     </Head>
     <Box

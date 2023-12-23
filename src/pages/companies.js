@@ -71,7 +71,7 @@ const Page = () => (
   <>
     <Head>
       <title>
-        Projets | Pouapeu
+        Projets | Association GTR
       </title>
     </Head>
     <Box
