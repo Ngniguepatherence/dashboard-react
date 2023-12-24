@@ -224,7 +224,7 @@ const Page = () => {
           <Grid
             xs={12}
             sm={6}
-            lg={3}
+            lg={4}
           >
             <FinanceFondDeCaisse
               difference={12}
@@ -236,7 +236,7 @@ const Page = () => {
           <Grid
             xs={12}
             sm={6}
-            lg={3}
+            lg={4}
           >
             <FinanceFondSocial
               difference={16}
@@ -248,7 +248,7 @@ const Page = () => {
           <Grid
             xs={12}
             sm={6}
-            lg={3}
+            lg={4}
           >
             <FinanceTotalCotisation
               sx={{ height: '100%' }}
