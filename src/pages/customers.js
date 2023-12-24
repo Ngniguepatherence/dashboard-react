@@ -181,31 +181,23 @@ const Page = () => {
                 </Stack>
               </Stack>
               <div>
-              <Link
-                  component={NextLink}
-                  href="/addmembers"
-                  underline="hover"
-                  variant="subtitle2"
-                  
-                >
                   <Button onClick={handleAddButtonClick}
                   startIcon={(
                     <SvgIcon fontSize="small">
                       <PlusIcon />
                     </SvgIcon>
                   )}
+                  variant="contained"
                   >
                     <Link
                       style={{ color: 'white', textDecoration: 'none' }}
                       color='white'
                       component={NextLink}
                       underline="none"
-                      variant="subtitle2" 
                       href="/addmembers">
                       Ajouter un membre
                     </Link>
                 </Button> 
-                </Link>
               </div>
             </Stack>
             
