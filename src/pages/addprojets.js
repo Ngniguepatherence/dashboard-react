@@ -89,7 +89,7 @@ const Page = () => {
                 color="text.secondary"
                 variant="body2"
               >
-                Ajoutez un nouvel membre a l'association?
+                Ajoutez un nouvel membre a l&apos;association?
               </Typography>
             </Stack>
             <form
@@ -159,7 +159,7 @@ const Page = () => {
                     color="text.secondary"
                     variant="body2"
                 >
-                    Le mot de passe mentionne sera utilise par l'utilisateur pour s'authentifier.
+                    Le mot de passe mentionne sera utilise par l&apos;utilisateur pour s&apos;authentifier.
                 </Typography>
               </Stack>
               {formik.errors.submit && (
