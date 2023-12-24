@@ -190,7 +190,7 @@ const Page = () => {
                 type="submit"
                 variant="contained"
               >
-                Ajouter l'evenement
+                Ajouter l&apos;evenement
               </Button>
             </form>
           </div>
