@@ -4,6 +4,8 @@ import ArrowUpOnSquareIcon from '@heroicons/react/24/solid/ArrowUpOnSquareIcon';
 import ArrowDownOnSquareIcon from '@heroicons/react/24/solid/ArrowDownOnSquareIcon';
 import PlusIcon from '@heroicons/react/24/solid/PlusIcon';
 import { applyPagination } from 'src/utils/apply-pagination';
+import Link from 'next/link';
+import NextLink from 'next/link';
 import { useSelection } from 'src/hooks/use-selection';
 import {
   Box,
@@ -133,7 +135,7 @@ const Page = () => {
             >
               <Stack spacing={1}>
                 <Typography variant="h4">
-                  Projets
+                  Ajouter 
                 </Typography>
                 {/* <Stack
                   alignItems="center"
@@ -163,16 +165,23 @@ const Page = () => {
                 </Stack> */}
               </Stack>
               <div>
-                <Button
+                  <Button
                   startIcon={(
                     <SvgIcon fontSize="small">
                       <PlusIcon />
                     </SvgIcon>
                   )}
                   variant="contained"
-                >
-                  Ajouter
-                </Button>
+                  >
+                    <Link
+                      style={{ color: 'white', textDecoration: 'none' }}
+                      color='white'
+                      component={NextLink}
+                      underline="none"
+                      href="/addprojets">
+                      Ajouter un projet
+                    </Link>
+                </Button> 
               </div>
             </Stack>
             <CompaniesSearch />

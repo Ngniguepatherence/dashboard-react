@@ -12,39 +12,38 @@ const Page = () => {
   const auth = useAuth();
   const formik = useFormik({
     initialValues: {
-      email: '',
-      name: '',
-      tel: '',
-      adresse: '',
-      password: '',
+      title: '',
+      description: '',
+      responsable: '',
+      logo: '',
+      dateinit: '',
       submit: null
     },
     validationSchema: Yup.object({
-      email: Yup
-        .string()
-        .email('Must be a valid email')
-        .max(255)
-        .required('Email is required'),
-      name: Yup
+      title: Yup
         .string()
         .max(255)
-        .required('Name is required'),
-      password: Yup
+        .required('Every project needs a title! required'),
+      descrition: Yup
         .string()
         .max(255)
-        .required('Password is required'),
-      adresse: Yup
+        .required('you must add a description to this project'),
+      responsable: Yup
         .string()
         .max(255)
-        .required('adresse is required'),
-      tel: Yup
+        .required('some one needs to be in charge'),
+      logo: Yup
         .string()
         .max(255)
-        .required('phone number is required')
+        .required('add a logo for this poject'),
+      dateinit: Yup
+        .string()
+        .max(255)
+        .required('the initialization date is needed')
     }),
     onSubmit: async (values, helpers) => {
       try {
-        await auth.signUp(values.email, values.name, values.adresse, values.tel, values.password);
+        await auth.signUp(values.title, values.description, values.responsable, values.logo, values.dateinit);
         router.push('/');
       } catch (err) {
         helpers.setStatus({ success: false });
@@ -58,7 +57,7 @@ const Page = () => {
     <>
       <Head>
         <title>
-          Ajouter un membre | Pouapeu
+          Ajouter membre | Pouapeu
         </title>
       </Head>
       <Box
@@ -83,7 +82,7 @@ const Page = () => {
               sx={{ mb: 3 }}
             >
               <Typography variant="h4">
-                Ajouter un nouvel membre
+                Ajouter un Membre
               </Typography>
               <Typography
                 color="text.secondary"
@@ -98,69 +97,61 @@ const Page = () => {
             >
               <Stack spacing={3}>
                 <TextField
-                  error={!!(formik.touched.name && formik.errors.name)}
+                  error={!!(formik.touched.name && formik.errors.title)}
                   fullWidth
-                  helperText={formik.touched.name && formik.errors.name}
-                  label="Nom"
-                  name="name"
+                  helperText={formik.touched.name && formik.errors.title}
+                  label="title"
+                  name="title"
                   onBlur={formik.handleBlur}
                   onChange={formik.handleChange}
-                  value={formik.values.name}
+                  value={formik.values.title}
                 />
 
                 <TextField
-                  error={!!(formik.touched.email && formik.errors.email)}
+                  error={!!(formik.touched.description && formik.errors.description)}
                   fullWidth
-                  helperText={formik.touched.email && formik.errors.email}
-                  label="Adresse Mail"
-                  name="email"
+                  helperText={formik.touched.description && formik.errors.description}
+                  label="description du projet"
+                  name="description"
                   onBlur={formik.handleBlur}
                   onChange={formik.handleChange}
-                  type="email"
-                  value={formik.values.email}
+                  value={formik.values.description}
                 />
 
                 <TextField
-                  error={!!(formik.touched.tel && formik.errors.tel)}
+                  error={!!(formik.touched.responsable && formik.errors.responsable)}
                   fullWidth
-                  helperText={formik.touched.tel && formik.errors.tel}
-                  label="numero de telephone"
-                  name="tel"
+                  helperText={formik.touched.responsable && formik.errors.responsable}
+                  label="responsable du projet"
+                  name="responsable"
                   onBlur={formik.handleBlur}
                   onChange={formik.handleChange}
-                  type="tel"
-                  value={formik.values.tel}
+                  value={formik.values.responsable}
                 />
                 
                 <TextField
-                  error={!!(formik.touched.adresse && formik.errors.adresse)}
+                  error={!!(formik.touched.logo && formik.errors.logo)}
                   fullWidth
-                  helperText={formik.touched.adresse && formik.errors.adresse}
-                  label="adresse"
-                  name="adresse"
+                  helperText={formik.touched.logo && formik.errors.logo}
+                  label="logo"
+                  name="logo"
                   onBlur={formik.handleBlur}
                   onChange={formik.handleChange}
-                  type="adresse"
-                  value={formik.values.adresse}
+                  type="file"
+                  value={formik.values.logo}
                 />
 
                 <TextField
-                  error={!!(formik.touched.password && formik.errors.password)}
+                  error={!!(formik.touched.date && formik.errors.date)}
                   fullWidth
-                  helperText={formik.touched.password && formik.errors.password}
-                  label="mot de passe"
-                  name="password"
+                  helperText={formik.touched.date && formik.errors.date}
+                  label="date d'initialisation"
+                  name="date"
                   onBlur={formik.handleBlur}
                   onChange={formik.handleChange}
-                  type="password"
-                  value={formik.values.password}
+                  type="date"
+                  value={formik.values.date}
                 />
-                <Typography
-                    color="text.secondary"
-                    variant="body2"
-                >
-                    Le mot de passe mentionne sera utilise par l'utilisateur pour s'authentifier.
-                </Typography>
               </Stack>
               {formik.errors.submit && (
                 <Typography
