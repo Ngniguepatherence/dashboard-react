@@ -1,18 +1,32 @@
 import PropTypes from 'prop-types';
 import ArrowDownOnSquareIcon from '@heroicons/react/24/solid/ArrowDownOnSquareIcon';
 import ClockIcon from '@heroicons/react/24/solid/ClockIcon';
+import AvatarIcon from '@heroicons/react/24/solid/UserCircleIcon';
 import { Avatar, Box, Card, CardContent, Divider, Stack, SvgIcon, Typography } from '@mui/material';
+import { useRouter } from 'next/router';
 
 export const CompanyCard = (props) => {
-  const { company } = props;
+  const { company} = props;
+  const router =  useRouter();
+
+  const handleCardClick = () => {
+    router.push(`/company-details?companyId=${company._id}`);
+    console.log(company.id);
+    console.log(company.title);
+    console.log(company.description);
+    console.log(company.responsable);
+    console.log(company.logo);
+  }
 
   return (
+    
     <Card
       sx={{
         display: 'flex',
         flexDirection: 'column',
         height: '100%'
       }}
+      onClick={handleCardClick}
     >
       <CardContent>
         <Box
@@ -59,14 +73,14 @@ export const CompanyCard = (props) => {
             color="action"
             fontSize="small"
           >
-            <ClockIcon />
+            <AvatarIcon />
           </SvgIcon>
           <Typography
             color="text.secondary"
             display="inline"
             variant="body2"
           >
-            Mises a jour il y&apos;a de cela 2hr
+            Charger du projet: {company.responsable}
           </Typography>
         </Stack>
       </Stack>

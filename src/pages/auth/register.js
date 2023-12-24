@@ -13,8 +13,7 @@ const Page = () => {
   const formik = useFormik({
     initialValues: {
       email: '',
-      name: '',
-      password: '',
+      profession: '',
       submit: null
     },
     validationSchema: Yup.object({
@@ -23,18 +22,22 @@ const Page = () => {
         .email('Must be a valid email')
         .max(255)
         .required('Email is required'),
-      name: Yup
+      phone: Yup
         .string()
         .max(255)
-        .required('Name is required'),
-      password: Yup
-        .string()
-        .max(255)
-        .required('Password is required')
+        .required('Phone Number is required'),
     }),
     onSubmit: async (values, helpers) => {
       try {
-        await auth.signUp(values.email, values.name, values.password);
+       
+        if(response.data.success){
+          await auth.signIn(values.email, values.phone);
+          router.push('/');
+        }else {
+          helpers.setStatus({ success: false });
+        helpers.setErrors({ submit: response.data.message });
+        helpers.setSubmitting(false);
+        }
         router.push('/');
       } catch (err) {
         helpers.setStatus({ success: false });
@@ -48,7 +51,7 @@ const Page = () => {
     <>
       <Head>
         <title>
-          Creer un Compte | Pouapeu
+          Creer un Compte | Association GTR
         </title>
       </Head>
       <Box
@@ -73,44 +76,21 @@ const Page = () => {
               sx={{ mb: 3 }}
             >
               <Typography variant="h4">
-                S&apos;enroller
+                Demande d&apos;adhesion a l&apos;association
               </Typography>
-              <Typography
-                color="text.secondary"
-                variant="body2"
-              >
-                Vous avez deja un compte?
-                &nbsp;
-                <Link
-                  component={NextLink}
-                  href="/auth/login"
-                  underline="hover"
-                  variant="subtitle2"
-                >
-                  se connecter
-                </Link>
-              </Typography>
+              
             </Stack>
             <form
               noValidate
               onSubmit={formik.handleSubmit}
             >
               <Stack spacing={3}>
-                <TextField
-                  error={!!(formik.touched.name && formik.errors.name)}
-                  fullWidth
-                  helperText={formik.touched.name && formik.errors.name}
-                  label="Nom"
-                  name="name"
-                  onBlur={formik.handleBlur}
-                  onChange={formik.handleChange}
-                  value={formik.values.name}
-                />
+                
                 <TextField
                   error={!!(formik.touched.email && formik.errors.email)}
                   fullWidth
                   helperText={formik.touched.email && formik.errors.email}
-                  label="Adresse Mail"
+                  label="Veuillez laisser votre addresse email"
                   name="email"
                   onBlur={formik.handleBlur}
                   onChange={formik.handleChange}
@@ -118,16 +98,16 @@ const Page = () => {
                   value={formik.values.email}
                 />
                 <TextField
-                  error={!!(formik.touched.password && formik.errors.password)}
+                  error={!!(formik.touched.phone && formik.errors.phone)}
                   fullWidth
-                  helperText={formik.touched.password && formik.errors.password}
-                  label="mot de passe"
-                  name="password"
+                  helperText={formik.touched.phone && formik.errors.phone}
+                  label="Veuillez laisser votre numero de telephone"
+                  name="phone"
                   onBlur={formik.handleBlur}
                   onChange={formik.handleChange}
-                  type="password"
-                  value={formik.values.password}
+                  value={formik.values.phone}
                 />
+                
               </Stack>
               {formik.errors.submit && (
                 <Typography
@@ -145,9 +125,25 @@ const Page = () => {
                 type="submit"
                 variant="contained"
               >
-                Continuer
+                Valider
               </Button>
             </form>
+            <Typography
+                color="text.secondary"
+                variant="body2"
+                sx={{ mt: 3 }}
+              >
+                Vous avez deja un compte?
+                &nbsp;
+                <Link
+                  component={NextLink}
+                  href="/auth/login"
+                  underline="hover"
+                  variant="subtitle2"
+                >
+                  se connecter
+                </Link>
+              </Typography>
           </div>
         </Box>
       </Box>

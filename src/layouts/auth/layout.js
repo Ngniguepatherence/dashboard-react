@@ -85,7 +85,7 @@ export const Layout = (props) => {
                 sx={{ color: '#15B79E' }}
                 target="_blank"
               >
-                Pouapeu
+                Association GTR
               </Box>
             </Typography>
             <Typography
@@ -93,12 +93,9 @@ export const Layout = (props) => {
               sx={{ mb: 3 }}
               variant="subtitle1"
             >
-              Platform a but non lucratifs de suivie de cotisation et assistance.
+              Platform a but non lucratifs de suivie de cotisation et assistance pour les etudiants de la promotion GTR
             </Typography>
-            <img
-              alt=""
-              src="/assets/caisse_moderne.png"
-            />
+            
           </Box>
         </Grid>
       </Grid>

@@ -36,11 +36,11 @@ const Page = () => {
       adresse: Yup
         .string()
         .max(255)
-        .required('adresse is required'),
+        .required('Password is required'),
       tel: Yup
         .string()
         .max(255)
-        .required('phone number is required')
+        .required('Password is required')
     }),
     onSubmit: async (values, helpers) => {
       try {
@@ -89,7 +89,7 @@ const Page = () => {
                 color="text.secondary"
                 variant="body2"
               >
-                Ajoutez un nouvel membre a l'association?
+                Ajoutez un nouvel membre a l&apos;association?
               </Typography>
             </Stack>
             <form
@@ -155,12 +155,6 @@ const Page = () => {
                   type="password"
                   value={formik.values.password}
                 />
-                <Typography
-                    color="text.secondary"
-                    variant="body2"
-                >
-                    Le mot de passe mentionne sera utilise par l'utilisateur pour s'authentifier.
-                </Typography>
               </Stack>
               {formik.errors.submit && (
                 <Typography
