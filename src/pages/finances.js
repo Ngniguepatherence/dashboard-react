@@ -204,7 +204,7 @@ const Page = () => {
     <>
       <Head>
         <title>
-          Transactions | Assocition GTR
+          Transactions | Pouapeu
         </title>
       </Head>
       <Box
@@ -230,7 +230,7 @@ const Page = () => {
               difference={12}
               positive
               sx={{ height: '100%' }}
-              value="$24k"
+              value="XAF24k"
             />
           </Grid>
           <Grid
@@ -252,7 +252,7 @@ const Page = () => {
           >
             <FinanceTotalCotisation
               sx={{ height: '100%' }}
-              value="$15k"
+              value="XAF15k"
             />
           </Grid>
           <Grid
