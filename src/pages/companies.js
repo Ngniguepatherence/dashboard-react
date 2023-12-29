@@ -135,7 +135,7 @@ const Page = () => {
             >
               <Stack spacing={1}>
                 <Typography variant="h4">
-                  Ajouter 
+                  Projets
                 </Typography>
                 {/* <Stack
                   alignItems="center"
@@ -172,16 +172,9 @@ const Page = () => {
                     </SvgIcon>
                   )}
                   variant="contained"
-                  >
-                    <Link
-                      style={{ color: 'white', textDecoration: 'none' }}
-                      color='white'
-                      component={NextLink}
-                      underline="none"
-                      href="/addprojets">
-                      Ajouter un projet
-                    </Link>
-                </Button> 
+                >
+                  Ajouter
+                </Button>
               </div>
             </Stack>
             <CompaniesSearch />

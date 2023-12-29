@@ -17,32 +17,46 @@ const Page = () => {
       responsable: '',
       logo: '',
       dateinit: '',
+      title: '',
+      description: '',
+      responsable: '',
+      logo: '',
+      dateinit: '',
       submit: null
     },
     validationSchema: Yup.object({
       title: Yup
         .string()
+        .email('Must be a valid email')
         .max(255)
-        .required('Every project needs a title! required'),
-      descrition: Yup
+        .required('Email is required'),
+      name: Yup
         .string()
         .max(255)
+        .required('you must add a description to this project'),
+      responsable: Yup
         .required('you must add a description to this project'),
       responsable: Yup
         .string()
         .max(255)
         .required('some one needs to be in charge'),
       logo: Yup
+        .required('some one needs to be in charge'),
+      logo: Yup
         .string()
         .max(255)
+        .required('add a logo for this poject'),
+      dateinit: Yup
         .required('add a logo for this poject'),
       dateinit: Yup
         .string()
         .max(255)
         .required('the initialization date is needed')
+        .required('the initialization date is needed')
     }),
     onSubmit: async (values, helpers) => {
       try {
+        await auth.signUp(values.title, values.description, values.responsable, values.logo, values.dateinit);
         await auth.signUp(values.title, values.description, values.responsable, values.logo, values.dateinit);
         router.push('/');
       } catch (err) {
@@ -57,7 +71,7 @@ const Page = () => {
     <>
       <Head>
         <title>
-          Ajouter membre | Pouapeu
+        Ajouter membre | Pouapeu
         </title>
       </Head>
       <Box
@@ -82,7 +96,7 @@ const Page = () => {
               sx={{ mb: 3 }}
             >
               <Typography variant="h4">
-                Ajouter un Membre
+              Ajouter un Membre
               </Typography>
               <Typography
                 color="text.secondary"
@@ -109,27 +123,38 @@ const Page = () => {
 
                 <TextField
                   error={!!(formik.touched.description && formik.errors.description)}
+                  error={!!(formik.touched.description && formik.errors.description)}
                   fullWidth
+                  helperText={formik.touched.description && formik.errors.description}
+                  label="description du projet"
+                  name="description"
                   helperText={formik.touched.description && formik.errors.description}
                   label="description du projet"
                   name="description"
                   onBlur={formik.handleBlur}
                   onChange={formik.handleChange}
+                  type="email"
                   value={formik.values.description}
                 />
 
                 <TextField
                   error={!!(formik.touched.responsable && formik.errors.responsable)}
+                  error={!!(formik.touched.responsable && formik.errors.responsable)}
                   fullWidth
+                  helperText={formik.touched.responsable && formik.errors.responsable}
+                  label="responsable du projet"
+                  name="responsable"
                   helperText={formik.touched.responsable && formik.errors.responsable}
                   label="responsable du projet"
                   name="responsable"
                   onBlur={formik.handleBlur}
                   onChange={formik.handleChange}
+                  type="tel"
                   value={formik.values.responsable}
                 />
                 
                 <TextField
+                  error={!!(formik.touched.logo && formik.errors.logo)}
                   error={!!(formik.touched.logo && formik.errors.logo)}
                   fullWidth
                   helperText={formik.touched.logo && formik.errors.logo}
@@ -139,11 +164,17 @@ const Page = () => {
                   onChange={formik.handleChange}
                   type="file"
                   value={formik.values.logo}
+                  type="file"
+                  value={formik.values.logo}
                 />
 
                 <TextField
                   error={!!(formik.touched.date && formik.errors.date)}
+                  error={!!(formik.touched.date && formik.errors.date)}
                   fullWidth
+                  helperText={formik.touched.date && formik.errors.date}
+                  label="date d'initialisation"
+                  name="date"
                   helperText={formik.touched.date && formik.errors.date}
                   label="date d'initialisation"
                   name="date"
@@ -151,7 +182,10 @@ const Page = () => {
                   onChange={formik.handleChange}
                   type="date"
                   value={formik.values.date}
+                  type="date"
+                  value={formik.values.date}
                 />
+               
               </Stack>
               {formik.errors.submit && (
                 <Typography
