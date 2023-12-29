@@ -1,207 +1,120 @@
-import { useCallback, useMemo, useState } from 'react';
 import Head from 'next/head';
-import { subDays, subHours } from 'date-fns';
-import ArrowDownOnSquareIcon from '@heroicons/react/24/solid/ArrowDownOnSquareIcon';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import ArrowUpOnSquareIcon from '@heroicons/react/24/solid/ArrowUpOnSquareIcon';
+import ArrowDownOnSquareIcon from '@heroicons/react/24/solid/ArrowDownOnSquareIcon';
 import PlusIcon from '@heroicons/react/24/solid/PlusIcon';
-import Link from 'next/link';
-import NextLink from 'next/link';
-import { Box, Button, Container, Stack, SvgIcon, Typography } from '@mui/material';
-import { useSelection } from 'src/hooks/use-selection';
-import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
-import { EventsTable } from 'src/sections/evenements/events-table';
-import { CustomersSearch } from 'src/sections/customer/customers-search';
 import { applyPagination } from 'src/utils/apply-pagination';
+import { useSelection } from 'src/hooks/use-selection';
+import {
+  Box,
+  Button,
+  Container,
+  Pagination,
+  Stack,
+  SvgIcon,
+  Typography,
+  Unstable_Grid2 as Grid
+} from '@mui/material';
+import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
+import { CompanyCard } from 'src/sections/evenement/evenement-card';
+import { CompaniesSearch } from 'src/sections/evenement/evenements-search';
 
-const now = new Date();
-
-const data = [
+const companies = [
   {
-    id: '5e887ac47eed253091be10cb',
-    address: {
-      city: 'John',
-      country: 'Cameroon',
-      state: '',
-      street: '2849 Fulton Street'
-    },
-    avatar: '/assets/avatars/avatar-carson-darrin.png',
-    createdAt: subDays(subHours(now, 7), 1).getTime(),
-    email: 'Anniversaire du bebe de Johnson',
-    name: 'Carson',
-    phone: 'Yaounde'
+    id: '2569ce0d517a7f06d3ea1f24',
+    createdAt: '27/03/2023',
+    description: 'Projet de reforme nationale, file synchronization, a personal cloud.',
+    logo: '/assets/logos/logo-dropbox.png',
+    title: 'stockligne',
+    downloads: '594'
   },
   {
-    id: '5e887b209c28ac3dd97f6db5',
-    address: {
-      city: 'Adrien',
-      country: 'Cameroon',
-      state: 'July',
-      street: '1865  Pleasant Hill Road'
-    },
-    avatar: '/assets/avatars/avatar-fran-perez.png',
-    createdAt: subDays(subHours(now, 1), 2).getTime(),
-    email: 'Mariage Officielle de Adrien et de July le 14 Octobre 2023',
-    name: 'Fran Perez',
-    phone: 'Douala Cameroun'
+    id: 'ed2b900870ceba72d203ec15',
+    createdAt: '31/03/2023',
+    description: 'Medium is an online publishing platform developed by Evan Williams, and launched in August 2012.',
+    logo: '/assets/logos/logo-medium.png',
+    title: 'Application de don de charite',
+    downloads: '625'
   },
   {
-    id: '5e887b7602bdbc4dbb234b27',
-    address: {
-      city: 'Edouard',
-      country: '',
-      state: '',
-      street: '4894  Lakeland Park Drive'
-    },
-    avatar: '/assets/avatars/avatar-jie-yan-song.png',
-    createdAt: subDays(subHours(now, 4), 2).getTime(),
-    email: 'Obseque d\'un membre de la famille',
-    name: 'Njie wilfried',
-    phone: 'Bangou'
+    id: 'a033e38768c82fca90df3db7',
+    createdAt: '03/04/2023',
+    description: 'Slack is a cloud-based set of team collaboration tools and services, founded by Stewart Butterfield.',
+    logo: '/assets/logos/logo-slack.png',
+    title: 'Formation',
+    downloads: '857'
   },
   {
-    id: '5e86809283e28b96d2d38537',
-    address: {
-      city: 'Paris',
-      country: 'France',
-      name: 'Anika Visser',
-      street: '4158  Hedge Street'
-    },
-    avatar: '/assets/avatars/avatar-anika-visser.png',
-    createdAt: subDays(subHours(now, 11), 2).getTime(),
-    email: 'anika.visser@association.org',
-    name: 'Adonise',
-    phone: '908-691-3242'
+    id: '1efecb2bf6a51def9869ab0f',
+    createdAt: '04/04/2023',
+    description: 'Lyft is an on-demand transportation company based in San Francisco, California.',
+    logo: '/assets/logos/logo-lyft.png',
+    title: 'E-commerce',
+    downloads: '406'
   },
   {
-    id: '5e86805e2bafd54f66cc95c3',
-    address: {
-      city: 'San Diego',
-      country: 'USA',
-      state: 'California',
-      street: '75247'
-    },
-    avatar: '/assets/avatars/avatar-miron-vitold.png',
-    createdAt: subDays(subHours(now, 7), 3).getTime(),
-    email: 'miron.vitold@association.org',
-    name: 'fingon tralala',
-    phone: '972-333-4106'
+    id: '1ed68149f65fbc6089b5fd07',
+    createdAt: '04/04/2023',
+    description: 'GitHub is a web-based hosting service for version control of code using Git.',
+    logo: '/assets/logos/logo-github.png',
+    title: 'Importation Chine',
+    downloads: '835'
   },
   {
-    id: '5e887a1fbefd7938eea9c981',
-    address: {
-      city: 'Berkeley',
-      country: 'USA',
-      state: 'California',
-      street: '317 Angus Road'
-    },
-    avatar: '/assets/avatars/avatar-penjani-inyene.png',
-    createdAt: subDays(subHours(now, 5), 4).getTime(),
-    email: 'penjani.inyene@association.org',
-    name: 'elodie',
-    phone: '858-602-3409'
-  },
-  {
-    id: '5e887d0b3d090c1b8f162003',
-    address: {
-      city: 'Carson City',
-      country: 'USA',
-      state: 'Nevada',
-      street: '2188  Armbrester Drive'
-    },
-    avatar: '/assets/avatars/avatar-omar-darboe.png',
-    createdAt: subDays(subHours(now, 15), 4).getTime(),
-    email: 'omar.darobe@association.org',
-    name: 'silas',
-    phone: '415-907-2647'
-  },
-  {
-    id: '5e88792be2d4cfb4bf0971d9',
-    address: {
-      city: 'Douala',
-      country: 'Cameroon',
-      state: 'Nord',
-      street: '1798  Hickory Ridge Drive'
-    },
-    avatar: '/assets/avatars/avatar-siegbert-gottfried.png',
-    createdAt: subDays(subHours(now, 2), 5).getTime(),
-    email: 'siegbert.gottfried@association.org',
-    name: 'Siegbert Gottfried',
-    phone: '+237-678-822-22'
-  },
-  {
-    id: '5e8877da9a65442b11551975',
-    address: {
-      city: 'Douala',
-      country: 'Cameroon',
-      state: 'Yaounde',
-      street: '3934  Wildrose Lane'
-    },
-    avatar: '/assets/avatars/avatar-iulia-albu.png',
-    createdAt: subDays(subHours(now, 8), 6).getTime(),
-    email: 'iulia.albu@association.org',
-    name: 'Iulia Albu',
-    phone: '+237-555-444-33'
-  },
-  {
-    id: '5e8680e60cba5019c5ca6fda',
-    address: {
-      city: 'Douala',
-      country: 'Cameroon',
-      state: 'Littoral',
-      street: 'des avocats'
-    },
-    avatar: '/assets/avatars/avatar-nasimiyu-danai.png',
-    createdAt: subDays(subHours(now, 1), 9).getTime(),
-    email: 'jeanfelix@association.org',
-    name: 'Jean felix',
-    phone: '+237-666-64-56'
+    id: '5dab321376eff6177407e887',
+    createdAt: '04/04/2019',
+    description: 'Squarespace provides software as a service for website building and hosting. Headquartered in NYC.',
+    logo: '/assets/logos/logo-squarespace.png',
+    title: 'Restauration',
+    downloads: '835'
   }
 ];
-
-const useEvents = (page, rowsPerPage) => {
+const useProjet = (data, page, rowsPerPage) => {
   return useMemo(
     () => {
       return applyPagination(data, page, rowsPerPage);
     },
-    [page, rowsPerPage]
+    [data, page, rowsPerPage]
   );
 };
 
-const useEventIds = (events) => {
+const useProjetIds = (customers) => {
   return useMemo(
     () => {
-      return events.map((event) => event.id);
+      return customers.map((customer) => customer.id);
     },
-    [events]
+    [customers]
   );
 };
+
 
 const Page = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const events = useEvents(page, rowsPerPage);
-  const eventsIds = useEventIds(events);
-  const eventsSelection = useSelection(eventsIds);
+  const [data, setData] = useState([]);
+  const projets = useProjet(data, page, rowsPerPage);
+  const projetIds = useProjetIds(projets);
+  const projetSelection = useSelection(projetIds);
 
-  const handlePageChange = useCallback(
-    (event, value) => {
-      setPage(value);
-    },
-    []
-  );
-
-  const handleRowsPerPageChange = useCallback(
-    (event) => {
-      setRowsPerPage(event.target.value);
-    },
-    []
-  );
-
+  useEffect(() =>{
+    const fetchData = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/api/projets');
+        const result = await response.json();
+        setData(result);
+      }
+      catch(error) {
+        console.error('Error fetching data: ',error);
+      }
+    };
+    fetchData();
+  },[]);
   return (
+  
     <>
       <Head>
         <title>
-          Evenements | Assocition GTR
+          Evenements | Pouapeu
         </title>
       </Head>
       <Box
@@ -222,22 +135,7 @@ const Page = () => {
                 <Typography variant="h4">
                   Evenements
                 </Typography>
-                <Stack
-                  alignItems="center"
-                  direction="row"
-                  spacing={1}
-                >
-                  <Button
-                    color="inherit"
-                    startIcon={(
-                      <SvgIcon fontSize="small">
-                        <ArrowDownOnSquareIcon />
-                      </SvgIcon>
-                    )}
-                  >
-                    Exporter listes evenements
-                  </Button>
-                </Stack>
+                
               </Stack>
               <div>
                 <Button
@@ -248,37 +146,44 @@ const Page = () => {
                   )}
                   variant="contained"
                 >
-                  <Link
-                      style={{ color: 'white', textDecoration: 'none' }}
-                      color='white'
-                      component={NextLink}
-                      underline="none"
-                      href="/addevenement">
-                       Ajouter des evenements
-                    </Link>
+                  Ajouter
                 </Button>
               </div>
             </Stack>
-            <CustomersSearch />
-            <EventsTable
-              count={data.length}
-              items={events}
-              onDeselectAll={eventsSelection.handleDeselectAll}
-              onDeselectOne={eventsSelection.handleDeselectOne}
-              onPageChange={handlePageChange}
-              onRowsPerPageChange={handleRowsPerPageChange}
-              onSelectAll={eventsSelection.handleSelectAll}
-              onSelectOne={eventsSelection.handleSelectOne}
-              page={page}
-              rowsPerPage={rowsPerPage}
-              selected={eventsSelection.selected}
-            />
+            <CompaniesSearch />
+            <Grid
+              container
+              spacing={3}
+            >
+              {projets.map((company,index) => (
+                
+                <Grid
+                  xs={12}
+                  md={6}
+                  lg={4}
+                  key={index}
+                >
+                  <CompanyCard company={company} onClik/>
+                </Grid>
+              ))}
+            </Grid>
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'center'
+              }}
+            >
+              <Pagination
+                count={3}
+                size="small"
+              />
+            </Box>
           </Stack>
         </Container>
       </Box>
     </>
   );
-};
+} 
 
 Page.getLayout = (page) => (
   <DashboardLayout>

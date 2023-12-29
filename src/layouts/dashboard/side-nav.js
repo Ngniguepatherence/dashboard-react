@@ -1,4 +1,5 @@
 import NextLink from 'next/link';
+import React from 'react';
 import { usePathname } from 'next/navigation';
 import PropTypes from 'prop-types';
 import ArrowTopRightOnSquareIcon from '@heroicons/react/24/solid/ArrowTopRightOnSquareIcon';
@@ -17,12 +18,18 @@ import { Logo } from 'src/components/logo';
 import { Scrollbar } from 'src/components/scrollbar';
 import { items } from './config';
 import { SideNavItem } from './side-nav-item';
+import { useAuthContext } from '../../contexts/auth-context';
 
 export const SideNav = (props) => {
   const { open, onClose } = props;
   const pathname = usePathname();
   const lgUp = useMediaQuery((theme) => theme.breakpoints.up('lg'));
+  const { user } = useAuthContext();
+  const userRoles = user ? user.role : [];
 
+  const filteredItems = items(userRoles); 
+  console.log(filteredItems);
+  console.log(userRoles);
   const content = (
     <Scrollbar
       sx={{
@@ -106,10 +113,11 @@ export const SideNav = (props) => {
               m: 0
             }}
           >
-            {items.map((item) => {
+            {filteredItems.map((item,index) => {
               const active = item.path ? (pathname === item.path) : false;
-
+              
               return (
+                <React.Fragment key={index}>
                 <SideNavItem
                   active={active}
                   disabled={item.disabled}
@@ -119,6 +127,28 @@ export const SideNav = (props) => {
                   path={item.path}
                   title={item.title}
                 />
+
+                {/* {item.options && active && (
+                    <Stack
+                      component="ul"
+                      spacing={0.5}
+                      sx={{
+                        listStyle: 'none',
+                        p: 0,
+                        m: 0
+                      }}
+                    >
+                      {item.options.map((option) => (
+                        <SideNavItem
+                          key={option.title}
+                          active={pathname === option.path}
+                          path={option.path}
+                          title={option.title}
+                        />
+                      ))}
+                    </Stack>
+                  )} */}
+                </React.Fragment>
               );
             })}
           </Stack>

@@ -1,13 +1,15 @@
 import { useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import PropTypes from 'prop-types';
-import { Box, Divider, MenuItem, MenuList, Popover, Typography } from '@mui/material';
+import { Box, Divider, MenuItem, MenuList, Popover,  Button, Typography } from '@mui/material';
 import { useAuth } from 'src/hooks/use-auth';
+import { useAuthContext } from '../../contexts/auth-context';
 
 export const AccountPopover = (props) => {
   const { anchorEl, onClose, open } = props;
   const router = useRouter();
   const auth = useAuth();
+  const { user } = useAuthContext();
 
   const handleSignOut = useCallback(
     () => {
@@ -42,7 +44,19 @@ export const AccountPopover = (props) => {
           color="text.secondary"
           variant="body2"
         >
-          Jean Felix
+         {user && user.name}
+        </Typography>
+        <Typography variant='body2' color="text.secondary">
+        <Button
+                  fullWidth
+                  size="large"
+                  sx={{ mt: 3 }}
+                  type="submit"
+                  variant="contained"
+                  onClick={handleSignOut}
+                >
+                  Se deconnecter
+                </Button>
         </Typography>
       </Box>
       <Divider />

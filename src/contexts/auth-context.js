@@ -1,14 +1,17 @@
 import { createContext, useContext, useEffect, useReducer, useRef } from 'react';
 import PropTypes from 'prop-types';
+import { jwtDecode } from 'jwt-decode';
+import axios from 'axios';
 
 const HANDLERS = {
   INITIALIZE: 'INITIALIZE',
   SIGN_IN: 'SIGN_IN',
-  SIGN_OUT: 'SIGN_OUT'
+  SIGN_OUT: 'SIGN_OUT',
+  SIGN_IN_WITH_GOOGLE: 'SIGN_IN_WITH_GOOGLE'
 };
 
 const initialState = {
-  isAuthenticated: true,
+  isAuthenticated: false,
   isLoading: true,
   user: null
 };
@@ -40,13 +43,28 @@ const handlers = {
       ...state,
       isAuthenticated: true,
       user
+     
     };
   },
+
+  [HANDLERS.SIGN_IN_WITH_GOOGLE]: (state, action) => {
+    const { user, expirationTime } = action.payload;
+
+    return {
+      ...state,
+      isAuthenticated: true,
+      isLoading: false,
+      user,
+      expirationTime,
+    };
+  },
+
   [HANDLERS.SIGN_OUT]: (state) => {
     return {
       ...state,
       isAuthenticated: false,
       user: null
+     
     };
   }
 };
@@ -70,33 +88,48 @@ export const AuthProvider = (props) => {
       return;
     }
 
-    initialized.current = true;
+    
 
     let isAuthenticated = false;
 
     try {
-      isAuthenticated = window.sessionStorage.getItem('authenticated') === 'true';
+      const token = window.sessionStorage.getItem('authToken');
+
+      if (token) {
+        const decodedToken = jwtDecode(token);
+
+        // Customize this part based on your token structure
+        const user = {
+          id: decodedToken.userId._id,
+          prenom: decodedToken.userId.surname, // Assurez-vous que ces propriétés existent dans votre token
+          name: decodedToken.userId.names,
+          email: decodedToken.userId.email,
+          phone: decodedToken.userId.phone,
+          role: decodedToken.userId.role,
+        };
+        console.log(user);
+        initialized.current = true;
+        isAuthenticated = true;
+       
+
+        dispatch({
+          type: HANDLERS.INITIALIZE,
+          payload: 
+            user
+            
+          
+        });
+      }
+
     } catch (err) {
       console.error(err);
     }
 
-    if (isAuthenticated) {
-      const user = {
-        id: '5e86809283e28b96d2d38537',
-        avatar: '/assets/avatars/avatar-anika-visser.png',
-        name: 'Anika Visser',
-        email: 'anika.visser@devias.io'
-      };
-
-      dispatch({
-        type: HANDLERS.INITIALIZE,
-        payload: user
-      });
-    } else {
+    if (!isAuthenticated) {
       dispatch({
         type: HANDLERS.INITIALIZE
       });
-    }
+    } 
   };
 
   useEffect(
@@ -107,67 +140,113 @@ export const AuthProvider = (props) => {
     []
   );
 
-  const skip = () => {
-    try {
-      window.sessionStorage.setItem('authenticated', 'true');
-    } catch (err) {
-      console.error(err);
-    }
-
-    const user = {
-      id: '5e86809283e28b96d2d38537',
-      avatar: '/assets/avatars/avatar-anika-visser.png',
-      name: 'Anika Visser',
-      email: 'anika.visser@devias.io'
-    };
-
-    dispatch({
-      type: HANDLERS.SIGN_IN,
-      payload: user
-    });
-  };
-
   const signIn = async (email, password) => {
-    if (email !== 'demo@devias.io' || password !== 'Password123!') {
-      throw new Error('Please check your email and password');
-    }
-
     try {
-      window.sessionStorage.setItem('authenticated', 'true');
-    } catch (err) {
-      console.error(err);
+      const response = await axios.post('http://localhost:5000/api/auth/login', {
+          email,
+          password
+        });
+        window.sessionStorage.setItem('authToken', response.data.token);
+
+        const decodedToken = jwtDecode(response.data.token);
+        // const userResponse = await axios.get(`http://localhost:5000/api/users/${decodedToken.userId}`);
+        const user = {
+          id: decodedToken.userId._id,
+          prenom: decodedToken.userId.surname, // Assurez-vous que ces propriétés existent dans votre token
+          name: decodedToken.userId.names,
+          email: decodedToken.userId.email,
+          phone: decodedToken.userId.phone,
+          role: decodedToken.userId.role,
+        };
+        console.log(user);
+        
+        dispatch({
+          type: HANDLERS.SIGN_IN,
+          payload:  user 
+            
+        });
+    }catch(error) {
+      console.error('Erreur lors de la connexion :', error);
+    throw new Error('Veuillez vérifier votre email et mot de passe');
     }
-
-    const user = {
-      id: '5e86809283e28b96d2d38537',
-      avatar: '/assets/avatars/avatar-anika-visser.png',
-      name: 'Anika Visser',
-      email: 'anika.visser@devias.io'
-    };
-
-    dispatch({
-      type: HANDLERS.SIGN_IN,
-      payload: user
-    });
   };
 
   const signUp = async (email, name, password) => {
-    throw new Error('Sign up is not implemented');
+    try {
+      // Envoyer les informations d'inscription au backend
+      const response = await axios.post('http://localhost:5000/auth/google', { email, name, password });
+  
+      // Stocker le token dans le sessionStorage (ou localStorage selon vos besoins)
+      window.sessionStorage.setItem('authToken', response.data.token);
+  
+      // Récupérer les détails de l'utilisateur à partir du token
+      const decodedToken = jwtDecode(response.data.token);
+      
+      const user = {
+        id: decodedToken.userId,
+        avatar: decodedToken.avatar, // Assurez-vous que ces propriétés existent dans votre token
+        name: decodedToken.name,
+        email: decodedToken.email
+      };
+  
+      // Dispatch pour mettre à jour l'état de l'authentification
+      dispatch({
+        type: HANDLERS.SIGN_IN,
+        payload: user
+      });
+    } catch (error) {
+      console.error('Erreur lors de l\'inscription :', error);
+      throw new Error('Échec de l\'inscription');
+    }
   };
+  
+  const signInWithGoogle = async () => {
+    try {
+      const response = await axios.get('http://localhost:5000/auth/google');
 
-  const signOut = () => {
+      const { token } = response.data;
+      const decodedToken = jwtDecode(token);
+
+      const user = {
+        id: decodedToken.userId,
+        name: decodedToken.name,
+        email: decodedToken.email,
+      };
+
+      dispatch({
+        type: HANDLERS.SIGN_IN_WITH_GOOGLE,
+        payload: 
+          user
+      
+      });
+    } catch (error) {
+      console.error('Erreur lors de la connexion avec Google :', error);
+      // throw new Error('Échec de la connexion avec Google');
+    }
+  };
+  
+
+
+
+  const signOut = async () => {
+    await axios.post('http://localhost:5000/api/auth/logout');
+
+    // Nettoyer le token du sessionStorage
+    window.sessionStorage.removeItem('authToken');
+
     dispatch({
       type: HANDLERS.SIGN_OUT
     });
   };
 
+
   return (
     <AuthContext.Provider
       value={{
         ...state,
-        skip,
         signIn,
         signUp,
+        signInWithGoogle,
         signOut
       }}
     >

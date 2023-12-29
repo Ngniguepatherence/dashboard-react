@@ -8,18 +8,24 @@ import {
   Divider,
   Typography
 } from '@mui/material';
+import { useAuthContext } from '../../contexts/auth-context';
 
-const user = {
-  avatar: '/assets/avatars/avatar-anika-visser.png',
-  city: 'Yaounde',
-  country: 'Cameroon',
-  jobTitle: 'PDG CAMCOM',
-  name: 'Tagne August',
-  timezone: 'GTM+1'
-};
 
-export const AccountProfile = () => (
-  <Card>
+// const user = {
+//   avatar: '/assets/avatars/avatar-anika-visser.png',
+//   city: 'Yaounde',
+//   country: 'Cameroon',
+//   jobTitle: 'PDG CAMCOM',
+//   name: 'Tagne August',
+//   timezone: 'GTM+1'
+// };
+// const { users } = useAuthContext();
+
+export const AccountProfile = () => {
+  const {user} = useAuthContext();
+
+    return(
+      <Card>
     <CardContent>
       <Box
         sx={{
@@ -40,7 +46,7 @@ export const AccountProfile = () => (
           gutterBottom
           variant="h5"
         >
-          {user.name}
+          {user.name} {user.prenom}
         </Typography>
         <Typography
           color="text.secondary"
@@ -66,4 +72,6 @@ export const AccountProfile = () => (
       </Button>
     </CardActions>
   </Card>
-);
+    );
+  
+        };

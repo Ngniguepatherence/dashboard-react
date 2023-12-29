@@ -1,10 +1,12 @@
 import { useCallback, useState } from 'react';
 import Head from 'next/head';
 import NextLink from 'next/link';
+// import {signIn, useSession, signOut} from 'next-auth/react'
 import { useRouter } from 'next/navigation';
 import { useFormik } from 'formik';
-import axios from 'axios';
+import { useAuth } from 'src/hooks/use-auth';
 import * as Yup from 'yup';
+
 import {
   Alert,
   Box,
@@ -21,7 +23,8 @@ import { Layout as AuthLayout } from 'src/layouts/auth/layout';
 
 const Page = () => {
   const router = useRouter();
-  // const auth = useAuth();
+
+  const auth = useAuth();
   const [method, setMethod] = useState('email');
 
   const formik = useFormik({
@@ -42,18 +45,11 @@ const Page = () => {
     }),
     onSubmit: async (values, helpers) => {
       try {
-        const response = await axios.post('http://localhost:5000/api/users/login', {
-          email: values.email,
-          password: values.password,
-        }
-        );
-        if (response.status === 200) {
-          console.log('Connexion réussie !');
+        await auth.signIn(values.email, values.password);
           router.push('/');
           // Rediriger ou effectuer d'autres actions après la connexion réussie
-        } else {
-          console.error('Échec de la connexion');
-        }
+        
+         
       } catch (err) {
         helpers.setStatus({ success: false });
         helpers.setErrors({ submit: err.message });
@@ -68,6 +64,9 @@ const Page = () => {
     },
     []
   );
+    const handleSignIn = async() => {
+      await auth.signInWithGoogle()
+    };
 
   
 
@@ -136,7 +135,7 @@ const Page = () => {
                 </Stack>
                 <Link
                   component={NextLink}
-                  href="/auth/reset_password"
+                  href="/auth/forget-password"
                   underline="hover"
                   variant="subtitle2"
                   
@@ -173,18 +172,22 @@ const Page = () => {
                   href="/auth/register"
                   underline="hover"
                   variant="subtitle2"
+                  
                 >
                   s&apos;erroller
                 </Link>
               </Typography>
-                <Button
-                  fullWidth
-                  size="large"
-                  sx={{ mt: 3 }}
-                  
+                
+              <Link
+                  component={NextLink}
+                  href="#"
+                  underline="hover"
+                  variant="subtitle2"
+                  onClick={auth.signInWithGoogle}
                 >
-                  Connexion avec Google
-                </Button>
+                  Connexion avec google
+                </Link>
+                
                 
               </form>
               

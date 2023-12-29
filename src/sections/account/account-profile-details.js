@@ -1,15 +1,19 @@
 import { useCallback, useState } from 'react';
+import NextLink from 'next/link';
 import {
   Box,
   Button,
   Card,
   CardActions,
   CardContent,
+  Link,
   CardHeader,
   Divider,
   TextField,
   Unstable_Grid2 as Grid
 } from '@mui/material';
+import axios from 'axios';
+import { useAuthContext } from '../../contexts/auth-context';
 
 const states = [
   {
@@ -39,6 +43,7 @@ export const AccountProfileDetails = () => {
     state: 'Yaounde',
     country: 'Cameroon'
   });
+  const { user } = useAuthContext();
 
   const handleChange = useCallback(
     (event) => {
@@ -49,6 +54,17 @@ export const AccountProfileDetails = () => {
     },
     []
   );
+
+    const handleSubmitGoogle = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/auth/google');
+        console.log(response);
+        
+      }
+      catch(error) {
+        console.error('Error fetching data: ',error);
+      }
+    };
 
   const handleSubmit = useCallback(
     (event) => {
@@ -85,7 +101,8 @@ export const AccountProfileDetails = () => {
                   name="firstName"
                   onChange={handleChange}
                   required
-                  value={values.firstName}
+                  disabled={true}
+                  value={user.name}
                 />
               </Grid>
               <Grid
@@ -94,11 +111,12 @@ export const AccountProfileDetails = () => {
               >
                 <TextField
                   fullWidth
+                  disabled={true}
                   label="Prenom"
                   name="lastName"
                   onChange={handleChange}
                   required
-                  value={values.lastName}
+                  value={user.prenom}
                 />
               </Grid>
               <Grid
@@ -107,11 +125,12 @@ export const AccountProfileDetails = () => {
               >
                 <TextField
                   fullWidth
+                  disabled={true}
                   label="Adresse Mail"
                   name="email"
                   onChange={handleChange}
                   required
-                  value={values.email}
+                  value={user.email}
                 />
               </Grid>
               <Grid
@@ -124,7 +143,7 @@ export const AccountProfileDetails = () => {
                   name="phone"
                   onChange={handleChange}
                   type="number"
-                  value={values.phone}
+                  value={user.phone}
                 />
               </Grid>
               <Grid
@@ -172,8 +191,17 @@ export const AccountProfileDetails = () => {
           <Button variant="contained">
             Sauvegarder les details
           </Button>
+          
         </CardActions>
+        <CardActions sx={{ justifyContent: 'flex-start' }}>
+          <Button variant="contained" onClick={handleSubmitGoogle}>
+            Ajouter son compte Google
+          </Button>
+          
+        </CardActions>
+        
       </Card>
     </form>
+    
   );
 };

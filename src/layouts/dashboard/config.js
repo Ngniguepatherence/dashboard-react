@@ -8,61 +8,101 @@ import UsersIcon from '@heroicons/react/24/solid/UsersIcon';
 import XCircleIcon from '@heroicons/react/24/solid/XCircleIcon';
 import { SvgIcon } from '@mui/material';
 
-export const items = [
-  {
-    title: 'Accueil',
-    path: '/',
-    icon: (
-      <SvgIcon fontSize="small">
-        <ChartBarIcon />
-      </SvgIcon>
-    )
-  },
-  {
-    title: 'Membres',
-    path: '/customers',
-    icon: (
-      <SvgIcon fontSize="small">
-        <UsersIcon />
-      </SvgIcon>
-    )
-  },
-  {
-    title: 'Projets',
-    path: '/companies',
-    icon: (
-      <SvgIcon fontSize="small">
-        <ShoppingBagIcon />
-      </SvgIcon>
-    )
-  },
-  {
-    title: 'Finances',
-    path: '/finances',
-    icon: (
-      <SvgIcon fontSize="small">
-        <XCircleIcon />
-      </SvgIcon>
-    )
-  },
-  {
-    title: 'Evenements',
-    path: '/evenements',
-    icon: (
-      <SvgIcon fontSize="small">
-        <XCircleIcon />
-      </SvgIcon>
-    )
-  },
-  {
-    title: 'Compte',
-    path: '/account',
-    icon: (
-      <SvgIcon fontSize="small">
-        <UserIcon />
-      </SvgIcon>
-    )
-  },
+
+export const items = (roles) =>{
+  const isUser = roles.includes('user');
+  console.log(isUser);
+
+  return [
+   
+
+  ...isUser ? [
+    {
+      title: 'Accueil',
+      path: '/',
+      icon: (
+        <SvgIcon fontSize="small">
+          <ChartBarIcon />
+        </SvgIcon>
+      )
+    },
+    {
+      title: 'Projets',
+      path: '/companies',
+      icon: (
+        <SvgIcon fontSize="small">
+          <ShoppingBagIcon />
+        </SvgIcon>
+      )
+    },
+    {
+      title: 'Membres',
+      path: '/customerM',
+      icon: (
+        <SvgIcon fontSize="small">
+          <UsersIcon />
+        </SvgIcon>
+      ),
+      visible: roles.includes('user') || roles.includes('admin'),
+    },
+    {
+      title: 'Finances',
+      path: '/finances',
+      icon: (
+        <SvgIcon fontSize="small">
+          <XCircleIcon />
+        </SvgIcon>
+      ),
+      visible: roles.includes('user') || roles.includes('admin'),
+    },
+    {
+      title: 'Evenements',
+      path: '/evenements',
+      icon: (
+        <SvgIcon fontSize="small">
+          <XCircleIcon />
+        </SvgIcon>
+      )
+    },
+    {
+      title: 'Compte',
+      path: '/account',
+      icon: (
+        <SvgIcon fontSize="small">
+          <UserIcon />
+        </SvgIcon>
+      )
+    },
+  ] : [
+    {
+      title: 'Accueil',
+      path: '/',
+      icon: (
+        <SvgIcon fontSize="small">
+          <ChartBarIcon />
+        </SvgIcon>
+      )
+    },
+    {
+      title: 'Projets',
+      path: '/companies',
+      icon: (
+        <SvgIcon fontSize="small">
+          <ShoppingBagIcon />
+        </SvgIcon>
+      )
+    },
+    {
+      title: 'Membres',
+      path: '/customers',
+      icon: (
+        <SvgIcon fontSize="small">
+          <UsersIcon />
+        </SvgIcon>
+      ),
+      visible: roles.includes('user') || roles.includes('admin'),
+    },  
+
   {
     title: 'Parametres',
     path: '/settings',
@@ -99,4 +139,9 @@ export const items = [
       </SvgIcon>
     )
   }
-];
+  ]
+  
+  
+  
+]
+};
