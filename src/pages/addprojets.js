@@ -123,11 +123,7 @@ const Page = () => {
 
                 <TextField
                   error={!!(formik.touched.description && formik.errors.description)}
-                  error={!!(formik.touched.description && formik.errors.description)}
                   fullWidth
-                  helperText={formik.touched.description && formik.errors.description}
-                  label="description du projet"
-                  name="description"
                   helperText={formik.touched.description && formik.errors.description}
                   label="description du projet"
                   name="description"
@@ -139,11 +135,7 @@ const Page = () => {
 
                 <TextField
                   error={!!(formik.touched.responsable && formik.errors.responsable)}
-                  error={!!(formik.touched.responsable && formik.errors.responsable)}
                   fullWidth
-                  helperText={formik.touched.responsable && formik.errors.responsable}
-                  label="responsable du projet"
-                  name="responsable"
                   helperText={formik.touched.responsable && formik.errors.responsable}
                   label="responsable du projet"
                   name="responsable"
@@ -155,7 +147,6 @@ const Page = () => {
                 
                 <TextField
                   error={!!(formik.touched.logo && formik.errors.logo)}
-                  error={!!(formik.touched.logo && formik.errors.logo)}
                   fullWidth
                   helperText={formik.touched.logo && formik.errors.logo}
                   label="logo"
@@ -164,24 +155,16 @@ const Page = () => {
                   onChange={formik.handleChange}
                   type="file"
                   value={formik.values.logo}
-                  type="file"
-                  value={formik.values.logo}
                 />
 
                 <TextField
-                  error={!!(formik.touched.date && formik.errors.date)}
                   error={!!(formik.touched.date && formik.errors.date)}
                   fullWidth
                   helperText={formik.touched.date && formik.errors.date}
                   label="date d'initialisation"
                   name="date"
-                  helperText={formik.touched.date && formik.errors.date}
-                  label="date d'initialisation"
-                  name="date"
                   onBlur={formik.handleBlur}
                   onChange={formik.handleChange}
-                  type="date"
-                  value={formik.values.date}
                   type="date"
                   value={formik.values.date}
                 />

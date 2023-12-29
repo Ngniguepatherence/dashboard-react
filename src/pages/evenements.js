@@ -99,7 +99,7 @@ const Page = () => {
   useEffect(() =>{
     const fetchData = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/projets');
+        const response = await fetch('http://localhost:5000/api/evenements');
         const result = await response.json();
         setData(result);
       }
