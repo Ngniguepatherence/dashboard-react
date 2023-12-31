@@ -17,6 +17,7 @@ const CompanyDetails = () => {
     try {
       const response = await fetch(`http://localhost:5000/api/events/${companyId}`);
       const data = await response.json();
+      console.log(data);
       setCompanyDetails(data);
     } catch (error) {
       console.error('Error fetching company details:', error);

@@ -101,10 +101,12 @@ export const AuthProvider = (props) => {
         // Customize this part based on your token structure
         const user = {
           id: decodedToken.userId._id,
+          avatar: decodedToken.userId.avatar,
           prenom: decodedToken.userId.surname, // Assurez-vous que ces propriétés existent dans votre token
-          name: decodedToken.userId.names,
+          name: decodedToken.userId.name,
           email: decodedToken.userId.email,
           phone: decodedToken.userId.phone,
+          address: decodedToken.userId.address,
           role: decodedToken.userId.role,
         };
         console.log(user);
@@ -170,7 +172,16 @@ export const AuthProvider = (props) => {
     throw new Error('Veuillez vérifier votre email et mot de passe');
     }
   };
-
+const AddMembers = async (avatar, name, surname, email, phone,country, region, ville,rue,password,passwordConfirm,profession,role)=>{
+  try {
+    const response = await axios.post('http://localhost:5000/api/profiles', {avatar, name,surname,email, phone,country,region,ville,rue,password,profession,role,passwordConfirm});
+    console.log(response);
+  }
+  catch(error) {
+    console.error('Erreur lors de l\'inscription :', error);
+      throw new Error('Échec de l\'ajout d\'un nouveau membre');
+  }
+};
   const signUp = async (email, name, password) => {
     try {
       // Envoyer les informations d'inscription au backend

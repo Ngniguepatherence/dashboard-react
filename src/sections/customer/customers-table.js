@@ -16,6 +16,7 @@ import {
 } from '@mui/material';
 import { Scrollbar } from 'src/components/scrollbar';
 import { getInitials } from 'src/utils/get-initials';
+import { yellow } from '@mui/material/colors';
 
 export const CustomersTable = (props) => {
   const {
@@ -68,19 +69,20 @@ export const CustomersTable = (props) => {
                   Num de telephone
                 </TableCell>
                 <TableCell>
-                  connecte
+                  status
                 </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {items.map((customer) => {
+              {items.map((customer,index) => {
                 const isSelected = selected.includes(customer.id);
                 const createdAt = customer.createdAt 
 
                 return (
+                  
                   <TableRow
                     hover
-                    key={customer.id}
+                    key={index}
                     selected={isSelected}
                   >
                     <TableCell padding="checkbox">
@@ -118,8 +120,8 @@ export const CustomersTable = (props) => {
                     <TableCell>
                       {customer.phone}
                     </TableCell>
-                    <TableCell>
-                      {createdAt}
+                    <TableCell color={yellow}>
+                      {customer.role}
                     </TableCell>
                   </TableRow>
                 );

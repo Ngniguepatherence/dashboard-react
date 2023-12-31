@@ -35,23 +35,16 @@ const Page = () => {
         .max(255)
         .required('you must add a description to this project'),
       responsable: Yup
-        .required('you must add a description to this project'),
-      responsable: Yup
         .string()
         .max(255)
-        .required('some one needs to be in charge'),
-      logo: Yup
         .required('some one needs to be in charge'),
       logo: Yup
         .string()
         .max(255)
         .required('add a logo for this poject'),
       dateinit: Yup
-        .required('add a logo for this poject'),
-      dateinit: Yup
         .string()
         .max(255)
-        .required('the initialization date is needed')
         .required('the initialization date is needed')
     }),
     onSubmit: async (values, helpers) => {

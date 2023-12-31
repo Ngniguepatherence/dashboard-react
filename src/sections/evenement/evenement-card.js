@@ -10,12 +10,12 @@ export const CompanyCard = (props) => {
   const router =  useRouter();
 
   const handleCardClick = () => {
-    router.push(`/company-details?companyId=${company._id}`);
+    router.push(`/evenement-details?companyId=${company._id}`);
     console.log(company.id);
     console.log(company.title);
     console.log(company.description);
-    console.log(company.responsable);
-    console.log(company.logo);
+    console.log(company.user);
+    console.log(company.status);
   }
 
   return (
@@ -36,10 +36,15 @@ export const CompanyCard = (props) => {
             pb: 3
           }}
         >
-          <Avatar
-            src={company.logo}
-            variant="square"
-          />
+          
+        <Typography
+          align="center"
+          gutterBottom
+          variant="h5"
+          color='grey'
+        >
+         {company.status}
+        </Typography>
         </Box>
         <Typography
           align="center"
@@ -52,7 +57,7 @@ export const CompanyCard = (props) => {
           align="center"
           variant="body1"
         >
-          {company.description}
+         le {company.date}
         </Typography>
       </CardContent>
       <Box sx={{ flexGrow: 1 }} />
@@ -80,7 +85,7 @@ export const CompanyCard = (props) => {
             display="inline"
             variant="body2"
           >
-            Charger du projet: {company.responsable}
+            Membre: {company.user}
           </Typography>
         </Stack>
       </Stack>

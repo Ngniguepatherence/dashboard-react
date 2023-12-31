@@ -52,7 +52,7 @@ export const AccountProfile = () => {
           color="text.secondary"
           variant="body2"
         >
-          {user.city} {user.country}
+          {user.address.city} {user.address.country}
         </Typography>
         <Typography
           color="text.secondary"

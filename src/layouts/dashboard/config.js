@@ -101,8 +101,25 @@ export const items = (roles) =>{
         </SvgIcon>
       ),
       visible: roles.includes('user') || roles.includes('admin'),
-    },  
-
+    },
+    {
+      title: 'Evenements',
+      path: '/evenements',
+      icon: (
+        <SvgIcon fontSize="small">
+          <XCircleIcon />
+        </SvgIcon>
+      )
+    }, 
+    {
+      title: 'Compte',
+      path: '/account',
+      icon: (
+        <SvgIcon fontSize="small">
+          <UserIcon />
+        </SvgIcon>
+      )
+    },
   {
     title: 'Parametres',
     path: '/settings',

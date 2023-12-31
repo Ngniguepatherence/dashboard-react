@@ -156,7 +156,7 @@ export const AccountProfileDetails = () => {
                   name="country"
                   onChange={handleChange}
                   required
-                  value={values.country}
+                  value={user.address.country}
                 />
               </Grid>
               <Grid
@@ -171,7 +171,7 @@ export const AccountProfileDetails = () => {
                   required
                   select
                   SelectProps={{ native: true }}
-                  value={values.state}
+                  value={user.address.city}
                 >
                   {states.map((option) => (
                     <option
