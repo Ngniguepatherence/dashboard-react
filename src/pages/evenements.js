@@ -15,6 +15,8 @@ import {
   Typography,
   Unstable_Grid2 as Grid
 } from '@mui/material';
+import Link from 'next/link';
+import NextLink from 'next/link';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
 import { CompanyCard } from 'src/sections/evenement/evenement-card';
 import { CompaniesSearch } from 'src/sections/evenement/evenements-search';
@@ -96,7 +98,14 @@ const Page = () => {
                   )}
                   variant="contained"
                 >
-                  Ajouter
+                 <Link
+                      style={{ color: 'white', textDecoration: 'none' }}
+                      color='white'
+                      component={NextLink}
+                      underline="none"
+                      href="/addevenement">
+                      Ajouter
+                    </Link>
                 </Button>
               </div>
             </Stack>

@@ -37,7 +37,7 @@ export const CompanyCard = (props) => {
           }}
         >
           <Avatar
-            src={company.logo}
+            src={`http://localhost:5000/api/files/${company.logo}`}
             variant="square"
           />
         </Box>

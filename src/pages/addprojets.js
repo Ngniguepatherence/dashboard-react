@@ -6,51 +6,67 @@ import * as Yup from 'yup';
 import { Box, Button, Link, Stack, TextField, Typography } from '@mui/material';
 import { useAuth } from 'src/hooks/use-auth';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
+import axios from 'axios';
+import { useState } from 'react';
 
 const Page = () => {
   const router = useRouter();
   const auth = useAuth();
+  const [logo, setLogo] = useState(null);
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    setLogo(file);
+  };
+
+
+  const uploadImageFunction = (File) => {
+    console.log("Image Res::::");
+    const formData = new FormData();
+    formData.append("files", File);
+
+    axios.post(`http://localhost:5000/api/projets/uploadImage`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    })
+      .then(res => {
+        console.log("Image Res::::", res.data.data[0].img);
+        if (res.data.messsage === "Files Uploaded") {
+          setLogo(res.data.data[0]?.img)
+        }
+      })
+      .catch(err => {
+        console.log("Error", err);
+      });
+  }
+
   const formik = useFormik({
     initialValues: {
       title: '',
       description: '',
       responsable: '',
-      logo: '',
-      dateinit: '',
-      title: '',
-      description: '',
-      responsable: '',
-      logo: '',
+      logo: null,
       dateinit: '',
       submit: null
     },
     validationSchema: Yup.object({
       title: Yup
         .string()
-        .email('Must be a valid email')
         .max(255)
-        .required('Email is required'),
-      name: Yup
+        .required('title is required'),
+      description: Yup
         .string()
         .max(255)
         .required('you must add a description to this project'),
-      responsable: Yup
-        .string()
-        .max(255)
-        .required('some one needs to be in charge'),
-      logo: Yup
-        .string()
-        .max(255)
-        .required('add a logo for this poject'),
       dateinit: Yup
-        .string()
-        .max(255)
+        .date()
         .required('the initialization date is needed')
     }),
     onSubmit: async (values, helpers) => {
       try {
-        await auth.signUp(values.title, values.description, values.responsable, values.logo, values.dateinit);
-        await auth.signUp(values.title, values.description, values.responsable, values.logo, values.dateinit);
+        
+        await auth.AddProjet(values.title,values.description, auth.user.id, logo, values.dateinit);
         router.push('/');
       } catch (err) {
         helpers.setStatus({ success: false });
@@ -89,13 +105,13 @@ const Page = () => {
               sx={{ mb: 3 }}
             >
               <Typography variant="h4">
-              Ajouter un Membre
+              Projet
               </Typography>
               <Typography
                 color="text.secondary"
                 variant="body2"
               >
-                Ajoutez un nouvel membre a l&apos;association?
+                Ajoutez un Projet 
               </Typography>
             </Stack>
             <form
@@ -104,9 +120,9 @@ const Page = () => {
             >
               <Stack spacing={3}>
                 <TextField
-                  error={!!(formik.touched.name && formik.errors.title)}
+                  error={!!(formik.touched.title && formik.errors.title)}
                   fullWidth
-                  helperText={formik.touched.name && formik.errors.title}
+                  helperText={formik.touched.title && formik.errors.title}
                   label="title"
                   name="title"
                   onBlur={formik.handleBlur}
@@ -122,21 +138,11 @@ const Page = () => {
                   name="description"
                   onBlur={formik.handleBlur}
                   onChange={formik.handleChange}
-                  type="email"
+                  type="text"
                   value={formik.values.description}
                 />
 
-                <TextField
-                  error={!!(formik.touched.responsable && formik.errors.responsable)}
-                  fullWidth
-                  helperText={formik.touched.responsable && formik.errors.responsable}
-                  label="responsable du projet"
-                  name="responsable"
-                  onBlur={formik.handleBlur}
-                  onChange={formik.handleChange}
-                  type="tel"
-                  value={formik.values.responsable}
-                />
+               
                 
                 <TextField
                   error={!!(formik.touched.logo && formik.errors.logo)}
@@ -145,21 +151,24 @@ const Page = () => {
                   label="logo"
                   name="logo"
                   onBlur={formik.handleBlur}
-                  onChange={formik.handleChange}
+                  onChange={(e) => {
+                    uploadImageFunction(e.target.files[0])
+                  }}
                   type="file"
                   value={formik.values.logo}
+                  inputProps={{ accept: 'image/*' }}
                 />
 
                 <TextField
-                  error={!!(formik.touched.date && formik.errors.date)}
+                  error={!!(formik.touched.dateinit && formik.errors.dateinit)}
                   fullWidth
-                  helperText={formik.touched.date && formik.errors.date}
-                  label="date d'initialisation"
-                  name="date"
+                  helperText={formik.touched.dateinit && formik.errors.dateinit}
+                  // label="date d'initialisation"
+                  name="dateinit"
                   onBlur={formik.handleBlur}
                   onChange={formik.handleChange}
                   type="date"
-                  value={formik.values.date}
+                  value={formik.values.dateinit}
                 />
                
               </Stack>

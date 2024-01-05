@@ -14,44 +14,26 @@ const Page = () => {
     initialValues: {
       titre: '',
       description: '',
-      concerne: '',
-      adresse: '',
       date: '',
-      duree: '',
-      status: '',
       submit: null
     },
     validationSchema: Yup.object({
       titre: Yup
         .string()
-        .email('Must be a valid email')
         .max(255)
         .required('event title is required'),
       description: Yup
         .string()
         .max(255)
         .required('event description is required'),
-      concerne: Yup
-        .string()
-        .max(255)
-        .required('event hoster(s) is required'),
-      adresse: Yup
-        .string()
-        .max(255)
-        .required('event addresse is required'),
       date: Yup
         .date()
-        .max(255)
         .required('event date is required'),
-      duree: Yup
-        .date()
-        .max(255)
-        .required('event duration is required')
     }),
     onSubmit: async (values, helpers) => {
       try {
-        await auth.signUp(values.titre, values.description, values.concerne, values.adresse, values.date, values.duree);
-        router.push('/');
+        await auth.AddEvent(values.titre, values.description, values.date, auth.user.id);
+        router.push('/evenements');
       } catch (err) {
         helpers.setStatus({ success: false });
         helpers.setErrors({ submit: err.message });
@@ -122,33 +104,10 @@ const Page = () => {
                   name="description"
                   onBlur={formik.handleBlur}
                   onChange={formik.handleChange}
-                  type="description"
+                  type="textaria"
                   value={formik.values.description}
                 />
-
-                <TextField
-                  error={!!(formik.touched.concerne && formik.errors.concerne)}
-                  fullWidth
-                  helperText={formik.touched.concerne && formik.errors.concerne}
-                  label="membres concerne"
-                  name="concerne"
-                  onBlur={formik.handleBlur}
-                  onChange={formik.handleChange}
-                  type="concerne"
-                  value={formik.values.concerne}
-                />
                 
-                <TextField
-                  error={!!(formik.touched.adresse && formik.errors.adresse)}
-                  fullWidth
-                  helperText={formik.touched.adresse && formik.errors.adresse}
-                  label="adresse"
-                  name="adresse"
-                  onBlur={formik.handleBlur}
-                  onChange={formik.handleChange}
-                  type="adresse"
-                  value={formik.values.adresse}
-                />
 
                 <TextField
                   error={!!(formik.touched.date && formik.errors.date)}
@@ -162,17 +121,6 @@ const Page = () => {
                   value={formik.values.date}
                 />
 
-                <TextField
-                  error={!!(formik.touched.duree && formik.errors.duree)}
-                  fullWidth
-                  helperText={formik.touched.duree && formik.errors.duree}
-                  label="duree"
-                  name="duree"
-                  onBlur={formik.handleBlur}
-                  onChange={formik.handleChange}
-                  type="duree"
-                  value={formik.values.duree}
-                />
               </Stack>
               {formik.errors.submit && (
                 <Typography

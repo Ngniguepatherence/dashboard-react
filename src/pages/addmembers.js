@@ -14,6 +14,7 @@ import {
   Delete as DeleteIcon,
 } from "@mui/icons-material";
 import { styled } from "@mui/system";
+import axios from 'axios';
 
 const states = [
   {
@@ -77,42 +78,14 @@ const BigAvatar = styled(Avatar)`
 const Page = () => {
   const router = useRouter();
   const auth = useAuth();
-   const [image, _setImage] = useState(null);
-  const inputFileRef = createRef(null);
-  const cleanup = () => {
-    URL.revokeObjectURL(image);
-    inputFileRef.current.value = null;
-  };
+  const [image, _setImage] = useState(null);
+  const [logo, setLogo] = useState(null);
 
-  const setImage = (newImage) => {
-    if (image) {
-      cleanup();
-    }
-    _setImage(newImage);
-  };
-
-  const handleOnChange = (event) => {
-    const newImage = event.target?.files?.[0];
-    console.log(newImage);
-    if (newImage) {
-      setImage(URL.createObjectURL(newImage));
-      formik.setFieldValue("Avatar", newImage);
-    }
-  };
- 
-
-   const handleClick = (event) => {
-    if (image) {
-      event.preventDefault();
-      setImage(null);
-      
-    }
-    console.log(image);
-  };
+  
 
   const formik = useFormik({
     initialValues: {
-      Avatar: '',
+      Avatar: null,
       name: '',
       email: '',
       surname: '',
@@ -128,10 +101,6 @@ const Page = () => {
       submit: null
     },
     validationSchema: Yup.object({
-      Avatar: Yup
-        .string()
-        .max(255)
-        .required('Avatar is required'),
       name: Yup
         .string()
         .max(255)
@@ -193,6 +162,66 @@ const Page = () => {
       }
     }
   });
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    setLogo(file);
+  };
+
+
+  const uploadImageFunction = (File) => {
+    console.log("Image Res::::");
+    const formData = new FormData();
+    formData.append("files", File);
+
+    axios.post(`http://localhost:5000/api/profiles/uploadImage`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    })
+      .then(res => {
+        console.log("Image Res::::", res.data.data[0].img);
+        if (res.data.messsage === "Files Uploaded") {
+          setLogo(res.data.data[0]?.img)
+
+        }
+      })
+      .catch(err => {
+        console.log("Error", err);
+      });
+  }
+   
+  const inputFileRef = createRef(null);
+  const cleanup = () => {
+    URL.revokeObjectURL(image);
+    inputFileRef.current.value = null;
+  };
+
+  const setImage = (newImage) => {
+    if (image) {
+      cleanup();
+    }
+    _setImage(newImage);
+  };
+
+  const handleOnChange = (event) => {
+    const newImage = event.target?.files?.[0];
+    console.log(newImage);
+    if (newImage) {
+      setImage(URL.createObjectURL(newImage));
+      formik.setFieldValue("Avatar", newImage);
+    }
+  };
+ 
+
+   const handleClick = (event) => {
+    if (image) {
+      event.preventDefault();
+      setImage(null);
+      
+    }
+    console.log(image);
+  };
 
   return (
     <form
@@ -270,13 +299,10 @@ const Page = () => {
         hidden
         id="avatar-image-upload"
         type="file"
-        onChange={handleOnChange}
+        onChange={uploadImageFunction}
       />
      
-      <Typography variant="caption" display="block" gutterBottom>
-      Allowed *.jpeg, *.jpg, *.png, *.gif
-max size of 3 Mb
-      </Typography>
+      
     </CenteredContent>
     
    </CardContent>

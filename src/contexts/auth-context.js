@@ -7,7 +7,8 @@ const HANDLERS = {
   INITIALIZE: 'INITIALIZE',
   SIGN_IN: 'SIGN_IN',
   SIGN_OUT: 'SIGN_OUT',
-  SIGN_IN_WITH_GOOGLE: 'SIGN_IN_WITH_GOOGLE'
+  SIGN_IN_WITH_GOOGLE: 'SIGN_IN_WITH_GOOGLE',
+  
 };
 
 const initialState = {
@@ -148,8 +149,7 @@ export const AuthProvider = (props) => {
           email,
           password
         });
-        window.sessionStorage.setItem('authToken', response.data.token);
-
+        
         const decodedToken = jwtDecode(response.data.token);
         // const userResponse = await axios.get(`http://localhost:5000/api/users/${decodedToken.userId}`);
         const user = {
@@ -161,6 +161,7 @@ export const AuthProvider = (props) => {
           role: decodedToken.userId.role,
         };
         console.log(user);
+        window.sessionStorage.setItem('authToken', response.data.token);
         
         dispatch({
           type: HANDLERS.SIGN_IN,
@@ -172,20 +173,49 @@ export const AuthProvider = (props) => {
     throw new Error('Veuillez vérifier votre email et mot de passe');
     }
   };
+
+  const AddProjet = async (title,description,responsable, logo, dateinit) => {
+    try {
+      
+      const response = await axios.post('http://localhost:5000/api/projets', {title, description,responsable,logo,dateinit});
+      console.log(response);
+    }
+    catch(error) {
+      console.error('Erreur lors de l\'ajout du proje:', error);
+      throw new Error('Échec de l\'ajout d\'un nouveau membre');
+    }
+
+  };
+  const AddEvent = async (title,description,date,responsable) => {
+    try {
+      console.log(responsable);
+      const response = await axios.post('http://localhost:5000/api/events', {title, description,date,responsable});
+      console.log(response);
+    }
+    catch(error) {
+      console.error('Erreur lors de l\'ajout de l\'evenement:', error);
+      throw new Error('Échec de l\'ajout de l\'evenement');
+    }
+
+  };
 const AddMembers = async (avatar, name, surname, email, phone,country, region, ville,rue,password,passwordConfirm,profession,role)=>{
+  if(password != passwordConfirm){
+    console.log('password not match');
+  }
+  console.log(avatar,name,surname,password,email,phone,profession);
   try {
-    const response = await axios.post('http://localhost:5000/api/profiles', {avatar, name,surname,email, phone,country,region,ville,rue,password,profession,role,passwordConfirm});
+    const response = await axios.post('http://localhost:5000/api/profiles', {avatar, name,surname,email, phone,country,region,ville,rue,password,profession,role});
     console.log(response);
   }
   catch(error) {
-    console.error('Erreur lors de l\'inscription :', error);
+    console.error('Erreur lors de l\'ajout :', error);
       throw new Error('Échec de l\'ajout d\'un nouveau membre');
   }
 };
-  const signUp = async (email, name, password) => {
+  const signUp = async (title,description, responsable, logo,createat) => {
     try {
       // Envoyer les informations d'inscription au backend
-      const response = await axios.post('http://localhost:5000/auth/google', { email, name, password });
+      const response = await axios.post('http://localhost:5000/api/projets', { title,description, responsable, logo,createat });
   
       // Stocker le token dans le sessionStorage (ou localStorage selon vos besoins)
       window.sessionStorage.setItem('authToken', response.data.token);
@@ -258,7 +288,10 @@ const AddMembers = async (avatar, name, surname, email, phone,country, region, v
         signIn,
         signUp,
         signInWithGoogle,
-        signOut
+        signOut,
+        AddProjet,
+        AddEvent,
+        AddMembers
       }}
     >
       {children}

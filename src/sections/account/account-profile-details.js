@@ -14,6 +14,8 @@ import {
 } from '@mui/material';
 import axios from 'axios';
 import { useAuthContext } from '../../contexts/auth-context';
+import Image from 'next/image';
+import {signIn} from 'next-auth/react';
 
 const states = [
   {
@@ -194,7 +196,8 @@ export const AccountProfileDetails = () => {
           
         </CardActions>
         <CardActions sx={{ justifyContent: 'flex-start' }}>
-          <Button variant="contained" onClick={handleSubmitGoogle}>
+          <Button  onClick={signIn('google')}>
+            <Image src='/assets/logos/google-logo.png' alt='google' height={30}  width={30}/>
             Ajouter son compte Google
           </Button>
           
