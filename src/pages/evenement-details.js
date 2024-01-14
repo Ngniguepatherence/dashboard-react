@@ -117,7 +117,7 @@ const formattedDate = new Intl.DateTimeFormat('fr-FR', options).format(date);
         </Box>
         <CustomTabPanel value={value} index={0}>
         <Typography>
-        <span style={{ fontWeight: 'bold', fontStyle: 'italic' }}>Description de l'evenement: </span>{' '}
+        <span style={{ fontWeight: 'bold', fontStyle: 'italic' }}>Description de l&apos; evenement: </span>{' '}
           {companyDetails.description}</Typography>
         <Typography sx={{mt: 2}}>
        <span style={{ fontWeight: 'bold', fontStyle: 'italic' }}>Créer le</span>{' '}
