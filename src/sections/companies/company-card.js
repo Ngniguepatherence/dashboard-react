@@ -80,7 +80,7 @@ export const CompanyCard = (props) => {
             display="inline"
             variant="body2"
           >
-            Charger du projet: {company.responsable}
+            initiateur du projet: {company.responsable}
           </Typography>
         </Stack>
       </Stack>

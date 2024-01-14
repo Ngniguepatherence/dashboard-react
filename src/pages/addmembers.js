@@ -36,12 +36,20 @@ const states = [
 ];
 const status = [
   {
-    value: 'user',
+    value: 'simple',
     label: 'Adherent'
   },
   {
+    value: 'user',
+    label: 'Membre'
+  },
+  {
     value: 'admin',
-    label: 'Responsable'
+    label: 'Super-Admin'
+  },
+  {
+    value: 'super-admin',
+    label: 'Administrateur'
   }
 ];
 
@@ -153,7 +161,7 @@ const Page = () => {
     }),
     onSubmit: async (values, helpers) => {
       try {
-        await auth.AddMembers(values.Avatar,values.name, values.surname,values.email, values.phone,values.country, values.region, values.ville,values.rue, values.role, values.profession, values.passwordConfirm, values.password);
+        await auth.AddMembers(logo,values.name, values.surname,values.email, values.phone,values.country, values.region, values.ville,values.rue, values.role, values.profession, values.passwordConfirm, values.password);
         router.push('/');
       } catch (err) {
         helpers.setStatus({ success: false });
@@ -169,11 +177,34 @@ const Page = () => {
   };
 
 
+  
+   
+  const inputFileRef = createRef(null);
+  const cleanup = () => {
+    URL.revokeObjectURL(image);
+    inputFileRef.current.value = null;
+  };
+
+  const setImage = (newImage) => {
+    if (image) {
+      cleanup();
+    }
+    _setImage(newImage);
+  };
+
+  const handleOnChange = (event) => {
+    
+    if (logo) {
+      setImage(URL.createObjectURL(logo));
+      // formik.setFieldValue("Avatar", newImage);
+    }
+  };
+
   const uploadImageFunction = (File) => {
     console.log("Image Res::::");
     const formData = new FormData();
     formData.append("files", File);
-
+    
     axios.post(`http://localhost:5000/api/profiles/uploadImage`, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
@@ -190,28 +221,6 @@ const Page = () => {
         console.log("Error", err);
       });
   }
-   
-  const inputFileRef = createRef(null);
-  const cleanup = () => {
-    URL.revokeObjectURL(image);
-    inputFileRef.current.value = null;
-  };
-
-  const setImage = (newImage) => {
-    if (image) {
-      cleanup();
-    }
-    _setImage(newImage);
-  };
-
-  const handleOnChange = (event) => {
-    const newImage = event.target?.files?.[0];
-    console.log(newImage);
-    if (newImage) {
-      setImage(URL.createObjectURL(newImage));
-      formik.setFieldValue("Avatar", newImage);
-    }
-  };
  
 
    const handleClick = (event) => {
@@ -270,7 +279,7 @@ const Page = () => {
       <BigAvatar
         $withBorder
         alt="Avatar"
-        src={image || "/static/img/avatars/default-profile.svg"}
+        src={`http://localhost:5000/api/avatar/${logo}`}
         imgProps={{
           style: {
             maxHeight: "100%",
@@ -294,12 +303,12 @@ const Page = () => {
      
       <input
         ref={inputFileRef}
-        value={formik.Avatar}
+        value={formik.values.Avatar}
         accept="image/*"
         hidden
         id="avatar-image-upload"
         type="file"
-        onChange={uploadImageFunction}
+        onChange={(e) =>{uploadImageFunction(e.target.files[0])}}
       />
      
       

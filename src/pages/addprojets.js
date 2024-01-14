@@ -31,7 +31,7 @@ const Page = () => {
       },
     })
       .then(res => {
-        console.log("Image Res::::", res.data.data[0].img);
+        console.log("Image Res::::", res.data.data);
         if (res.data.messsage === "Files Uploaded") {
           setLogo(res.data.data[0]?.img)
         }
@@ -45,7 +45,6 @@ const Page = () => {
     initialValues: {
       title: '',
       description: '',
-      responsable: '',
       logo: null,
       dateinit: '',
       submit: null
@@ -59,6 +58,10 @@ const Page = () => {
         .string()
         .max(255)
         .required('you must add a description to this project'),
+      inititeur: Yup
+        .string()
+        .max(255)
+        .required('you must add a description to this project'),
       dateinit: Yup
         .date()
         .required('the initialization date is needed')
@@ -66,8 +69,8 @@ const Page = () => {
     onSubmit: async (values, helpers) => {
       try {
         
-        await auth.AddProjet(values.title,values.description, auth.user.id, logo, values.dateinit);
-        router.push('/');
+        await auth.AddProjet(values.title,values.description, auth.user.id,logo, values.dateinit);
+        router.push('/companies');
       } catch (err) {
         helpers.setStatus({ success: false });
         helpers.setErrors({ submit: err.message });
@@ -80,7 +83,7 @@ const Page = () => {
     <>
       <Head>
         <title>
-        Ajouter membre | Pouapeu
+        Ajouter Projet | Pouapeu
         </title>
       </Head>
       <Box
@@ -141,7 +144,7 @@ const Page = () => {
                   type="text"
                   value={formik.values.description}
                 />
-
+                
                
                 
                 <TextField
@@ -170,6 +173,7 @@ const Page = () => {
                   type="date"
                   value={formik.values.dateinit}
                 />
+                
                
               </Stack>
               {formik.errors.submit && (

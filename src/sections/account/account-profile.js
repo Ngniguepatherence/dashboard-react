@@ -35,7 +35,7 @@ export const AccountProfile = () => {
         }}
       >
         <Avatar
-          src={user.avatar}
+          src={`http://localhost:5000/api/avatar/${user.avatar}`}
           sx={{
             height: 80,
             mb: 2,

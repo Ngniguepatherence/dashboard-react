@@ -16,17 +16,32 @@ import {
   ListItemText,
   SvgIcon
 } from '@mui/material';
+import { useState,useEffect } from 'react';
 
 export const OverviewLatestProducts = (props) => {
   const { products = [], sx } = props;
+  const [events, setEvents] = useState([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/api/events');
+        const data = await response.json();
+        setEvents(data);
+      } catch (error) {
+        console.error('Erreur lors de la récupération des événements :', error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   return (
     <Card sx={sx}>
       <CardHeader title="Evenements recents" />
       <List>
-        {products.map((product, index) => {
-          const hasDivider = index < products.length - 1;
-          const ago = formatDistanceToNow(product.updatedAt);
+        {events.map((product, index) => {
+          const hasDivider = index < events.length - 1;
+          // const ago = formatDistanceToNow(product.da);
 
           return (
             <ListItem
@@ -39,7 +54,7 @@ export const OverviewLatestProducts = (props) => {
                     ? (
                       <Box
                         component="img"
-                        src={product.image}
+                        src={`http://localhost:5000/api/files/${product.image}`}
                         sx={{
                           borderRadius: 1,
                           height: 48,
@@ -60,9 +75,9 @@ export const OverviewLatestProducts = (props) => {
                 }
               </ListItemAvatar>
               <ListItemText
-                primary={product.name}
+                primary={product.title}
                 primaryTypographyProps={{ variant: 'subtitle1' }}
-                secondary={`termine il y'a de cela ${ago} jours`}
+                secondary={`termine il y'a de cela ${0} jours`}
                 secondaryTypographyProps={{ variant: 'body2' }}
               />
               <IconButton edge="end">

@@ -41,7 +41,7 @@ const Page = () => (
               difference={12}
               positive
               sx={{ height: '100%' }}
-              value="XAF24k"
+              value="24K Franc CFA"
             />
           </Grid>
           <Grid
@@ -53,7 +53,7 @@ const Page = () => (
               difference={16}
               positive={false}
               sx={{ height: '100%' }}
-              value="1.6k"
+              value="1.6k Franc CFA"
             />
           </Grid>
           <Grid
@@ -73,7 +73,7 @@ const Page = () => (
           >
             <OverviewTotalProfit
               sx={{ height: '100%' }}
-              value="XAF15k"
+              value="15k XAF"
             />
           </Grid>
           <Grid

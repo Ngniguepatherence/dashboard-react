@@ -57,16 +57,16 @@ export const AccountProfileDetails = () => {
     []
   );
 
-    const handleSubmitGoogle = async () => {
-      try {
-        const response = await axios.get('http://localhost:5000/auth/google');
-        console.log(response);
+    // const handleSubmitGoogle = async () => {
+    //   try {
+    //     const response = await axios.get('http://localhost:5000/auth/google');
+    //     console.log(response);
         
-      }
-      catch(error) {
-        console.error('Error fetching data: ',error);
-      }
-    };
+    //   }
+    //   catch(error) {
+    //     console.error('Error fetching data: ',error);
+    //   }
+    // };
 
   const handleSubmit = useCallback(
     (event) => {
@@ -195,14 +195,73 @@ export const AccountProfileDetails = () => {
           </Button>
           
         </CardActions>
-        <CardActions sx={{ justifyContent: 'flex-start' }}>
-          <Button  onClick={signIn('google')}>
-            <Image src='/assets/logos/google-logo.png' alt='google' height={30}  width={30}/>
-            Ajouter son compte Google
+       
+        
+      </Card>
+      <Card>
+      <CardHeader
+          subheader="Mettre a jour votre mot de passe"
+          title="Mot de passe"
+        />
+      <CardActions sx={{ pt: 0 }}>
+      <Box sx={{ m: 1.5 }}>
+            <Grid
+              container
+              spacing={3}
+            >
+              <Grid
+                xs={12}
+                md={6}
+              >
+          <TextField
+                  fullWidth
+                  label="ancien mot de passe"
+                  name="old-password"
+                  onChange={handleChange}
+                  required
+                  type='password'
+                  value={user.old_password}
+                ></TextField>
+                </Grid>
+                <Grid
+                xs={12}
+                md={6}
+              >
+          <TextField
+                  fullWidth
+                  label="nouveau mot de passe"
+                  name="new-password"
+                  onChange={handleChange}
+                  required
+                  type='password'
+                  value={user.new_password}
+                ></TextField>
+                </Grid>
+                <Grid
+                xs={12}
+                md={6}
+              >
+          <TextField
+                  fullWidth
+                  label="confirm nouveau mot de passe"
+                  name="new-password-confirm"
+                  onChange={handleChange}
+                  required
+                  type='password'
+                  value={user.new_password_confirm}
+                ></TextField>
+                </Grid>
+                </Grid></Box>
+
+               
+        </CardActions>
+        <Divider />
+        <CardActions sx={{ justifyContent: 'flex-end' }}>
+          <Button variant="contained">
+            Mettre a Jour
           </Button>
           
         </CardActions>
-        
       </Card>
     </form>
     

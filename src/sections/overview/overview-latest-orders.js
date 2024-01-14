@@ -17,6 +17,7 @@ import {
 } from '@mui/material';
 import { Scrollbar } from 'src/components/scrollbar';
 import { SeverityPill } from 'src/components/severity-pill';
+import { useState,useEffect } from 'react';
 
 const statusMap = {
   pending: 'warning',
@@ -26,6 +27,22 @@ const statusMap = {
 
 export const OverviewLatestOrders = (props) => {
   const { orders = [], sx } = props;
+  const [projet, setProjet] = useState([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/api/projets');
+        const data = await response.json();
+        setProjet(data);
+      } catch (error) {
+        console.error('Erreur lors de la récupération des événements :', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+  
+
 
   return (
     <Card sx={sx}>
@@ -50,19 +67,22 @@ export const OverviewLatestOrders = (props) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {orders.map((order) => {
-                const createdAt = format(order.createdAt, 'dd/MM/yyyy');
-
+              {projet.map((order) => {
+                const date = new Date(order.createat);
+                
+                const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
+                const formattedDate = new Intl.DateTimeFormat('fr-FR', options).format(date);
+                const createdAt = formattedDate;
                 return (
                   <TableRow
                     hover
                     key={order.id}
                   >
                     <TableCell>
-                      {order.ref}
+                      {order.title}
                     </TableCell>
                     <TableCell>
-                      {order.customer.name}
+                      {order.responsable}
                     </TableCell>
                     <TableCell>
                       {createdAt}

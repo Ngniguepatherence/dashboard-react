@@ -69,7 +69,10 @@ const CompanyDetails = () => {
   if (!companyDetails) {
     return <Typography>Loading...</Typography>;
   }
+  const date = new Date(companyDetails.createat);
 
+const options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', timeZoneName: 'short' };
+const formattedDate = new Intl.DateTimeFormat('fr-FR', options).format(date);
   return (
     <>
     <Head>
@@ -113,8 +116,14 @@ const CompanyDetails = () => {
             </Stack>
         </Box>
         <CustomTabPanel value={value} index={0}>
-        <Typography>{companyDetails.description}</Typography>
-       <Typography sx={{mt: 2}}>Creer le <Typography variant='subtitle2' >{companyDetails.date}</Typography></Typography>
+        <Typography>
+        <span style={{ fontWeight: 'bold', fontStyle: 'italic' }}>Description de l'evenement: </span>{' '}
+          {companyDetails.description}</Typography>
+        <Typography sx={{mt: 2}}>
+       <span style={{ fontWeight: 'bold', fontStyle: 'italic' }}>Créer le</span>{' '}
+       <span style={{ fontStyle: 'italic' }}>{formattedDate}</span>{' '}
+       </Typography>
+       
       </CustomTabPanel>
         
             

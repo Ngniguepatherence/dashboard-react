@@ -69,7 +69,7 @@ export const CustomersTable = (props) => {
                   Num de telephone
                 </TableCell>
                 <TableCell>
-                  status
+                  Role
                 </TableCell>
               </TableRow>
             </TableHead>
@@ -103,7 +103,7 @@ export const CustomersTable = (props) => {
                         direction="row"
                         spacing={2}
                       >
-                        <Avatar src={customer.avatar}>
+                        <Avatar src={`http://localhost:5000/api/avatar/${customer.avatar}`}>
                           {getInitials(customer.name)}
                         </Avatar>
                         <Typography variant="subtitle2">

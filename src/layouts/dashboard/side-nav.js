@@ -128,7 +128,7 @@ export const SideNav = (props) => {
                   title={item.title}
                 />
 
-                {/* {item.options && active && (
+                {item.options && active && (
                     <Stack
                       component="ul"
                       spacing={0.5}
@@ -147,7 +147,7 @@ export const SideNav = (props) => {
                         />
                       ))}
                     </Stack>
-                  )} */}
+                  )}
                 </React.Fragment>
               );
             })}

@@ -166,7 +166,7 @@ export const AuthProvider = (props) => {
         dispatch({
           type: HANDLERS.SIGN_IN,
           payload:  user 
-            
+          
         });
     }catch(error) {
       console.error('Erreur lors de la connexion :', error);
@@ -174,18 +174,7 @@ export const AuthProvider = (props) => {
     }
   };
 
-  const AddProjet = async (title,description,responsable, logo, dateinit) => {
-    try {
-      
-      const response = await axios.post('http://localhost:5000/api/projets', {title, description,responsable,logo,dateinit});
-      console.log(response);
-    }
-    catch(error) {
-      console.error('Erreur lors de l\'ajout du proje:', error);
-      throw new Error('Échec de l\'ajout d\'un nouveau membre');
-    }
-
-  };
+  
   const AddEvent = async (title,description,date,responsable) => {
     try {
       console.log(responsable);
@@ -198,13 +187,26 @@ export const AuthProvider = (props) => {
     }
 
   };
+  const AddProjet = async (title,description,responsable,logo,dateinit) => {
+    console.log(title,description,responsable,logo,dateinit);
+    try {
+      console.log(responsable);
+      const response = await axios.post('http://localhost:5000/api/projets', {title, description,responsable,logo,dateinit});
+      console.log(response);
+    }
+    catch(error) {
+      console.error('Erreur lors de l\'ajout du projet:', error);
+      throw new Error('Échec de l\'ajout du nouveau projet`');
+    }
+
+  };
 const AddMembers = async (avatar, name, surname, email, phone,country, region, ville,rue,password,passwordConfirm,profession,role)=>{
   if(password != passwordConfirm){
     console.log('password not match');
   }
   console.log(avatar,name,surname,password,email,phone,profession);
   try {
-    const response = await axios.post('http://localhost:5000/api/profiles', {avatar, name,surname,email, phone,country,region,ville,rue,password,profession,role});
+    const response = await axios.post('http://localhost:5000/api/profiles', {avatar, name,surname,email, phone,country,region,ville,rue,role,profession,password});
     console.log(response);
   }
   catch(error) {

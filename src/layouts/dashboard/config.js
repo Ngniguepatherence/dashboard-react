@@ -112,6 +112,16 @@ export const items = (roles) =>{
       )
     }, 
     {
+      title: 'Finances',
+      path: '/finances',
+      icon: (
+        <SvgIcon fontSize="small">
+          <XCircleIcon />
+        </SvgIcon>
+      ),
+      visible: roles.includes('user') || roles.includes('admin'),
+    },
+    {
       title: 'Compte',
       path: '/account',
       icon: (

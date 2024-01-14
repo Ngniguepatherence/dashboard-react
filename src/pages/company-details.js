@@ -70,6 +70,13 @@ const CompanyDetails = () => {
     return <Typography>Loading...</Typography>;
   }
 
+  const date = new Date(companyDetails.createat);
+
+const options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', timeZoneName: 'short' };
+const formattedDate = new Intl.DateTimeFormat('fr-FR', options).format(date);
+
+console.log(formattedDate);
+
   return (
     <>
     <Head>
@@ -96,7 +103,7 @@ const CompanyDetails = () => {
         >
           <CardMedia
             component="img"
-            image={companyDetails.logo}
+            image={`http://localhost:5000/api/files/${companyDetails.logo}`}
             alt="Company Image"
           />
         </Card>
@@ -122,11 +129,44 @@ const CompanyDetails = () => {
             </Stack>
         </Box>
         <CustomTabPanel value={value} index={0}>
-        <Typography>{companyDetails.description}</Typography>
-       <Typography sx={{mt: 2}}>Creer le <Typography variant='subtitle2' >{companyDetails.createat}</Typography></Typography>
+        <Typography>
+        <span style={{ fontWeight: 'bold', fontStyle: 'italic' }}>Description du Projet: </span>{' '}
+          {companyDetails.description}</Typography>
+        <Stack
+              spacing={1}
+              sx={{ mb: 3 }}
+            >
+      </Stack>
+       <Typography sx={{mt: 2}}>
+       <span style={{ fontWeight: 'bold', fontStyle: 'italic' }}>Créer le</span>{' '}
+       <span style={{ fontStyle: 'italic' }}>{formattedDate}</span>{' '}
+       </Typography>
+       <Typography sx={{mt: 2, textAlign: 'center'}}>
+       <span style={{ fontWeight: 'bold', fontStyle: 'italic', justifyItems: 'center'}}>Evolution du projet</span>{' '}
+       
+       </Typography>
+       <Typography sx={{mt: 2}}>
+      <span style={{  fontStyle: 'italic' }}>Premier Rapport Projet: </span>{' '}
+       <span style={{fontWeight: 'bold', fontStyle: 'italic' }}>{}</span>{' '}
+       <Button style={{flex:'flex-end',color:'blue'}} > ajouter un rapport de projet</Button>
+       </Typography>
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
-      <Typography>{companyDetails.responsable}</Typography>
+      <Typography sx={{mt: 2}}>
+      <span style={{  fontStyle: 'italic' }}>Initiateur de Projet: </span>{' '}
+       <span style={{fontWeight: 'bold', fontStyle: 'italic' }}>{companyDetails.responsable}</span>{' '}
+       </Typography>
+      
+
+       <Button
+                fullWidth
+                size="large"
+                sx={{ mt: 3 }}
+                type="submit"
+                variant="contained"
+              >
+                Ajouter des membres aux projets
+              </Button>
       </CustomTabPanel>
             
       
