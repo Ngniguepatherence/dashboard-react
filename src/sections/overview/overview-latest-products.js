@@ -16,6 +16,8 @@ import {
   ListItemText,
   SvgIcon
 } from '@mui/material';
+import getConfig from 'next/config';
+const { publicRuntimeConfig } = getConfig();
 import { useState,useEffect } from 'react';
 
 export const OverviewLatestProducts = (props) => {
@@ -24,7 +26,7 @@ export const OverviewLatestProducts = (props) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/events');
+        const response = await fetch(`${publicRuntimeConfig.api.baseURL}/api/events`);
         const data = await response.json();
         setEvents(data);
       } catch (error) {
@@ -54,7 +56,7 @@ export const OverviewLatestProducts = (props) => {
                     ? (
                       <Box
                         component="img"
-                        src={`http://localhost:5000/api/files/${product.image}`}
+                        src={`${publicRuntimeConfig.api.baseURL}/api/files/${product.image}`}
                         sx={{
                           borderRadius: 1,
                           height: 48,

@@ -44,13 +44,13 @@ export const EventsTable = (props) => {
               <TableRow>
                 <TableCell padding="checkbox">
                   <Checkbox
-                    checked={selectedAll}
+                    checked={selectedSome}
                     indeterminate={selectedSome}
                     onChange={(event) => {
                       if (event.target.checked) {
-                        onSelectAll?.();
+                        onSelectOne?.();
                       } else {
-                        onDeselectAll?.();
+                        onDeselectOne?.();
                       }
                     }}
                   />

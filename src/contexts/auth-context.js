@@ -2,7 +2,9 @@ import { createContext, useContext, useEffect, useReducer, useRef } from 'react'
 import PropTypes from 'prop-types';
 import { jwtDecode } from 'jwt-decode';
 import axios from 'axios';
-
+import getConfig from 'next/config';
+import { FastRewind } from '@mui/icons-material';
+const { publicRuntimeConfig } = getConfig();
 const HANDLERS = {
   INITIALIZE: 'INITIALIZE',
   SIGN_IN: 'SIGN_IN',
@@ -43,7 +45,18 @@ const handlers = {
     return {
       ...state,
       isAuthenticated: true,
-      user
+      ...(
+        // if payload (user) is provided, then is authenticated
+        user
+          ? ({
+            isAuthenticated: true,
+            isLoading: false,
+            user
+          })
+          : ({
+            isLoading: false
+          })
+      )
      
     };
   },
@@ -92,6 +105,7 @@ export const AuthProvider = (props) => {
     
 
     let isAuthenticated = false;
+    let isLoading = true;
 
     try {
       const token = window.sessionStorage.getItem('authToken');
@@ -145,7 +159,7 @@ export const AuthProvider = (props) => {
 
   const signIn = async (email, password) => {
     try {
-      const response = await axios.post('http://localhost:5000/api/auth/login', {
+      const response = await axios.post(`${publicRuntimeConfig.api.baseURL}/api/auth/login`, {
           email,
           password
         });
@@ -178,7 +192,7 @@ export const AuthProvider = (props) => {
   const AddEvent = async (title,description,date,responsable) => {
     try {
       console.log(responsable);
-      const response = await axios.post('http://localhost:5000/api/events', {title, description,date,responsable});
+      const response = await axios.post(`${publicRuntimeConfig.api.baseURL}/api/events`, {title, description,date,responsable});
       console.log(response);
     }
     catch(error) {
@@ -191,7 +205,7 @@ export const AuthProvider = (props) => {
     console.log(title,description,responsable,logo,dateinit);
     try {
       console.log(responsable);
-      const response = await axios.post('http://localhost:5000/api/projets', {title, description,responsable,logo,dateinit});
+      const response = await axios.post(`${publicRuntimeConfig.api.baseURL}/api/projets'`, {title, description,responsable,logo,dateinit});
       console.log(response);
     }
     catch(error) {
@@ -206,7 +220,7 @@ const AddMembers = async (avatar, name, surname, email, phone,country, region, v
   }
   console.log(avatar,name,surname,password,email,phone,profession);
   try {
-    const response = await axios.post('http://localhost:5000/api/profiles', {avatar, name,surname,email, phone,country,region,ville,rue,role,profession,password});
+    const response = await axios.post(`${publicRuntimeConfig.api.baseURL}/api/profiles`, {avatar, name,surname,email, phone,country,region,ville,rue,role,profession,password});
     console.log(response);
   }
   catch(error) {
@@ -217,7 +231,7 @@ const AddMembers = async (avatar, name, surname, email, phone,country, region, v
   const signUp = async (title,description, responsable, logo,createat) => {
     try {
       // Envoyer les informations d'inscription au backend
-      const response = await axios.post('http://localhost:5000/api/projets', { title,description, responsable, logo,createat });
+      const response = await axios.post(`${publicRuntimeConfig.api.baseURL}/api/projets`, { title,description, responsable, logo,createat });
   
       // Stocker le token dans le sessionStorage (ou localStorage selon vos besoins)
       window.sessionStorage.setItem('authToken', response.data.token);
@@ -245,7 +259,7 @@ const AddMembers = async (avatar, name, surname, email, phone,country, region, v
   
   const signInWithGoogle = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/auth/google');
+      const response = await axios.get(`${publicRuntimeConfig.api.baseURL}/auth/google`);
 
       const { token } = response.data;
       const decodedToken = jwtDecode(token);
@@ -272,7 +286,7 @@ const AddMembers = async (avatar, name, surname, email, phone,country, region, v
 
 
   const signOut = async () => {
-    await axios.post('http://localhost:5000/api/auth/logout');
+    await axios.post(`${publicRuntimeConfig.api.baseURL}/api/auth/logout`);
 
     // Nettoyer le token du sessionStorage
     window.sessionStorage.removeItem('authToken');

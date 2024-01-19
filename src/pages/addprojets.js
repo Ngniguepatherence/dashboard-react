@@ -8,6 +8,8 @@ import { useAuth } from 'src/hooks/use-auth';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
 import axios from 'axios';
 import { useState } from 'react';
+import getConfig from 'next/config';
+const { publicRuntimeConfig } = getConfig();
 
 const Page = () => {
   const router = useRouter();
@@ -42,7 +44,7 @@ const Page = () => {
     const formData = new FormData();
     formData.append("files", File);
 
-    axios.post(`http://localhost:5000/api/projets/uploadImage`, formData, {
+    axios.post(`${publicRuntimeConfig.api.baseURL}/api/projets/uploadImage`, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },

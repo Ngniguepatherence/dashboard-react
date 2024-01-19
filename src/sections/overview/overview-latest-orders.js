@@ -18,6 +18,8 @@ import {
 import { Scrollbar } from 'src/components/scrollbar';
 import { SeverityPill } from 'src/components/severity-pill';
 import { useState,useEffect } from 'react';
+import getConfig from 'next/config';
+const { publicRuntimeConfig } = getConfig();
 
 const statusMap = {
   pending: 'warning',
@@ -31,7 +33,7 @@ export const OverviewLatestOrders = (props) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/projets');
+        const response = await fetch(`${publicRuntimeConfig.api.baseURL}/api/projets`);
         const data = await response.json();
         setProjet(data);
       } catch (error) {

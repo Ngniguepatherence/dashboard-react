@@ -5,6 +5,8 @@ import ArrowDownOnSquareIcon from '@heroicons/react/24/solid/ArrowDownOnSquareIc
 import PlusIcon from '@heroicons/react/24/solid/PlusIcon';
 import { applyPagination } from 'src/utils/apply-pagination';
 import { useSelection } from 'src/hooks/use-selection';
+import getConfig from 'next/config';
+const { publicRuntimeConfig } = getConfig();
 import {
   Box,
   Button,
@@ -51,7 +53,7 @@ const Page = () => {
   useEffect(() =>{
     const fetchData = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/events');
+        const response = await fetch(`${publicRuntimeConfig.api.baseURL}/api/events`);
         const result = await response.json();
         setData(result);
       }

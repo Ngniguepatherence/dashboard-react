@@ -1,11 +1,8 @@
 module.exports = {
-  reactStrictMode: true
-  // async rewrites() {
-  //   return [
-  //     {
-  //       source: '/account',
-  //       destination: 'http://localhost:5000/auth/google',
-  //     },
-  //   ];
-  // },
+  reactStrictMode: true,
+  publicRuntimeConfig: {
+    api: {
+      baseURL: process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:5000/api',
+    },
+  },
 };

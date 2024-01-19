@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react';
 import Layout from '../components/Layout'; // Importez le composant de mise en page que vous utilisez
 import { Typography } from '@mui/material';
 import NextLink from 'next/link';
+import getConfig from 'next/config';
+const { publicRuntimeConfig } = getConfig();
 
 const CompanyDetails = () => {
   const router = useRouter();
@@ -14,7 +16,7 @@ const CompanyDetails = () => {
 
   useEffect(() => {
     if(companyId) {
-        fetch(`http://localhost:5000/api/projets/${companyId}`)
+        fetch(`${publicRuntimeConfig.api.baseURL}/api/projets/${companyId}`)
             .then((response) => response.json())
             .then((data) => setCompanyDetails(data))
             .catch((error) => console.error('Error fetching Data: ',error));

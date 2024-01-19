@@ -13,6 +13,8 @@ import { applyPagination } from 'src/utils/apply-pagination';
 import TextField from '@mui/material/TextField';
 import NextLink from 'next/link';
 const now = new Date();
+import getConfig from 'next/config';
+const { publicRuntimeConfig } = getConfig();
 
 const useCustomers = (data, page, rowsPerPage) => {
   return useMemo(
@@ -59,7 +61,7 @@ const Page = () => {
   useEffect(() =>{
     const fetchData = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/profiles');
+        const response = await fetch(`${publicRuntimeConfig.api.baseURL}/api/profiles`);
         const result = await response.json();
         setData(result);
       }
@@ -101,7 +103,7 @@ const Page = () => {
 
     try {
       // Envoyez les données du nouveau client au serveur
-      await axios.post('http://localhost:5000/api/profiles', newCustomerData);
+      await axios.post(`${publicRuntimeConfig.api.baseURL}/api/profiles`, newCustomerData);
 
       // Réinitialisez les données du nouveau client et désactivez le mode ajout
       setNewCustomerData({
@@ -121,7 +123,7 @@ const Page = () => {
       setIsAdding(false);
 
       // Rafraîchissez les données en rechargeant la liste des clients
-      const response = await axios.get('http://localhost:5000/api/profiles');
+      const response = await axios.get(`${publicRuntimeConfig.api.baseURL}/api/profiles`);
       setData(response.data);
     } catch (error) {
       console.error('Error adding new customer:', error);

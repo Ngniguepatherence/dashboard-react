@@ -9,6 +9,8 @@ import { Box, Link,Container,Button ,Typography,Avatar, Stack,Divider,CardAction
 import { useAuth } from 'src/hooks/use-auth';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
 import { grey } from "@mui/material/colors";
+import getConfig from 'next/config';
+const { publicRuntimeConfig } = getConfig();
 import {
   CloudUpload as CloudUploadIcon,
   Delete as DeleteIcon,
@@ -205,7 +207,7 @@ const Page = () => {
     const formData = new FormData();
     formData.append("files", File);
     
-    axios.post(`http://localhost:5000/api/profiles/uploadImage`, formData, {
+    axios.post(`${publicRuntimeConfig.api.baseURL}/api/profiles/uploadImage`, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
@@ -279,7 +281,7 @@ const Page = () => {
       <BigAvatar
         $withBorder
         alt="Avatar"
-        src={`http://localhost:5000/api/avatar/${logo}`}
+        src={`${publicRuntimeConfig.api.baseURL}/api/avatar/${logo}`}
         imgProps={{
           style: {
             maxHeight: "100%",

@@ -9,7 +9,8 @@ import {
   Typography
 } from '@mui/material';
 import { useAuthContext } from '../../contexts/auth-context';
-
+import getConfig from 'next/config';
+const { publicRuntimeConfig } = getConfig();
 
 // const user = {
 //   avatar: '/assets/avatars/avatar-anika-visser.png',
@@ -35,7 +36,7 @@ export const AccountProfile = () => {
         }}
       >
         <Avatar
-          src={`http://localhost:5000/api/avatar/${user.avatar}`}
+          src={`${publicRuntimeConfig.api.baseURL}/api/avatar/${user.avatar}`}
           sx={{
             height: 80,
             mb: 2,

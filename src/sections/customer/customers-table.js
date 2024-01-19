@@ -17,6 +17,8 @@ import {
 import { Scrollbar } from 'src/components/scrollbar';
 import { getInitials } from 'src/utils/get-initials';
 import { yellow } from '@mui/material/colors';
+import getConfig from 'next/config';
+const { publicRuntimeConfig } = getConfig();
 
 export const CustomersTable = (props) => {
   const {
@@ -45,13 +47,13 @@ export const CustomersTable = (props) => {
               <TableRow>
                 <TableCell padding="checkbox">
                   <Checkbox
-                    checked={selectedAll}
+                    checked={selectedSome}
                     indeterminate={selectedSome}
                     onChange={(event) => {
                       if (event.target.checked) {
-                        onSelectAll?.();
+                        onSelectOne?.();
                       } else {
-                        onDeselectAll?.();
+                        onDeselectOne?.();
                       }
                     }}
                   />
@@ -103,7 +105,7 @@ export const CustomersTable = (props) => {
                         direction="row"
                         spacing={2}
                       >
-                        <Avatar src={`http://localhost:5000/api/avatar/${customer.avatar}`}>
+                        <Avatar src={`${publicRuntimeConfig.api.baseURL}/api/avatar/${customer.avatar}`}>
                           {getInitials(customer.name)}
                         </Avatar>
                         <Typography variant="subtitle2">

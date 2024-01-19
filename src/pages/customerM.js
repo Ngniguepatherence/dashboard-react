@@ -12,6 +12,8 @@ import { CustomersSearch } from 'src/sections/customer/customers-search';
 import { applyPagination } from 'src/utils/apply-pagination';
 import TextField from '@mui/material/TextField';
 import NextLink from 'next/link';
+import getConfig from 'next/config';
+const { publicRuntimeConfig } = getConfig();
 const now = new Date();
 
 const useCustomers = (data, page, rowsPerPage) => {
@@ -59,7 +61,7 @@ const Page = () => {
   useEffect(() =>{
     const fetchData = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/profiles');
+        const response = await fetch(`${publicRuntimeConfig.api.baseURL}/api/profiles`);
         const result = await response.json();
         setData(result);
       }

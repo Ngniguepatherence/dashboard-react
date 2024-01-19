@@ -6,6 +6,8 @@ import Layout from 'src/layouts/dashboard/layout'; // Importez le composant de m
 import { Box, Button, Link,Tab, Tabs, Stack, TextField, Typography, Card, CardActionArea, CardMedia, CardHeader, Divider } from '@mui/material';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
 import * as React from 'react';
+import getConfig from 'next/config';
+const { publicRuntimeConfig } = getConfig();
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -49,7 +51,7 @@ const CompanyDetails = () => {
 
   const fetchCompanyDetails = async () => {
     try {
-      const response = await fetch(`http://localhost:5000/api/projets/${companyId}`);
+      const response = await fetch(`${publicRuntimeConfig.api.baseURL}/api/projets/${companyId}`);
       const data = await response.json();
       setCompanyDetails(data);
     } catch (error) {
@@ -103,7 +105,7 @@ console.log(formattedDate);
         >
           <CardMedia
             component="img"
-            image={`http://localhost:5000/api/files/${companyDetails.logo}`}
+            image={`${publicRuntimeConfig.api.baseURL}/api/files/${companyDetails.logo}`}
             alt="Company Image"
           />
         </Card>

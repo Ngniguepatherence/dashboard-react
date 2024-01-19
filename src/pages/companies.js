@@ -20,7 +20,8 @@ import {
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
 import { CompanyCard } from 'src/sections/companies/company-card';
 import { CompaniesSearch } from 'src/sections/companies/companies-search';
-
+import getConfig from 'next/config';
+const { publicRuntimeConfig } = getConfig();
 
 const useProjet = (data, page, rowsPerPage) => {
   return useMemo(
@@ -52,7 +53,7 @@ const Page = () => {
   useEffect(() =>{
     const fetchData = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/projets');
+        const response = await fetch(`${publicRuntimeConfig.api.baseURL}/api/projets`);
         const result = await response.json();
         setData(result);
       }

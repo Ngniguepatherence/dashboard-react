@@ -4,6 +4,8 @@ import ClockIcon from '@heroicons/react/24/solid/ClockIcon';
 import AvatarIcon from '@heroicons/react/24/solid/UserCircleIcon';
 import { Avatar, Box, Card, CardContent, Divider, Stack, SvgIcon, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
+import getConfig from 'next/config';
+const { publicRuntimeConfig } = getConfig();
 
 export const CompanyCard = (props) => {
   const { company} = props;
@@ -37,7 +39,7 @@ export const CompanyCard = (props) => {
           }}
         >
           <Avatar
-            src={`http://localhost:5000/api/files/${company.logo}`}
+            src={`${publicRuntimeConfig.api.baseURL}/api/files/${company.logo}`}
             variant="square"
           />
         </Box>
