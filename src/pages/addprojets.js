@@ -14,11 +14,28 @@ const Page = () => {
   const auth = useAuth();
   const [logo, setLogo] = useState(null);
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    setLogo(file);
-  };
+  const [values, setValues] = useState({
+    title: '',
+    description: '',
+    inititeur: '',
+    dateinit: '',
+    submit: null,
+  });
 
+  const [errors, setErrors] = useState({
+    title: '',
+    description: '',
+    inititeur: '',
+    dateinit: '',
+  });
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setValues({
+      ...values,
+      [name]: value,
+    });
+  };
 
   const uploadImageFunction = (File) => {
     console.log("Image Res::::");
@@ -41,43 +58,30 @@ const Page = () => {
       });
   }
 
-  const formik = useFormik({
-    initialValues: {
-      title: '',
-      description: '',
-      logo: null,
-      dateinit: '',
-      submit: null
-    },
-    validationSchema: Yup.object({
-      title: Yup
-        .string()
-        .max(255)
-        .required('title is required'),
-      description: Yup
-        .string()
-        .max(255)
-        .required('you must add a description to this project'),
-      inititeur: Yup
-        .string()
-        .max(255)
-        .required('you must add a description to this project'),
-      dateinit: Yup
-        .date()
-        .required('the initialization date is needed')
-    }),
-    onSubmit: async (values, helpers) => {
-      try {
-        
-        await auth.AddProjet(values.title,values.description, auth.user.id,logo, values.dateinit);
-        router.push('/companies');
-      } catch (err) {
-        helpers.setStatus({ success: false });
-        helpers.setErrors({ submit: err.message });
-        helpers.setSubmitting(false);
+  const handleSubmit = async () => {
+    try {
+      const schema = Yup.object({
+        title: Yup.string().max(255).required('Title is required'),
+        description: Yup.string().max(255).required('Description is required'),
+        inititeur: Yup.string().max(255).required('Initiateur is required'),
+        dateinit: Yup.date().required('The initialization date is needed'),
+      });
+
+      // await schema.validate(values, { abortEarly: false });
+
+      // Validation succeeded, perform your API call or other actions
+      await auth.AddProjet(values.title, values.description, auth.user.id,logo, values.dateinit);
+      router.push('/companies');
+    } catch (err) {
+      if (err instanceof Yup.ValidationError) {
+        const newErrors = {};
+        err.inner.forEach((error) => {
+          newErrors[error.path] = error.message;
+        });
+        setErrors(newErrors);
       }
     }
-  });
+  };
 
   return (
     <>
@@ -117,84 +121,63 @@ const Page = () => {
                 Ajoutez un Projet 
               </Typography>
             </Stack>
-            <form
+            {/* <form
               noValidate
-              onSubmit={formik.handleSubmit}
-            >
+              onSubmit={handleSubmits()}
+            > */}
               <Stack spacing={3}>
                 <TextField
-                  error={!!(formik.touched.title && formik.errors.title)}
+                  
                   fullWidth
-                  helperText={formik.touched.title && formik.errors.title}
                   label="title"
                   name="title"
-                  onBlur={formik.handleBlur}
-                  onChange={formik.handleChange}
-                  value={formik.values.title}
+                  value={values.title}
+                  onChange={handleChange}
+                  error={!!errors.title}
+                  helperText={errors.title}
                 />
 
                 <TextField
-                  error={!!(formik.touched.description && formik.errors.description)}
                   fullWidth
-                  helperText={formik.touched.description && formik.errors.description}
                   label="description du projet"
                   name="description"
-                  onBlur={formik.handleBlur}
-                  onChange={formik.handleChange}
-                  type="text"
-                  value={formik.values.description}
+                  value={values.description}
+                  onChange={handleChange}
+                  error={!!errors.description}
+                  helperText={errors.description}
                 />
                 
                
                 
                 <TextField
-                  error={!!(formik.touched.logo && formik.errors.logo)}
-                  fullWidth
-                  helperText={formik.touched.logo && formik.errors.logo}
-                  label="logo"
+                  
                   name="logo"
-                  onBlur={formik.handleBlur}
                   onChange={(e) => {
                     uploadImageFunction(e.target.files[0])
                   }}
                   type="file"
-                  value={formik.values.logo}
+                  value={values.logo}
                   inputProps={{ accept: 'image/*' }}
                 />
 
                 <TextField
-                  error={!!(formik.touched.dateinit && formik.errors.dateinit)}
                   fullWidth
-                  helperText={formik.touched.dateinit && formik.errors.dateinit}
                   // label="date d'initialisation"
                   name="dateinit"
-                  onBlur={formik.handleBlur}
-                  onChange={formik.handleChange}
-                  type="date"
-                  value={formik.values.dateinit}
+                  value={values.dateinit}
+                  onChange={handleChange}
+                  error={!!errors.dateinit}
+                  helperText={errors.dateinit}
+                  type='date'
                 />
                 
                
               </Stack>
-              {formik.errors.submit && (
-                <Typography
-                  color="error"
-                  sx={{ mt: 3 }}
-                  variant="body2"
-                >
-                  {formik.errors.submit}
-                </Typography>
-              )}
-              <Button
-                fullWidth
-                size="large"
-                sx={{ mt: 3 }}
-                type="submit"
-                variant="contained"
-              >
-                Ajouter
-              </Button>
-            </form>
+              
+              <Button onClick={handleSubmit} variant="contained" color="primary">
+        Submit
+      </Button>
+          
           </div>
         </Box>
       </Box>

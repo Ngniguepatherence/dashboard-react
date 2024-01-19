@@ -67,7 +67,7 @@ export const OverviewLatestOrders = (props) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {projet.map((order) => {
+              {projet.map((order,index) => {
                 const date = new Date(order.createat);
                 
                 const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
@@ -76,7 +76,7 @@ export const OverviewLatestOrders = (props) => {
                 return (
                   <TableRow
                     hover
-                    key={order.id}
+                    key={index}
                   >
                     <TableCell>
                       {order.title}
