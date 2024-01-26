@@ -6,7 +6,6 @@ import { useRouter } from 'next/navigation';
 import { useFormik } from 'formik';
 import { useAuth } from 'src/hooks/use-auth';
 import * as Yup from 'yup';
-import passport from 'passport';
 import axios from 'axios';
 import {
   Alert,
@@ -21,7 +20,6 @@ import {
 } from '@mui/material';
 // import { useAuth } from 'src/hooks/use-auth';
 import { Layout as AuthLayout } from 'src/layouts/auth/layout';
-import "../../../lib/passport";
 
 const Page = () => {
   const router = useRouter();
