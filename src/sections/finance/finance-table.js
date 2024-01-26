@@ -26,7 +26,7 @@ export const FinancesTable = (props) => {
     onRowsPerPageChange,
     onSelectOne,
     page = 0,
-    rowsPerPage = 0,
+    rowsPerPage = 5,
     selected = []
   } = props;
 
@@ -38,19 +38,28 @@ export const FinancesTable = (props) => {
             <TableHead>
               <TableRow>
                 <TableCell>
-                  Nom
+                  NOM
                 </TableCell>
                 <TableCell>
-                  Tontine
+                  TONTINE
                 </TableCell>
                 <TableCell>
-                  Rappel Tontine
+                  CONTRIBUTION PLAT
                 </TableCell>
                 <TableCell>
-                  Contribution au plat
+                  FOND DE CAISSE
                 </TableCell>
                 <TableCell>
-                  Date
+                  SANCTIONS
+                </TableCell>
+                <TableCell>
+                  EVENEMENT
+                </TableCell>
+                <TableCell>
+                  DATE
+                </TableCell>
+                <TableCell>
+                  STATUS
                 </TableCell>
               </TableRow>
             </TableHead>

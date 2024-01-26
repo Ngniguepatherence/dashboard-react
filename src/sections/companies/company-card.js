@@ -2,10 +2,14 @@ import PropTypes from 'prop-types';
 import ArrowDownOnSquareIcon from '@heroicons/react/24/solid/ArrowDownOnSquareIcon';
 import ClockIcon from '@heroicons/react/24/solid/ClockIcon';
 import AvatarIcon from '@heroicons/react/24/solid/UserCircleIcon';
-import { Avatar, Box, Card, CardContent, Divider, Stack, SvgIcon, Typography } from '@mui/material';
+import { Avatar, Box, Button, Card, CardContent, Divider, Stack, SvgIcon, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
 import getConfig from 'next/config';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditNote  from '@mui/icons-material/EditNote';
+import axios from 'axios';
 const { publicRuntimeConfig } = getConfig();
+
 
 export const CompanyCard = (props) => {
   const { company} = props;
@@ -19,7 +23,11 @@ export const CompanyCard = (props) => {
     console.log(company.responsable);
     console.log(company.logo);
   }
-
+  const DeleteItems = async() => {
+    const response = await axios.post(`${publicRuntimeConfig.api.baseURL}/api/projets/delete/${company._id}`);
+    console.log(response.data);
+    router.push('/companies')
+  }
   return (
     
     <Card
@@ -28,9 +36,10 @@ export const CompanyCard = (props) => {
         flexDirection: 'column',
         height: '100%'
       }}
-      onClick={handleCardClick}
+      
+      
     >
-      <CardContent>
+      <CardContent onClick={handleCardClick}>
         <Box
           sx={{
             display: 'flex',
@@ -82,8 +91,10 @@ export const CompanyCard = (props) => {
             display="inline"
             variant="body2"
           >
-            initiateur du projet: {company.responsable}
+            Initiateur: {company.responsable}
           </Typography>
+          <EditNote />
+            <Button color='error' onClick={DeleteItems} ><DeleteIcon  /></Button>
         </Stack>
       </Stack>
     </Card>

@@ -44,7 +44,7 @@ const useProjetIds = (customers) => {
 
 const Page = () => {
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
   const [data, setData] = useState([]);
   const projets = useProjet(data, page, rowsPerPage);
   const projetIds = useProjetIds(projets);
@@ -63,6 +63,33 @@ const Page = () => {
     };
     fetchData();
   },[]);
+
+  const handlePageChange = useCallback(
+    (event, value) => {
+      setPage(value);
+    },
+    []
+  );
+
+  const handleRowsPerPageChange = useCallback(
+    (event) => {
+      setRowsPerPage(event.target.value);
+    },
+    []
+  );
+
+  const handleAddButtonClick = () => {
+    setIsAdding(true);
+  };
+
+  const handleFormInputChange = (e) => {
+    const { name, value } = e.target;
+    setNewCustomerData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
   return (
   
     <>
@@ -160,7 +187,7 @@ const Page = () => {
               }}
             >
               <Pagination
-                count={3}
+                count={5}
                 size="small"
               />
             </Box>

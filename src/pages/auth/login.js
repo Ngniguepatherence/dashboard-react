@@ -6,7 +6,8 @@ import { useRouter } from 'next/navigation';
 import { useFormik } from 'formik';
 import { useAuth } from 'src/hooks/use-auth';
 import * as Yup from 'yup';
-
+import passport from 'passport';
+import axios from 'axios';
 import {
   Alert,
   Box,
@@ -20,6 +21,7 @@ import {
 } from '@mui/material';
 // import { useAuth } from 'src/hooks/use-auth';
 import { Layout as AuthLayout } from 'src/layouts/auth/layout';
+import "../../../lib/passport";
 
 const Page = () => {
   const router = useRouter();
@@ -57,6 +59,9 @@ const Page = () => {
       }
     }
   });
+  const GoogleConnect = async() => {
+    await axios.get("http://localhost:5000/auth/google");
+  }
 
   const handleMethodChange = useCallback(
     (event, value) => {
@@ -64,9 +69,7 @@ const Page = () => {
     },
     []
   );
-    const handleSignIn = async() => {
-      await auth.signInWithGoogle()
-    };
+    
 
   
 
@@ -169,7 +172,7 @@ const Page = () => {
                 &nbsp;
                 <Link
                   component={NextLink}
-                  href="/auth/register"
+                  href="auth/register"
                   underline="hover"
                   variant="subtitle2"
                   
@@ -178,15 +181,12 @@ const Page = () => {
                 </Link>
               </Typography>
                 
-              <Link
-                  component={NextLink}
-                  href="#"
-                  underline="hover"
-                  variant="subtitle2"
-                  onClick={auth.signInWithGoogle}
+              <Button
+                  onClick={GoogleConnect}
+                  // onClick={}
                 >
                   Connexion avec google
-                </Link>
+                </Button>
                 
                 
               </form>
@@ -199,6 +199,8 @@ const Page = () => {
     </>
   );
 };
+
+
 
 Page.getLayout = (page) => (
   <AuthLayout>

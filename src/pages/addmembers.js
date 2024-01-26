@@ -163,7 +163,7 @@ const Page = () => {
     }),
     onSubmit: async (values, helpers) => {
       try {
-        await auth.AddMembers(logo,values.name, values.surname,values.email, values.phone,values.country, values.region, values.ville,values.rue, values.role, values.profession, values.passwordConfirm, values.password);
+        await auth.AddMembers(logo,values.name, values.surname,values.email, values.phone,values.country, values.region, values.ville,values.rue, values.role, values.profession,values.password,values.passwordConfirm);
         router.push('/');
       } catch (err) {
         helpers.setStatus({ success: false });

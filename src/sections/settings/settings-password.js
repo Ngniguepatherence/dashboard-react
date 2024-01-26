@@ -7,10 +7,14 @@ import {
   CardHeader,
   Divider,
   Stack,
-  TextField
+  TextField,
+  Snackbar
 } from '@mui/material';
+import { useAuth } from 'src/hooks/use-auth';
+import axios from 'axios';
 
 export const SettingsPassword = () => {
+  const auth = useAuth();
   const [values, setValues] = useState({
     password: '',
     confirm: ''
@@ -24,21 +28,29 @@ export const SettingsPassword = () => {
       }));
     },
     []
-  );
-
-  const handleSubmit = useCallback(
-    (event) => {
-      event.preventDefault();
+    );
+    
+    const handleSubmit = useCallback(
+      (event) => {
+        event.preventDefault();
+        console.log(values);
+        updatepassword();
     },
     []
   );
+
+  const updatepassword = async () =>{
+    const response = await axios.post('http://localhost:5000/api/profiles/reset-password', {
+     
+    });
+  }
 
   return (
     <form onSubmit={handleSubmit}>
       <Card>
         <CardHeader
           subheader="Mettre a jour le mot de passe"
-          title="Password"
+          title="Password" 
         />
         <Divider />
         <CardContent>
@@ -66,7 +78,7 @@ export const SettingsPassword = () => {
         </CardContent>
         <Divider />
         <CardActions sx={{ justifyContent: 'flex-end' }}>
-          <Button variant="contained">
+          <Button variant="contained" type='submit'>
             Mettre a jour
           </Button>
         </CardActions>

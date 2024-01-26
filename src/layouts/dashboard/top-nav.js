@@ -13,10 +13,12 @@ import {
   Tooltip,
   useMediaQuery
 } from '@mui/material';
+import getConfig from 'next/config';
 import { alpha } from '@mui/material/styles';
 import { usePopover } from 'src/hooks/use-popover';
 import { AccountPopover } from './account-popover';
 import { useAuthContext } from '../../contexts/auth-context';
+const { publicRuntimeConfig } = getConfig();
 
 const SIDE_NAV_WIDTH = 280;
 const TOP_NAV_HEIGHT = 64;
@@ -67,26 +69,26 @@ export const TopNav = (props) => {
                 </SvgIcon>
               </IconButton>
             )}
-            <Tooltip title="Search">
+            {/* <Tooltip title="Search">
               <IconButton>
                 <SvgIcon fontSize="small">
                   <MagnifyingGlassIcon />
                 </SvgIcon>
               </IconButton>
-            </Tooltip>
+            </Tooltip> */}
           </Stack>
           <Stack
             alignItems="center"
             direction="row"
             spacing={2}
           >
-            <Tooltip title="Contacts">
+            {/* <Tooltip title="Contacts">
               <IconButton>
                 <SvgIcon fontSize="small">
                   <UsersIcon />
                 </SvgIcon>
               </IconButton>
-            </Tooltip>
+            </Tooltip> */}
             <Tooltip title="Notifications">
               <IconButton>
                 <Badge
@@ -108,7 +110,7 @@ export const TopNav = (props) => {
                 height: 40,
                 width: 40
               }}
-              src={`http://34.155.59.97/api/avatar/${user.avatar}`}
+              src={`${publicRuntimeConfig.api.baseURL}/api/avatar/${user.avatar}`}
             />
           </Stack>
         </Stack>

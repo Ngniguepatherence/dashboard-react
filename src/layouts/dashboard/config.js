@@ -120,6 +120,27 @@ export const items = (roles) =>{
         </SvgIcon>
       ),
       visible: roles.includes('user') || roles.includes('admin'),
+      children: [
+        {
+          title: 'Revenus',
+          path: '/revenus',
+          icon: (
+            <SvgIcon fontSize="small">
+              {/* Icône pour les revenus */}
+            </SvgIcon>
+          )
+        },
+        {
+          title: 'Dépenses',
+          path: '/depenses',
+          icon: (
+            <SvgIcon fontSize="small">
+              {/* Icône pour les dépenses */}
+            </SvgIcon>
+          )
+        },
+        // Ajoutez d'autres sous-menus au besoin
+      ]
     },
     {
       title: 'Compte',
@@ -136,33 +157,6 @@ export const items = (roles) =>{
     icon: (
       <SvgIcon fontSize="small">
         <CogIcon />
-      </SvgIcon>
-    )
-  },
-  {
-    title: 'Connexion',
-    path: '/auth/login',
-    icon: (
-      <SvgIcon fontSize="small">
-        <LockClosedIcon />
-      </SvgIcon>
-    )
-  },
-  {
-    title: 'Creation de compte',
-    path: '/auth/register',
-    icon: (
-      <SvgIcon fontSize="small">
-        <UserPlusIcon />
-      </SvgIcon>
-    )
-  },
-  {
-    title: 'Erreur',
-    path: '/404',
-    icon: (
-      <SvgIcon fontSize="small">
-        <XCircleIcon />
       </SvgIcon>
     )
   }

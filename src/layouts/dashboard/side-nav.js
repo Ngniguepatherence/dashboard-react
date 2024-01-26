@@ -138,13 +138,16 @@ export const SideNav = (props) => {
                         m: 0
                       }}
                     >
-                      {item.options.map((option) => (
+                      {item.options.map((option,index) => (
+                         <React.Fragment key={index}>
                         <SideNavItem
                           key={option.title}
                           active={pathname === option.path}
                           path={option.path}
                           title={option.title}
                         />
+                        {option.options && (SideNav(option,index))}
+                        </React.Fragment>
                       ))}
                     </Stack>
                   )}

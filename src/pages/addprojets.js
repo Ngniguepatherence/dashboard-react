@@ -15,6 +15,7 @@ const Page = () => {
   const router = useRouter();
   const auth = useAuth();
   const [logo, setLogo] = useState(null);
+  const [responsables, setResponsables] = useState([]);
 
   const [values, setValues] = useState({
     title: '',

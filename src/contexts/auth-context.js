@@ -2,8 +2,8 @@ import { createContext, useContext, useEffect, useReducer, useRef } from 'react'
 import PropTypes from 'prop-types';
 import { jwtDecode } from 'jwt-decode';
 import axios from 'axios';
-import getConfig from 'next/config';
 import { FastRewind } from '@mui/icons-material';
+import getConfig from 'next/config';
 const { publicRuntimeConfig } = getConfig();
 const HANDLERS = {
   INITIALIZE: 'INITIALIZE',
@@ -158,6 +158,8 @@ export const AuthProvider = (props) => {
   );
 
   const signIn = async (email, password) => {
+    let isAuthenticated = false;
+
     try {
       const response = await axios.post(`${publicRuntimeConfig.api.baseURL}/api/auth/login`, {
           email,
@@ -177,15 +179,46 @@ export const AuthProvider = (props) => {
         console.log(user);
         window.sessionStorage.setItem('authToken', response.data.token);
         
-        dispatch({
-          type: HANDLERS.SIGN_IN,
-          payload:  user 
-          
-        });
+        try {
+          const token = window.sessionStorage.getItem('authToken');
+    
+          if (token) {
+            const decodedToken = jwtDecode(token);
+    
+            // Customize this part based on your token structure
+            const user = {
+              id: decodedToken.userId._id,
+              avatar: decodedToken.userId.avatar,
+              prenom: decodedToken.userId.surname, // Assurez-vous que ces propriétés existent dans votre token
+              name: decodedToken.userId.name,
+              email: decodedToken.userId.email,
+              phone: decodedToken.userId.phone,
+              address: decodedToken.userId.address,
+              role: decodedToken.userId.role,
+            };
+            console.log(user);
+            initialized.current = true;
+            isAuthenticated = true;
+           
+    
+            dispatch({
+              type: HANDLERS.INITIALIZE,
+              payload: 
+                user
+                
+              
+            });
+          }
+    
+        } catch (err) {
+          console.error(err);
+        }
+
     }catch(error) {
       console.error('Erreur lors de la connexion :', error);
     throw new Error('Veuillez vérifier votre email et mot de passe');
     }
+    
   };
 
   
@@ -205,8 +238,9 @@ export const AuthProvider = (props) => {
     console.log(title,description,responsable,logo,dateinit);
     try {
       console.log(responsable);
-      const response = await axios.post(`${publicRuntimeConfig.api.baseURL}/api/projets'`, {title, description,responsable,logo,dateinit});
+      const response = await axios.post(`${publicRuntimeConfig.api.baseURL}/api/projets`, {title, description,responsable,logo,dateinit});
       console.log(response);
+      // Equiper les membres de l'association de polo pendant les seances
     }
     catch(error) {
       console.error('Erreur lors de l\'ajout du projet:', error);
@@ -214,7 +248,7 @@ export const AuthProvider = (props) => {
     }
 
   };
-const AddMembers = async (avatar, name, surname, email, phone,country, region, ville,rue,password,passwordConfirm,profession,role)=>{
+const AddMembers = async (avatar, name, surname, email, phone,country, region, ville,rue,role,profession,password,passwordConfirm)=>{
   if(password != passwordConfirm){
     console.log('password not match');
   }
