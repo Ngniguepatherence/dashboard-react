@@ -161,7 +161,7 @@ export const AuthProvider = (props) => {
     let isAuthenticated = false;
 
     try {
-      const response = await axios.post(`${publicRuntimeConfig.api.baseURL}/api/auth/login`, {
+      const response = await axios.post(`${publicRuntimeConfig.api.baseURL}api/auth/login`, {
           email,
           password
         });
@@ -225,7 +225,7 @@ export const AuthProvider = (props) => {
   const AddEvent = async (title,description,date,responsable) => {
     try {
       console.log(responsable);
-      const response = await axios.post(`${publicRuntimeConfig.api.baseURL}/api/events`, {title, description,date,responsable});
+      const response = await axios.post(`${publicRuntimeConfig.api.baseURL}api/events`, {title, description,date,responsable});
       console.log(response);
     }
     catch(error) {
@@ -238,7 +238,7 @@ export const AuthProvider = (props) => {
     console.log(title,description,responsable,logo,dateinit);
     try {
       console.log(responsable);
-      const response = await axios.post(`${publicRuntimeConfig.api.baseURL}/api/projets`, {title, description,responsable,logo,dateinit});
+      const response = await axios.post(`${publicRuntimeConfig.api.baseURL}api/projets`, {title, description,responsable,logo,dateinit});
       console.log(response);
       // Equiper les membres de l'association de polo pendant les seances
     }
@@ -254,7 +254,7 @@ const AddMembers = async (avatar, name, surname, email, phone,country, region, v
   }
   console.log(avatar,name,surname,password,email,phone,profession);
   try {
-    const response = await axios.post(`${publicRuntimeConfig.api.baseURL}/api/profiles`, {avatar, name,surname,email, phone,country,region,ville,rue,role,profession,password});
+    const response = await axios.post(`${publicRuntimeConfig.api.baseURL}api/profiles`, {avatar, name,surname,email, phone,country,region,ville,rue,role,profession,password});
     console.log(response);
   }
   catch(error) {
@@ -265,7 +265,7 @@ const AddMembers = async (avatar, name, surname, email, phone,country, region, v
   const signUp = async (title,description, responsable, logo,createat) => {
     try {
       // Envoyer les informations d'inscription au backend
-      const response = await axios.post(`${publicRuntimeConfig.api.baseURL}/api/projets`, { title,description, responsable, logo,createat });
+      const response = await axios.post(`${publicRuntimeConfig.api.baseURL}api/projets`, { title,description, responsable, logo,createat });
   
       // Stocker le token dans le sessionStorage (ou localStorage selon vos besoins)
       window.sessionStorage.setItem('authToken', response.data.token);
@@ -293,7 +293,7 @@ const AddMembers = async (avatar, name, surname, email, phone,country, region, v
   
   const signInWithGoogle = async () => {
     try {
-      const response = await axios.get(`${publicRuntimeConfig.api.baseURL}/auth/google`);
+      const response = await axios.get(`${publicRuntimeConfig.api.baseURL}auth/google`);
 
       const { token } = response.data;
       const decodedToken = jwtDecode(token);
@@ -320,7 +320,7 @@ const AddMembers = async (avatar, name, surname, email, phone,country, region, v
 
 
   const signOut = async () => {
-    await axios.post(`${publicRuntimeConfig.api.baseURL}/api/auth/logout`);
+    await axios.post(`${publicRuntimeConfig.api.baseURL}api/auth/logout`);
 
     // Nettoyer le token du sessionStorage
     window.sessionStorage.removeItem('authToken');
