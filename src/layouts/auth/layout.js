@@ -93,7 +93,7 @@ export const Layout = (props) => {
               sx={{ mb: 3 }}
               variant="subtitle1"
             >
-              Platform a but non lucratifs de suivie de cotisation et assistance pour les etudiants de la promotion GTR
+              Plateforme à but non lucratif, pour le partage et la communion entre les étudiants de la promotion GTR 2008. Together for a better Tomorrow !
             </Typography>
             
           </Box>

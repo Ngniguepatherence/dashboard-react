@@ -11,6 +11,8 @@ import { SvgIcon } from '@mui/material';
 
 export const items = (roles) =>{
   const isUser = roles.includes('user');
+  const isAdmin = roles.includes('admin');
+  const isSuperAdmin = roles.includes('super-admin');
   console.log(isUser);
 
   return [

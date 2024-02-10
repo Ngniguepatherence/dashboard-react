@@ -153,7 +153,7 @@ const Page = () => {
             >
               <Stack spacing={1}>
                 <Typography variant="h4">
-                  Membres Pouapeu
+                  Membres de l'association Pouapou
                 </Typography>
                 <Stack
                   alignItems="center"

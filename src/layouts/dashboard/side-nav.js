@@ -28,7 +28,7 @@ export const SideNav = (props) => {
   const userRoles = user ? user.role : [];
 
   const filteredItems = items(userRoles); 
-  console.log(filteredItems);
+  // console.log(filteredItems);
   console.log(userRoles);
   const content = (
     <Scrollbar

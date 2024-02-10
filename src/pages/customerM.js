@@ -104,7 +104,7 @@ const Page = () => {
     <>
       <Head>
         <title>
-          Membres | Pouapeu
+          Membres | Pouapou
         </title>
       </Head>
       <Box

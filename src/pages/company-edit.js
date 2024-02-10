@@ -17,7 +17,31 @@ const Page = () => {
   const auth = useAuth();
   const [logo, setLogo] = useState(null);
   const [responsables, setResponsables] = useState([]);
-  const [acteurs, setActeurs] = useState([]);
+  const ProjetId = router.query;
+  const [value, setValue] = useState(0);
+
+  // Utilisez l'identifiant de l'entreprise pour charger ses détails depuis l'API ou votre source de données
+  const [companyDetails, setCompanyDetails] = useState(null);
+
+  const fetchCompanyDetails = async () => {
+    try {
+      const response = await fetch(`${publicRuntimeConfig.api.baseURL}/api/projets/${companyId}`);
+      const data = await response.json();
+      setCompanyDetails(data);
+    } catch (error) {
+      console.error('Error fetching company details:', error);
+    }
+  };
+  
+
+  useEffect(() => {
+    if(ProjetId) {
+      fetchCompanyDetails();
+  }
+  
+}, [ProjetId]);
+    
+
 
   const [values, setValues] = useState({
     title: '',
@@ -89,7 +113,7 @@ const Page = () => {
       // await schema.validate(values, { abortEarly: false });
 
       // Validation succeeded, perform your API call or other actions
-      await auth.AddProjet(values.title, values.description, acteurs,logo, values.dateinit);
+      await auth.AddProjet(values.title, values.description, responsables,logo, values.dateinit);
       router.push('/companies');
     } catch (err) {
       if (err instanceof Yup.ValidationError) {
@@ -106,7 +130,7 @@ const Page = () => {
     <>
       <Head>
         <title>
-        Ajouter Projet | Pouapeu
+        Update | Pouapeu
         </title>
       </Head>
       <Box
@@ -137,20 +161,17 @@ const Page = () => {
                 color="text.secondary"
                 variant="body2"
               >
-                Ajouter un Projet 
+                Mettre a jour un Projet 
               </Typography>
             </Stack>
-            {/* <form
-              noValidate
-              onSubmit={handleSubmits()}
-            > */}
+            
               <Stack spacing={3}>
                 <TextField
                   
                   fullWidth
                   label="title"
                   name="title"
-                  value={values.title}
+                  value={companyDetails.title}
                   onChange={handleChange}
                   error={!!errors.title}
                   helperText={errors.title}
@@ -165,21 +186,17 @@ const Page = () => {
                   error={!!errors.description}
                   helperText={errors.description}
                 />
-                
                 <Autocomplete
-                disablePortal
                   multiple
                   id="responsables"
                   options={responsables}
-                  
                   getOptionLabel={(responsable) => responsable.name}
                   value={values.responsables}
                   onChange={(event, newValue) => {
-                    const selectedActeurs = newValue.map((responsable) => responsable.name);
-                    console.log(selectedActeurs);
-                    setActeurs(selectedActeurs);
-                    console.log(acteurs);
-                    
+                    setValues({
+                      ...values,
+                      responsables: newValue.map((responsable) => responsable.id),
+                    });
                   }}
                   renderInput={(params) => (
                     <TextField

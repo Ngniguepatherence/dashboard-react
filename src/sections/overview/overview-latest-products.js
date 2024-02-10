@@ -56,7 +56,7 @@ export const OverviewLatestProducts = (props) => {
                     ? (
                       <Box
                         component="img"
-                        src={`${publicRuntimeConfig.api.baseURL}/api/files/${product.image}`}
+                        src={`${publicRuntimeConfig.api.baseURL}/api/files/${product.image}`} alt='Feb 8'
                         sx={{
                           borderRadius: 1,
                           height: 48,
@@ -66,13 +66,14 @@ export const OverviewLatestProducts = (props) => {
                     )
                     : (
                       <Box
+                        
                         sx={{
                           borderRadius: 1,
                           backgroundColor: 'neutral.200',
                           height: 48,
                           width: 48
                         }}
-                      />
+                      ><h4>product.date</h4></Box>
                     )
                 }
               </ListItemAvatar>

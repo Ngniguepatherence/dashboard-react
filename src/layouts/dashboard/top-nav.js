@@ -10,9 +10,11 @@ import {
   IconButton,
   Stack,
   SvgIcon,
+  Link,
   Tooltip,
   useMediaQuery
 } from '@mui/material';
+import NextLink from 'next/link';
 import getConfig from 'next/config';
 import { alpha } from '@mui/material/styles';
 import { usePopover } from 'src/hooks/use-popover';
@@ -82,13 +84,20 @@ export const TopNav = (props) => {
             direction="row"
             spacing={2}
           >
-            {/* <Tooltip title="Contacts">
+            <Tooltip title="Contacts">
+            <Link
+                  component={NextLink}
+                  href="/customerM"
+                  underline="hover"
+                  variant="subtitle2"
+                >
               <IconButton>
                 <SvgIcon fontSize="small">
                   <UsersIcon />
                 </SvgIcon>
               </IconButton>
-            </Tooltip> */}
+              </Link>
+            </Tooltip>
             <Tooltip title="Notifications">
               <IconButton>
                 <Badge
@@ -110,7 +119,7 @@ export const TopNav = (props) => {
                 height: 40,
                 width: 40
               }}
-              src={`${publicRuntimeConfig.api.baseURL}/api/avatar/${user.avatar}`}
+              src={`${publicRuntimeConfig.api.baseURL}/api/avatar/${user.avatar}` || 'avatar'} alt='Avatar'
             />
           </Stack>
         </Stack>

@@ -83,7 +83,7 @@ export const AccountProfileDetails = () => {
     >
       <Card>
         <CardHeader
-          subheader="Ses informations peuvent etre modifie"
+          subheader="Ces informations peuvent etre modifie"
           title="Profile"
         />
         <CardContent sx={{ pt: 0 }}>
@@ -198,9 +198,9 @@ export const AccountProfileDetails = () => {
        
         
       </Card>
-      <Card>
+      {/* <Card>
       <CardHeader
-          subheader="Mettre a jour votre mot de passe"
+          subheader="Mettre à jour votre mot de passe"
           title="Mot de passe"
         />
       <CardActions sx={{ pt: 0 }}>
@@ -243,7 +243,7 @@ export const AccountProfileDetails = () => {
               >
           <TextField
                   fullWidth
-                  label="confirm nouveau mot de passe"
+                  label="confirmez votre nouveau mot de passe"
                   name="new-password-confirm"
                   onChange={handleChange}
                   required
@@ -262,7 +262,7 @@ export const AccountProfileDetails = () => {
           </Button>
           
         </CardActions>
-      </Card>
+      </Card> */}
     </form>
     
   );

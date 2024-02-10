@@ -62,14 +62,13 @@ const handlers = {
   },
 
   [HANDLERS.SIGN_IN_WITH_GOOGLE]: (state, action) => {
-    const { user, expirationTime } = action.payload;
+    const { user } = action.payload;
 
     return {
       ...state,
       isAuthenticated: true,
       isLoading: false,
       user,
-      expirationTime,
     };
   },
 
@@ -221,6 +220,14 @@ export const AuthProvider = (props) => {
     
   };
 
+  const forgotPassword = async (email) => {
+    await axios.post(`${publicRuntimeConfig.api.baseURL}/api/profiles/forget-password`,{email});
+    
+  }
+  const VerificationCode = async (codepin) => {
+    await axios.post(`${publicRuntimeConfig.api.baseURL}/api/profiles/verification`,{codepin});
+    
+  }
   
   const AddEvent = async (title,description,date,responsable) => {
     try {
@@ -234,11 +241,11 @@ export const AuthProvider = (props) => {
     }
 
   };
-  const AddProjet = async (title,description,responsable,logo,dateinit) => {
-    console.log(title,description,responsable,logo,dateinit);
+  const AddProjet = async (title,description,acteurs,logo,dateinit) => {
+    console.log(title,description,acteurs,logo,dateinit);
     try {
-      console.log(responsable);
-      const response = await axios.post(`${publicRuntimeConfig.api.baseURL}/api/projets`, {title, description,responsable,logo,dateinit});
+      console.log(acteurs);
+      const response = await axios.post(`${publicRuntimeConfig.api.baseURL}/api/projets`, {title, description,acteurs,logo,dateinit});
       console.log(response);
       // Equiper les membres de l'association de polo pendant les seances
     }
@@ -248,13 +255,13 @@ export const AuthProvider = (props) => {
     }
 
   };
-const AddMembers = async (avatar, name, surname, email, phone,country, region, ville,rue,role,profession,password,passwordConfirm)=>{
+const AddMembers = async (avatar, name, surname, email, phone,country, ville,role,profession,password,passwordConfirm)=>{
   if(password != passwordConfirm){
     console.log('password not match');
   }
-  console.log(avatar,name,surname,password,email,phone,profession);
+  console.log(password,role);
   try {
-    const response = await axios.post(`${publicRuntimeConfig.api.baseURL}/api/profiles`, {avatar, name,surname,email, phone,country,region,ville,rue,role,profession,password});
+    const response = await axios.post(`${publicRuntimeConfig.api.baseURL}/api/profiles`, {avatar, name,surname,email, phone,country,ville,role,profession,password});
     console.log(response);
   }
   catch(error) {
@@ -291,30 +298,122 @@ const AddMembers = async (avatar, name, surname, email, phone,country, region, v
     }
   };
   
-  const signInWithGoogle = async () => {
+  const signInWithGoogle = async (email,expires) => {
+    let isAuthenticated = false;
     try {
-      const response = await axios.get(`${publicRuntimeConfig.api.baseURL}/auth/google`);
-
-      const { token } = response.data;
-      const decodedToken = jwtDecode(token);
-
-      const user = {
-        id: decodedToken.userId,
-        name: decodedToken.name,
-        email: decodedToken.email,
-      };
-
-      dispatch({
-        type: HANDLERS.SIGN_IN_WITH_GOOGLE,
-        payload: 
-          user
-      
+      const response = await axios.post(`${publicRuntimeConfig.api.baseURL}/api/auth/google`, {
+        email, expires
       });
+      const decodedToken = jwtDecode(response.data.token);
+        // const userResponse = await axios.get(`http://localhost:5000/api/users/${decodedToken.userId}`);
+        const user = {
+          id: decodedToken.userId._id,
+          prenom: decodedToken.userId.surname, // Assurez-vous que ces propriétés existent dans votre token
+          name: decodedToken.userId.names,
+          email: decodedToken.userId.email,
+          phone: decodedToken.userId.phone,
+          role: decodedToken.userId.role,
+        };
+        console.log(user);
+        window.sessionStorage.setItem('authToken', response.data.token);
+        
+        try {
+          const token = window.sessionStorage.getItem('authToken');
+    
+          if (token) {
+            const decodedToken = jwtDecode(token);
+    
+            // Customize this part based on your token structure
+            const user = {
+              id: decodedToken.userId._id,
+              avatar: decodedToken.userId.avatar,
+              prenom: decodedToken.userId.surname, // Assurez-vous que ces propriétés existent dans votre token
+              name: decodedToken.userId.name,
+              email: decodedToken.userId.email,
+              phone: decodedToken.userId.phone,
+              address: decodedToken.userId.address,
+              role: decodedToken.userId.role,
+            };
+            console.log(user);
+            initialized.current = true;
+            isAuthenticated = true;
+           
+    
+            dispatch({
+              type: HANDLERS.INITIALIZE,
+              payload: 
+                user
+                
+              
+            });
+          }
+    
+        } catch (err) {
+          console.error(err);
+        }
     } catch (error) {
-      console.error('Erreur lors de la connexion avec Google :', error);
-      // throw new Error('Échec de la connexion avec Google');
+
     }
   };
+
+
+  const GoogleSession = async (email,expires) => {
+    let isAuthenticated = false;
+    try {
+      const response = await axios.post(`${publicRuntimeConfig.api.baseURL}/api/auth/google`, {
+        email, expires
+      });
+      const decodedToken = jwtDecode(response.data.token);
+        // const userResponse = await axios.get(`http://localhost:5000/api/users/${decodedToken.userId}`);
+        const user = {
+          id: decodedToken.userId._id,
+          prenom: decodedToken.userId.surname, // Assurez-vous que ces propriétés existent dans votre token
+          name: decodedToken.userId.names,
+          email: decodedToken.userId.email,
+          phone: decodedToken.userId.phone,
+          role: decodedToken.userId.role,
+        };
+        console.log(user);
+        window.sessionStorage.setItem('authToken', response.data.token);
+        
+        try {
+          const token = window.sessionStorage.getItem('authToken');
+    
+          if (token) {
+            const decodedToken = jwtDecode(token);
+    
+            // Customize this part based on your token structure
+            const user = {
+              id: decodedToken.userId._id,
+              avatar: decodedToken.userId.avatar,
+              prenom: decodedToken.userId.surname, // Assurez-vous que ces propriétés existent dans votre token
+              name: decodedToken.userId.name,
+              email: decodedToken.userId.email,
+              phone: decodedToken.userId.phone,
+              address: decodedToken.userId.address,
+              role: decodedToken.userId.role,
+            };
+            console.log(user);
+            initialized.current = true;
+            isAuthenticated = true;
+           
+    
+            dispatch({
+              type: HANDLERS.INITIALIZE,
+              payload: 
+                user
+                
+              
+            });
+          }
+    
+        } catch (err) {
+          console.error(err);
+        }
+    } catch (error) {
+
+    }
+  }
   
 
 
@@ -341,7 +440,10 @@ const AddMembers = async (avatar, name, surname, email, phone,country, region, v
         signOut,
         AddProjet,
         AddEvent,
-        AddMembers
+        AddMembers,
+        GoogleSession,
+        forgotPassword,
+        VerificationCode
       }}
     >
       {children}

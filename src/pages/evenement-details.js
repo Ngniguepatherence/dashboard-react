@@ -79,7 +79,7 @@ const formattedDate = new Intl.DateTimeFormat('fr-FR', options).format(date);
     <>
     <Head>
         <title>
-        Details Projet | Pouapeu
+        Détails Projet | Pouapou
         </title>
       </Head>
       <Box

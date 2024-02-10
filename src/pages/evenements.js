@@ -68,7 +68,7 @@ const Page = () => {
     <>
       <Head>
         <title>
-          Evenements | Pouapeu
+          Evenements | Pouapou
         </title>
       </Head>
       <Box

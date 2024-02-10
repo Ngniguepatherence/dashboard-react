@@ -5,6 +5,7 @@ import {
   Box,
   Card,
   Checkbox,
+  Grid,
   Stack,
   Table,
   TableBody,
@@ -12,12 +13,33 @@ import {
   TableHead,
   TablePagination,
   TableRow,
-  Typography
+  Typography,
+  Button,
+  IconButton
 } from '@mui/material';
+import {
+  GridRowsProp,
+  GridRowModesModel,
+  GridRowModes,
+  GridColDef,
+  GridToolbarContainer,
+  GridActionsCellItem,
+  GridEventListener,
+  GridRowId,
+  DataGrid,
+  GridRowModel,
+  GridRowEditStopReasons,
+} from '@mui/x-data-grid';
 import { Scrollbar } from 'src/components/scrollbar';
 import { getInitials } from 'src/utils/get-initials';
 import { yellow } from '@mui/material/colors';
 import getConfig from 'next/config';
+import AddIcon from '@mui/icons-material/Add';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/DeleteOutlined';
+import SaveIcon from '@mui/icons-material/Save';
+import CancelIcon from '@mui/icons-material/Close';
+import { ArrowBack, ArrowRight, Details } from '@mui/icons-material';
 const { publicRuntimeConfig } = getConfig();
 
 export const CustomersTable = (props) => {
@@ -37,6 +59,7 @@ export const CustomersTable = (props) => {
 
   const selectedSome = (selected.length > 0) && (selected.length < items.length);
   const selectedAll = (items.length > 0) && (selected.length === items.length);
+  // const gridRootProps = useGridRootProps();
 
   return (
     <Card>
@@ -62,16 +85,16 @@ export const CustomersTable = (props) => {
                   Nom
                 </TableCell>
                 <TableCell>
-                  Email
+                  Location
                 </TableCell>
                 <TableCell>
-                  Adresse
+                  Contact
                 </TableCell>
                 <TableCell>
-                  Num de telephone
+                  Rôle
                 </TableCell>
                 <TableCell>
-                  Role
+                  Actions
                 </TableCell>
               </TableRow>
             </TableHead>
@@ -109,21 +132,29 @@ export const CustomersTable = (props) => {
                           {getInitials(customer.name)}
                         </Avatar>
                         <Typography variant="subtitle2">
-                          {customer.name}
+                          {customer.name} {customer.surname} <br/> {customer.email}
                         </Typography>
+                        
+                        
                       </Stack>
                     </TableCell>
                     <TableCell>
-                      {customer.email}
-                    </TableCell>
-                    <TableCell>
-                      {customer.address.city}, {customer.address.state}, {customer.address.country}
+                    {customer.address.city},{customer.address.country}
                     </TableCell>
                     <TableCell>
                       {customer.phone}
                     </TableCell>
-                    <TableCell color={yellow}>
+                    <TableCell>
                       {customer.role}
+                    </TableCell>
+                    <TableCell color={yellow}>
+                    
+                      
+                      <IconButton aria-label="edit"><EditIcon /></IconButton>
+                      <IconButton aria-label="delete"><DeleteIcon /></IconButton>
+                      <IconButton aria-label="details"><ArrowRight /></IconButton>
+                    
+                    
                     </TableCell>
                   </TableRow>
                 );

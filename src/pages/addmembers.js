@@ -91,7 +91,20 @@ const Page = () => {
   const [image, _setImage] = useState(null);
   const [logo, setLogo] = useState(null);
 
+
+  const [notification, setNotification] = useState({
+    open: false,
+    message: '',
+    severity: 'success'
+  });
   
+
+  const handleCloseNotification = () => {
+    setNotification({
+      ...notification,
+      open: false
+    });
+  };
 
   const formik = useFormik({
     initialValues: {
@@ -101,9 +114,7 @@ const Page = () => {
       surname: '',
       phone: '',
       country: '',
-      region: '',
       ville: '',
-      rue: '',
       role: '',
       profession: '',
       password: '',
@@ -132,15 +143,7 @@ const Page = () => {
         .string()
         .max(255)
         .required('country is required'),
-      region: Yup
-        .string()
-        .max(255)
-        .required('State is required'),
       ville: Yup
-        .string()
-        .max(255)
-        .required('State is required'),
-      rue: Yup
         .string()
         .max(255)
         .required('State is required'),
@@ -163,8 +166,14 @@ const Page = () => {
     }),
     onSubmit: async (values, helpers) => {
       try {
-        await auth.AddMembers(logo,values.name, values.surname,values.email, values.phone,values.country, values.region, values.ville,values.rue, values.role, values.profession,values.password,values.passwordConfirm);
-        router.push('/');
+        await auth.AddMembers(logo,values.name, values.surname,values.email, values.phone,values.country, values.ville, values.role, values.profession,values.password,values.passwordConfirm);
+
+        setNotification({
+          open: true,
+          message: 'Ajout du nouveau membre reussi avec success!',
+          severity: 'success'
+        });
+        router.push('/customers');
       } catch (err) {
         helpers.setStatus({ success: false });
         helpers.setErrors({ submit: err.message });
@@ -256,14 +265,14 @@ const Page = () => {
         <Stack spacing={3}>
           <div>
             <Typography variant="h4">
-            Ajouter un nouvel membre
+            Ajouter un nouveau membre
             </Typography>
           </div>
           <Typography
                 color="text.secondary"
                 variant="body2"
               >
-                Ajoutez un nouvel membre a l&apos;association?
+                Ajouter un nouveau membre à l&apos;association?
               </Typography>
           <div>
             <Grid
@@ -445,46 +454,19 @@ const Page = () => {
                 md={6}
               >
                 <TextField
-                  error={!!(formik.touched.region && formik.errors.region)}
+                  error={!!(formik.touched.ville && formik.errors.ville)}
                   fullWidth
-                  helperText={formik.touched.region && formik.errors.region}
+                  helperText={formik.touched.ville && formik.errors.ville}
                   label="State/Region"
-                  name="region"
-                  onBlur={formik.handleBlur}
-                  onChange={formik.handleChange}
-                  required
-                  value={formik.values.region} 
-                  
-                />
-              </Grid>
-              <Grid
-                xs={12}
-                md={6}
-              >
-                <TextField
-                   error={!!(formik.touched.ville && formik.errors.ville)}
-                   fullWidth
-                   helperText={formik.touched.ville && formik.errors.ville}
-                  label="Choisissez une ville"
                   name="ville"
                   onBlur={formik.handleBlur}
                   onChange={formik.handleChange}
                   required
-                  select
-                  SelectProps={{ native: true }}
-                  value={formik.values.ville}
+                  value={formik.values.ville} 
                   
-                >
-                  {states.map((option) => (
-                    <option
-                      key={option.value}
-                      value={option.value}
-                    >
-                      {option.label}
-                    </option>
-                  ))}
-                </TextField>
+                />
               </Grid>
+              
               <Grid
                 xs={12}
                 md={6}
@@ -513,23 +495,7 @@ const Page = () => {
                   ))}
                 </TextField>
               </Grid>
-              <Grid
-                xs={12}
-                md={6}
-              >
-                <TextField
-                  error={!!(formik.touched.rue && formik.errors.rue)}
-                  fullWidth
-                  helperText={formik.touched.rue && formik.errors.rue}
-                  label="Quartier/Rue"
-                  name="rue"
-                  onBlur={formik.handleBlur}
-                  onChange={formik.handleChange}
-                  required
-                  value={formik.values.rue} 
-                  
-                />
-              </Grid>
+              
             </Grid>
           </Box>
         </CardContent>
@@ -541,7 +507,7 @@ const Page = () => {
                 color="text.primary"
                 variant="subtitle1"
               >
-                Creer un Nouveau Mot de passe
+                Créer un Nouveau Mot de passe
               </Typography>
 
               <Box sx={{ m: 2 }}>

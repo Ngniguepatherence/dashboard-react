@@ -3,15 +3,29 @@ import NextLink from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { Box, Button, Link, Stack, TextField, Typography } from '@mui/material';
+import { Box, Button, Card, CardContent, CardHeader, Snackbar,Link, Stack, TextField, Typography } from '@mui/material';
 import { useAuth } from 'src/hooks/use-auth';
 import { Layout as AuthLayout } from 'src/layouts/auth/layout';
 import axios from 'axios';
+import { useState } from 'react';
 
 
 const Page = () => {
     const router = useRouter();
     const auth = useAuth();
+
+    const [notification, setNotification] = useState({
+      open: false,
+      message: '',
+      severity: 'success'
+    });
+
+    const handleCloseNotification = () => {
+      setNotification({
+        ...notification,
+        open: false
+      });
+    };
     const formik = useFormik({
       initialValues: {
         email: '',
@@ -19,22 +33,22 @@ const Page = () => {
       },
       validationSchema: Yup.object({
         email: Yup
-        .string()
-        .max(255)
-        .required('Email is required'),
+          .string()
+          .max(255)
+          .required('Email is required'),
       }),
       onSubmit: async (values, helpers) => {
         try {
-         
-          if(response.data.success){
-            await auth.signIn(values.new_password, values.confirm_password);
-            router.push('/');
-          }else {
-            helpers.setStatus({ success: false });
-          helpers.setErrors({ submit: response.data.message });
-          helpers.setSubmitting(false);
-          }
-          router.push('/');
+          const response = await auth.forgotPassword(values.email)
+          
+          setNotification({
+            open: true,
+            message: `${response}`,
+            severity: 'success'
+          });
+
+          router.push('/verification-code');
+          
         } catch (err) {
           helpers.setStatus({ success: false });
           helpers.setErrors({ submit: err.message });
@@ -58,6 +72,19 @@ const Page = () => {
             justifyContent: 'center'
           }}
         >
+          <Snackbar
+        open={notification.open}
+        autoHideDuration={6000}
+        onClose={handleCloseNotification}
+        message={notification.message}
+        severity={notification.severity}
+      />
+      <Link
+                  component={NextLink}
+                  href="/"
+                  underline="hover"
+                  variant="subtitle2"
+                > Back</Link>
           <Box
             sx={{
               maxWidth: 550,
@@ -66,32 +93,28 @@ const Page = () => {
               width: '100%'
             }}
           >
-            <div>
-              <Stack
-                spacing={1}
-                sx={{ mb: 3 }}
-              >
-                <Typography variant="h4">
-                Mot de passe oublié 
-                </Typography>
-                
-              </Stack>
-              <form
-                noValidate
-                onSubmit={formik.handleSubmit}
-              >
+
+        <Card style={{}}>
+            <CardHeader
+            title="Mot de passe oublié"
+            />
+            <CardContent>
+                <form
+                    noValidate
+                    onSubmit={formik.handleSubmit}
+                >
                 <Stack spacing={3}>
-                  
                   <TextField
-                    error={!!(formik.touched.new_password && formik.errors.new_password)}
+                    error={!!(formik.touched.email && formik.errors.email)}
                     fullWidth
-                    helperText={formik.touched.new_password && formik.errors.new_password}
+                    helperText={formik.touched.email && formik.errors.email}
                     label="Entrez votre email"
                     name="email"
                     onBlur={formik.handleBlur}
                     onChange={formik.handleChange}
                     type="email"
-                    value={formik.values.new_password}
+                    required
+                    value={formik.email}
                   />
                   
                 </Stack>
@@ -105,12 +128,12 @@ const Page = () => {
                   </Typography>
                 )}
                 
-                    <Link
+                    {/* <Link
                   component={NextLink}
-                  href="/auth/confirm"
+                  href="/verification-code"
                   underline="hover"
                   variant="subtitle2"
-                >
+                > */}
                     <Button
                   fullWidth
                   size="large"
@@ -118,14 +141,17 @@ const Page = () => {
                   type="submit"
                   variant="contained"
                 >
-                  Valider
+                  Envoyer le lien de réinitialisation
                   </Button>
-                </Link>
-                  
-               
-              </form>
-              
-            </div>
+                {/* </Link> */}
+                </form>
+            </CardContent>
+                
+        
+       
+        
+        </Card>
+            
           </Box>
         </Box>
       </>
@@ -133,9 +159,8 @@ const Page = () => {
   };
   
   Page.getLayout = (page) => (
-    <AuthLayout>
       {page}
-    </AuthLayout>
+ 
   );
   
   export default Page;

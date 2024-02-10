@@ -95,7 +95,7 @@ const Page = () => {
     <>
       <Head>
         <title>
-          Projets | Pouapeu
+          Projets | Pouapou
         </title>
       </Head>
       <Box
@@ -131,7 +131,7 @@ const Page = () => {
                   >
                     Importer
                   </Button>
-                  <Button
+                  {/* <Button
                     color="inherit"
                     startIcon={(
                       <SvgIcon fontSize="small">
@@ -140,7 +140,7 @@ const Page = () => {
                     )}
                   >
                     Exporter
-                  </Button>
+                  </Button> */}
                 </Stack>
               </Stack>
               <div>

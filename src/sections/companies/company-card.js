@@ -4,10 +4,11 @@ import ClockIcon from '@heroicons/react/24/solid/ClockIcon';
 import AvatarIcon from '@heroicons/react/24/solid/UserCircleIcon';
 import { Avatar, Box, Button, Card, CardContent, Divider, Stack, SvgIcon, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
-import getConfig from 'next/config';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditNote  from '@mui/icons-material/EditNote';
 import axios from 'axios';
+import getConfig from 'next/config';
+import { Edit } from '@mui/icons-material';
 const { publicRuntimeConfig } = getConfig();
 
 
@@ -17,16 +18,14 @@ export const CompanyCard = (props) => {
 
   const handleCardClick = () => {
     router.push(`/company-details?companyId=${company._id}`);
-    console.log(company.id);
-    console.log(company.title);
-    console.log(company.description);
-    console.log(company.responsable);
-    console.log(company.logo);
+  }
+  const EditItems = () => {
+    router.push(`/company-edit?ProjetId=${company._id}`);
   }
   const DeleteItems = async() => {
     const response = await axios.post(`${publicRuntimeConfig.api.baseURL}/api/projets/delete/${company._id}`);
     console.log(response.data);
-    router.push('/companies')
+    router.reload();
   }
   return (
     
@@ -93,7 +92,8 @@ export const CompanyCard = (props) => {
           >
             Initiateur: {company.responsable}
           </Typography>
-          <EditNote />
+          {/* <Button color='black' onClick={EditItems}> <EditNote  /></Button> */}
+          <Button onClick={EditItems}> <Edit color='white'/></Button>
             <Button color='error' onClick={DeleteItems} ><DeleteIcon  /></Button>
         </Stack>
       </Stack>

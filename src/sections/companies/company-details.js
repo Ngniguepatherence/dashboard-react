@@ -16,7 +16,7 @@ const CompanyDetails = () => {
 
   useEffect(() => {
     if(companyId) {
-        fetch(`${publicRuntimeConfig.api.baseURL}/api/projets/${companyId}`)
+        fetch(c)
             .then((response) => response.json())
             .then((data) => setCompanyDetails(data))
             .catch((error) => console.error('Error fetching Data: ',error));

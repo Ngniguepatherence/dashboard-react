@@ -48,15 +48,15 @@ const Page = () => (
             sx={{ mb: 3 }}
             variant="h3"
           >
-            404: La page que vous cherchez existe pas!
+            404: La page que vous cherchez n'existe pas!
           </Typography>
           <Typography
             align="center"
             color="text.secondary"
             variant="body1"
           >
-            Vous avez soit mal interprete la route ou alors est arive la par erreur
-            Quelquen soit, esssayez dactualiser ou retournez a la page precedente
+           Vous avez soit mal interprété la route ou alors est arrivé la par erreur
+           Quel qu’en soit , essayez d’actualiser ou retournez à  la page précédente
           </Typography>
           <Button
             component={NextLink}

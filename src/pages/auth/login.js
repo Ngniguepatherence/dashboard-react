@@ -1,12 +1,16 @@
+'use client'
 import { useCallback, useState } from 'react';
 import Head from 'next/head';
 import NextLink from 'next/link';
-// import {signIn, useSession, signOut} from 'next-auth/react'
+import {signIn, signOut} from 'next-auth/react'
 import { useRouter } from 'next/navigation';
 import { useFormik } from 'formik';
 import { useAuth } from 'src/hooks/use-auth';
 import * as Yup from 'yup';
 import axios from 'axios';
+import firebase from 'firebase/app';
+import { useSession } from 'next-auth/react';
+import 'firebase/auth';
 import {
   Alert,
   Box,
@@ -20,10 +24,13 @@ import {
 } from '@mui/material';
 // import { useAuth } from 'src/hooks/use-auth';
 import { Layout as AuthLayout } from 'src/layouts/auth/layout';
+import getConfig from 'next/config';
+const { publicRuntimeConfig } = getConfig();
+
 
 const Page = () => {
   const router = useRouter();
-
+  const {data: session} = useSession();
   const auth = useAuth();
   const [method, setMethod] = useState('email');
 
@@ -57,9 +64,29 @@ const Page = () => {
       }
     }
   });
-  const GoogleConnect = async() => {
-    await axios.get("http://localhost:5000/auth/google");
+
+const GoogleConnect = async () => {
+
+  // Vérifier si l'utilisateur est connecté avec Google
+  if (!session || !session.user) {
+    // Si l'utilisateur n'est pas connecté, rediriger vers la page de connexion
+    await signIn();
+    const { user, expires } = session;
+    const response = await auth.signInWithGoogle(user.email, expires);
+    console.log(response);
+    router.push('/');// Arrêter l'exécution de la fonction
   }
+
+  const { user, expires } = session;
+
+  // Envoie d'une requête au backend pour vérifier l'existence de l'email dans la base de données
+  
+const response = await auth.signInWithGoogle(user.email, expires);
+console.log(response);
+router.push('/');// Arrêter l'exécution de la fonction
+};
+
+
 
   const handleMethodChange = useCallback(
     (event, value) => {
@@ -67,9 +94,6 @@ const Page = () => {
     },
     []
   );
-    
-
-  
 
   return (
     <>
@@ -80,7 +104,7 @@ const Page = () => {
       </Head>
       <Box
         sx={{
-          // backgroundColor: 'background.paper',
+          backgroundColor: 'background.paper',
           flex: '1 1 auto',
           alignItems: 'center',
           display: 'flex',
@@ -119,7 +143,7 @@ const Page = () => {
                     name="email"
                     onBlur={formik.handleBlur}
                     onChange={formik.handleChange}
-                    // type="email" 
+                    type="email" 
                     value={formik.values.email}
                   />
                   <TextField
@@ -141,7 +165,7 @@ const Page = () => {
                   variant="subtitle2"
                   
                 >
-                   Mot de passe oublie
+                   Mot de passe oublié 
                 </Link>
                 
                 {formik.errors.submit && (
@@ -162,22 +186,7 @@ const Page = () => {
                 >
                   Connexion
                 </Button>
-                <Typography
-                color="text.secondary"
-                variant="body2"
-              >
-                J&apos;aimerai faire partie de l&apos;association!
-                &nbsp;
-                <Link
-                  component={NextLink}
-                  href="auth/register"
-                  underline="hover"
-                  variant="subtitle2"
-                  
-                >
-                  s&apos;erroller
-                </Link>
-              </Typography>
+                
                 
               <Button
                   onClick={GoogleConnect}

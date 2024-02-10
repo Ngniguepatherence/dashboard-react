@@ -79,10 +79,10 @@ const Page = () => {
                 sx={{ mb: 3 }}
               >
                 <Typography variant="h4">
-                  Mot de passe Oublie
+                Mot de passe oublié 
                 </Typography>
                 <Typography variant="subtitle2">
-                    Un email vous a été envoyé pour modifier votre mot de passe.
+                    Un email vous a été envoyé a cette addresse pour modifier votre mot de passe.
                     </Typography>                
               </Stack>
               

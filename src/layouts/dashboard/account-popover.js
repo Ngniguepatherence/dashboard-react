@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { Box, Divider, MenuItem, MenuList, Popover,  Button, Typography } from '@mui/material';
 import { useAuth } from 'src/hooks/use-auth';
 import { useAuthContext } from '../../contexts/auth-context';
+import { signOut } from 'next-auth/react';
 
 export const AccountPopover = (props) => {
   const { anchorEl, onClose, open } = props;
@@ -15,6 +16,7 @@ export const AccountPopover = (props) => {
     () => {
       onClose?.();
       auth.signOut();
+      signOut();
       router.push('/auth/login');
     },
     [onClose, auth, router]
@@ -46,6 +48,9 @@ export const AccountPopover = (props) => {
         >
          {user && user.name}
         </Typography>
+        <Button>
+          Mon Etat
+        </Button>
         <Typography variant='body2' color="text.secondary">
         <Button
                   fullWidth

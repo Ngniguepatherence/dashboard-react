@@ -12,15 +12,7 @@ import { useAuthContext } from '../../contexts/auth-context';
 import getConfig from 'next/config';
 const { publicRuntimeConfig } = getConfig();
 
-// const user = {
-//   avatar: '/assets/avatars/avatar-anika-visser.png',
-//   city: 'Yaounde',
-//   country: 'Cameroon',
-//   jobTitle: 'PDG CAMCOM',
-//   name: 'Tagne August',
-//   timezone: 'GTM+1'
-// };
-// const { users } = useAuthContext();
+
 
 export const AccountProfile = () => {
   const {user} = useAuthContext();
@@ -64,14 +56,14 @@ export const AccountProfile = () => {
       </Box>
     </CardContent>
     <Divider />
-    <CardActions>
+    {/* <CardActions>
       <Button
         fullWidth
         variant="text"
       >
-        ajouter une photo
+        jouter une photo
       </Button>
-    </CardActions>
+    </CardActions> */}
   </Card>
     );
   

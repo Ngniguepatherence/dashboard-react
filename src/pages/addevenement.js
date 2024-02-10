@@ -77,7 +77,7 @@ const Page = () => {
                 color="text.secondary"
                 variant="body2"
               >
-                Ajoutez des evenements a venir pour que ce soit visible par tout les membres!
+                Ajoutez des evenements à venir pour que ce soit visible par tout les membres!
               </Typography>
             </Stack>
             <form
