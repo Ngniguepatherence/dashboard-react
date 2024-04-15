@@ -17,7 +17,7 @@ import {
 import { Scrollbar } from 'src/components/scrollbar';
 import { getInitials } from 'src/utils/get-initials';
 
-export const FinancesTable = (props) => {
+export const FinancesPlat = (props) => {
   const {
     count = 0,
     items = [],
@@ -40,23 +40,15 @@ export const FinancesTable = (props) => {
                 <TableCell>
                   NOM
                 </TableCell>
+                
                 <TableCell>
-                  TONTINE
-                </TableCell>
-                <TableCell>
-                  CONTRIBUTION PLAT
-                </TableCell>
-                <TableCell>
-                  FOND DE CAISSE
-                </TableCell>
-                <TableCell>
-                  SANCTIONS
-                </TableCell>
-                <TableCell>
-                  EVENEMENT
+                  MONTANT
                 </TableCell>
                 <TableCell>
                   DATE
+                </TableCell>
+                <TableCell>
+                  CONTRIBUTION CUMULE
                 </TableCell>
                 <TableCell>
                   STATUS
@@ -79,16 +71,16 @@ export const FinancesTable = (props) => {
                     {finance.name}
                     </TableCell>
                     <TableCell>
-                      {finance.tontine}
-                    </TableCell>
-                    <TableCell>
-                      {finance.rappel_tontine}
-                    </TableCell>
-                    <TableCell>
-                      {finance.contribution_au_plat}
+                    {finance.tontine}
                     </TableCell>
                     <TableCell>
                       {createdAt}
+                    </TableCell>
+                    <TableCell>
+                      {finance.tontine}
+                    </TableCell>
+                    <TableCell>
+                      {finance.status}
                     </TableCell>
                   </TableRow>
                   </>
@@ -111,7 +103,7 @@ export const FinancesTable = (props) => {
   );
 };
 
-FinancesTable.propTypes = {
+FinancesPlat.propTypes = {
   count: PropTypes.number,
   items: PropTypes.array,
   onDeselectAll: PropTypes.func,

@@ -8,16 +8,15 @@ import { FinanceBouffe } from 'src/sections/finance/FinanceBouffe';
 import { FinancesSanction } from 'src/sections/finance/FinancesSanction';
 import { applyPagination } from 'src/utils/apply-pagination';
 import { useSelection } from 'src/hooks/use-selection';
-import { FinancesSanctions } from "../sections/finance/finances-sanctions";
+import { FinancesSanctions } from "../sections/finance/finances-pret";
 import { FinanceFondDeCaisse } from 'src/sections/finance/finance-fond-de-caisse';
 import { FinanceFondSanction } from 'src/sections/finance/finance-fond-sanctions';
 import { FinanceTotalCotisation } from 'src/sections/finance/finance-total-cotisation'
-import NextLink from 'next/link';
 import { subDays, subHours } from 'date-fns';
-import Link from "@mui/material";
+import NextLink from 'next/link';
 import PlusIcon from '@heroicons/react/24/solid/PlusIcon';
 import ArrowDownOnSquareIcon from '@heroicons/react/24/solid/ArrowDownOnSquareIcon';
-import { Box, Container,Grid, Stack, Typography,Button,SvgIcon } from "@mui/material";
+import { Box, Container,Grid, Stack,Link, Typography,Button,SvgIcon } from "@mui/material";
 
 const now = new Date();
 
@@ -107,7 +106,12 @@ const Page = () => {
   const SanctionsIds = useEventSanctioonIds(sanctions);
   const financesSelection = useSelection(financesIds);
   const sanctionsSelection = useSelection(SanctionsIds);
+  const [isAdding, setIsAdding] = useState(false);
 
+
+  const handleAddButtonClick = () => {
+    setIsAdding(true);
+  };
 
   const handlePageChange = useCallback(
     (event, value) => {
@@ -127,7 +131,7 @@ const Page = () => {
       <>
       <Head>
         <title>
-          Sanctions | Pouapeu
+          Prêt | Pouapeu
         </title>
       </Head>
       <Box
@@ -147,12 +151,13 @@ const Page = () => {
             >
               <Stack spacing={1}>
                 <Typography variant="h4">
-                  Bilan Cotisation
+                  Bilan Prêts
                 </Typography>
                 
               </Stack>
               <div>
-                <Button
+                
+                <Button onClick={handleAddButtonClick}
                   startIcon={(
                     <SvgIcon fontSize="small">
                       <PlusIcon />
@@ -160,7 +165,14 @@ const Page = () => {
                   )}
                   variant="contained"
                 >
-                 Add
+                 <Link
+                      style={{ color: 'white', textDecoration: 'none' }}
+                      color='white'
+                      component={NextLink}
+                      underline="none"
+                      href="/addSanctions">
+                      Add
+                    </Link>
                 </Button>
               </div>
             </Stack>
@@ -179,7 +191,7 @@ const Page = () => {
           </Grid>
             
             <Typography variant="h6">
-            Recensement des Cotisation de la saison
+            Recensement des Prêts de la saison
             </Typography> 
 
             <FinancesSanctions

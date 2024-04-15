@@ -1,53 +1,66 @@
-import React, { useState,useCallback,useMemo } from "react";
+import React, { useState,useCallback,useMemo,useEffect } from "react";
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
 import { FinancesTable } from 'src/sections/finance/finance-table';
 import { CustomersSearch } from 'src/sections/customer/customers-search';
 // import { FinancesSanction } from 'src/sections/finance/FinancesSanction';
 import Head from "next/head";
 import { FinanceBouffe } from 'src/sections/finance/FinanceBouffe';
-import { FinancesSanction } from 'src/sections/finance/FinancesSanction';
+import { FinancesSanction } from 'src/sections/finance/FinancesTontine';
 import { applyPagination } from 'src/utils/apply-pagination';
 import { useSelection } from 'src/hooks/use-selection';
-import { FinancesSanctions } from "../sections/finance/finances-sanctions";
+import { FinancesSanctions } from "../sections/finance/finances-tontine";
+import { FinancesTontinT } from "../sections/finance/finances-tontin";
 import { FinanceFondDeCaisse } from 'src/sections/finance/finance-fond-de-caisse';
-import { FinanceFondSanction } from 'src/sections/finance/finance-fond-sanctions';
+import { FinanceFondSanction } from 'src/sections/finance/finance-fond-tontine';
 import { FinanceTotalCotisation } from 'src/sections/finance/finance-total-cotisation'
-import NextLink from 'next/link';
 import { subDays, subHours } from 'date-fns';
-import Link from "@mui/material";
+import NextLink from 'next/link';
 import PlusIcon from '@heroicons/react/24/solid/PlusIcon';
 import ArrowDownOnSquareIcon from '@heroicons/react/24/solid/ArrowDownOnSquareIcon';
-import { Box, Container,Grid, Stack, Typography,Button,SvgIcon } from "@mui/material";
+import { Box, Container,Grid, Stack,Link, Typography,Button,SvgIcon } from "@mui/material";
+import getConfig from 'next/config';
+const { publicRuntimeConfig } = getConfig();
+import axios from "axios";
+
 
 const now = new Date();
 
-const data = [
-  {
-    id: '5e887ac47eed253091be10Ob',
-    motif: "Absence Seance",
-    createdAt: subDays(subHours(now, 7), 1).getTime(),
-    contribution_au_plat: '3000',
-    name: 'MBOGNE  FOTSI RODRIGUE',
-    tontine: '10000',
-    status: 'Non'
-  },
-  {
-    id: '5e887ac47eed253091be10Oa',
-    motif: "Retard",
-    createdAt: subDays(subHours(now, 7), 1).getTime(),
-    name: 'SEULE TCHONANG GLADYS STÉPHANE',
-    tontine: '200',
-    status: 'oui'
-  },
+
+// const data = [
+//   {
+//     id: '5e887ac47eed253091be10Ob',
+//     motif: "Un Nom",
+//     createdAt: subDays(subHours(now, 7), 1).getTime(),
+//     contribution_au_plat: '3000',
+//     name: 'MBOGNE  FOTSI RODRIGUE',
+//     tontine: '10000',
+//     status: 'Non'
+//   },
+//   {
+//     id: '5e887ac47eed253091be10Oa',
+//     motif: "Demi Nom",
+//     createdAt: subDays(subHours(now, 7), 1).getTime(),
+//     name: 'SEULE TCHONANG GLADYS STÉPHANE',
+//     tontine: '200',
+//     status: 'oui'
+//   },
+//   {
+//     id: '5e887ac47eed253091be10Oa',
+//     motif: "Demi Nom",
+//     createdAt: new Date('2024-03-23T10:00:00').getTime(),
+//     name: 'SEULE TCHONANG GLADYS STÉPHANE',
+//     tontine: '200',
+//     status: 'oui'
+//   },
   
-];
+// ];
 const total = [
   {
     id: 'f69f88012978187a6c12897f',
     ref: 'DEV1049',
-    amount: 30.5,
+    amount: 1128000,
     customer: {
-      name: 'Ekaterina Tankova'
+      name: 'AMO NOKAM GUY MARTIAL'
     },
     createdAt: 1555016400000,
     status: 'pending'
@@ -55,16 +68,16 @@ const total = [
   {
     id: '9eaa1c7dd4433f413c308ce2',
     ref: 'DEV1048',
-    amount: 25.1,
+    amount: 1128000,
     customer: {
-      name: 'Cao Yu'
+      name: 'MOKTO NEGUE WILFRIED HYACINTHE I'
     },
     createdAt: 1555016400000,
     status: 'delivered'
   },
 ];
 
-const useEvents = (page, rowsPerPage) => {
+const useEvents = (data,page, rowsPerPage) => {
   return useMemo(
     () => {
       return applyPagination(data, page, rowsPerPage);
@@ -101,13 +114,36 @@ const useEventSanctioonIds = (sanctions) => {
 const Page = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const finances = useEvents(page, rowsPerPage);
+  const [data, setData] = useState([]);
+  const finances = useEvents(data,page, rowsPerPage);
   const sanctions = useEventSanctions(page, rowsPerPage);
   const financesIds = useEventIds(finances);
   const SanctionsIds = useEventSanctioonIds(sanctions);
   const financesSelection = useSelection(financesIds);
   const sanctionsSelection = useSelection(SanctionsIds);
+  const [isAdding, setIsAdding] = useState(false);
 
+
+
+  useEffect(() =>{
+    const fetchData = async () => {
+      try {
+        const response = await fetch(`${publicRuntimeConfig.api.baseURL}/api/tontine`);
+        const result = await response.json();
+        setData(result);
+        console.log(data);
+        // console.log(result)
+      }
+      catch(error) {
+        console.error('Error fetching data: ',error);
+      }
+    };
+    fetchData();
+  },[]);
+
+  const handleAddButtonClick = () => {
+    setIsAdding(true);
+  };
 
   const handlePageChange = useCallback(
     (event, value) => {
@@ -127,7 +163,7 @@ const Page = () => {
       <>
       <Head>
         <title>
-          Sanctions | Pouapeu
+          Tontine | Pouapeu
         </title>
       </Head>
       <Box
@@ -147,12 +183,13 @@ const Page = () => {
             >
               <Stack spacing={1}>
                 <Typography variant="h4">
-                  Bilan Cotisation
+                  BILAN TONTINE
                 </Typography>
                 
               </Stack>
               <div>
-                <Button
+                
+                <Button onClick={handleAddButtonClick}
                   startIcon={(
                     <SvgIcon fontSize="small">
                       <PlusIcon />
@@ -160,7 +197,14 @@ const Page = () => {
                   )}
                   variant="contained"
                 >
-                 Add
+                 <Link
+                      style={{ color: 'white', textDecoration: 'none' }}
+                      color='white'
+                      component={NextLink}
+                      underline="none"
+                      href="/addTontine">
+                      Add
+                    </Link>
                 </Button>
               </div>
             </Stack>
@@ -179,7 +223,7 @@ const Page = () => {
           </Grid>
             
             <Typography variant="h6">
-            Recensement des Cotisation de la saison
+            TONTINE EN COURS
             </Typography> 
 
             <FinancesSanctions
@@ -195,11 +239,24 @@ const Page = () => {
               rowsPerPage={rowsPerPage}
               selected={financesSelection.selected}
             />
-            {/* <FinancesSanction
+            <FinancesSanction
             count={total.length}
             orders={sanctions}
             
-            /> */}
+            />
+            <FinancesTontinT
+              count={data.length}
+              items={finances}
+              onDeselectAll={financesSelection.handleDeselectAll}
+              onDeselectOne={financesSelection.handleDeselectOne}
+              onPageChange={handlePageChange}
+              onRowsPerPageChange={handleRowsPerPageChange}
+              onSelectAll={financesSelection.handleSelectAll}
+              onSelectOne={financesSelection.handleSelectOne}
+              page={page}
+              rowsPerPage={rowsPerPage}
+              selected={financesSelection.selected}
+            />
           </Stack>
         </Container>
       </Box>

@@ -119,7 +119,7 @@ export const TopNav = (props) => {
                 height: 40,
                 width: 40
               }}
-              src={`${publicRuntimeConfig.api.baseURL}/api/avatar/${user.avatar}` || 'avatar'} alt='Avatar'
+              src={`${publicRuntimeConfig.api.baseURL}/api/avatar/${user.avatar}`} alt='Avatar'
             />
           </Stack>
         </Stack>

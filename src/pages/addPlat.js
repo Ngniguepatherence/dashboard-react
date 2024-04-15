@@ -17,22 +17,22 @@ const { publicRuntimeConfig } = getConfig();
 const Page = () => {
   const router = useRouter();
   const auth = useAuth();
-  const [logo, setLogo] = useState(null);
   const [responsables, setResponsables] = useState([]);
+  const [type, setType] = useState([]);
   const [acteurs, setActeurs] = useState([]);
 
   const [values, setValues] = useState({
     montant: '',
-    description: '',
-    initiateur: [],
-    date: '',
+    type: '',
+    beneficiaire: '',
+    date: new Date().toISOString().slice(0, 10),
     submit: null,
   });
 
   const [errors, setErrors] = useState({
     montant: '',
-    description: '',
-    initiateur: [],
+    type: '',
+    beneficiaire: '',
     date: '',
   });
 
@@ -57,59 +57,27 @@ const Page = () => {
     });
   };
 
-  const uploadImageFunction = (File) => {
-    console.log("Image Res::::");
-    const formData = new FormData();
-    formData.append("files", File);
-
-    axios.post(`${publicRuntimeConfig.api.baseURL}/api/projets/uploadImage`, formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    })
-      .then(res => {
-        console.log("Image Res::::", res.data.data);
-        if (res.data.messsage === "Files Uploaded") {
-          setLogo(res.data.data[0]?.img)
-        }
-      })
-      .catch(err => {
-        console.log("Error", err);
-      });
-  }
 
   const handleSubmit = async () => {
-    console.log(responsables)
     try {
-      const schema = Yup.object({
-        
-        description: Yup.string().max(255).required('Le motif de la sanction doit être précisé'),
-        initiateur: Yup.array().required('Le membre conserner doit être mentionné'),
-        montant: Yup.number().required('Le montant de la sanction est requis'),
-        date: Yup.date().required('La date limite de paiement doit etre mentionné'),
-      });
-
-      // await schema.validate(values, { abortEarly: false });
-
-      // Validation succeeded, perform your API call or other actions
-      await auth.AddProjet(values.description, acteurs,values.montant,values.datefin);
-      router.push('/companies');
-    } catch (err) {
-      if (err instanceof Yup.ValidationError) {
-        const newErrors = {};
-        err.inner.forEach((error) => {
-          newErrors[error.path] = error.message;
-        });
-        setErrors(newErrors);
-      }
+      await auth.AddTontine(acteurs.name,values.montant,values.type,values.beneficiaire,values.date);
+      router.push('/plat');
+    }catch(error) {
+      throw new Error('Error');
     }
   };
+  const Benef = [
+    { value: true, label: 'oui' },
+    { value: false, label: 'non' },
+  ];
+
+  const today = new Date().toISOString().slice(0, 10);
 
   return (
     <>
       <Head>
         <title>
-        Ajouter Sanction | Pouapeu
+        Plat| Pouapeu
         </title>
       </Head>
       <Box
@@ -131,7 +99,7 @@ const Page = () => {
           <div>
           <Link
             component={NextLink}
-            href="/sanction"
+            href="/plat"
             underline="hover"
             variant="body"
                 >
@@ -147,13 +115,13 @@ const Page = () => {
               sx={{ mb: 3 }}
             >
               <Typography variant="h4">
-              Sanctions
+              PLAT
               </Typography>
               <Typography
                 color="text.secondary"
                 variant="body2"
               >
-                Ajouter une sanction
+                Ajouter une tontine
               </Typography>
             </Stack>
             {/* <form
@@ -163,16 +131,13 @@ const Page = () => {
               <Stack spacing={3}>
               <Autocomplete
                 disablePortal
-                  multiple
                   id="responsables"
                   options={responsables}
                   
                   getOptionLabel={(responsable) => responsable.name}
                   value={values.responsables}
                   onChange={(event, newValue) => {
-                    const selectedActeurs = newValue.map((responsable) => responsable.name);
-                    console.log(selectedActeurs);
-                    setActeurs(selectedActeurs);
+                    setActeurs(newValue);
                     console.log(acteurs);
                     
                   }}
@@ -182,25 +147,16 @@ const Page = () => {
                       fullWidth
                       label="Membre"
                       name="responsables"
-                      error={!!errors.responsables}
+                      error={!!errors.responsable}
                       helperText={errors.responsables}
                     />
                   )}
                 />
-                <TextField
-                  fullWidth
-                  label="Motif de sanction"
-                  name="description"
-                  value={values.description}
-                  onChange={handleChange}
-                  error={!!errors.description}
-                  helperText={errors.description}
-                />
-                
+          
                 <TextField
                   
                   fullWidth
-                  label="Montant Sanctions a payer avant  la prochaine assemblée"
+                  label="Montant cotisation"
                   name="montant"
                   type='number'
                   value={values.montant}
@@ -208,18 +164,38 @@ const Page = () => {
                   error={!!errors.montant}
                   helperText={errors.montant}
                 />
-
+                <TextField
+                  
+                  fullWidth
+                  label="Beneficiaire ?"
+                  name="beneficiaire"
+                  type='text'
+                  select
+                  
+                  value={values.beneficiaire}
+                  onChange={handleChange}
+                  error={!!errors.beneficiaire}
+                  helperText={errors.beneficiaire}
+                  >
+                  {Benef.map(option => (
+                    <MenuItem key={option.value} value={option.value}>
+                      {option.label}
+                    </MenuItem>
+                  ))}
+                  </TextField>
                 
                 <TextField
-                  fullWidth
                   
-                  name="datefin"
+                  fullWidth
+                  label="Date"
+                  name="date"
+                  type='date'
                   value={values.date}
                   onChange={handleChange}
                   error={!!errors.date}
                   helperText={errors.date}
-                  type='date'
                 />
+                
                 
                
               </Stack>

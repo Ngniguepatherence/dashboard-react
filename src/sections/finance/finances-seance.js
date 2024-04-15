@@ -16,79 +16,93 @@ import {
 } from '@mui/material';
 import { Scrollbar } from 'src/components/scrollbar';
 import { getInitials } from 'src/utils/get-initials';
+import { useState } from 'react';
 
-export const FinancesTable = (props) => {
+export const FinancesSeances = (props) => {
   const {
     count = 0,
     items = [],
-    onDeselectOne,
     onPageChange = () => {},
     onRowsPerPageChange,
-    onSelectOne,
     page = 0,
     rowsPerPage = 5,
     selected = []
   } = props;
 
+  const [filtreDateDebut, setFiltreDateDebut] = useState('');
+  const [filtreDateFin, setFiltreDateFin] = useState('');
+  
+  // Fonction de filtrage des cotisations
+  const filteredCotisations = items.filter(cotisation => {
+    const dateCotisation = new Date(cotisation.date);
+    const debutFiltre = filtreDateDebut ? new Date(filtreDateDebut) : null;
+    const finFiltre = filtreDateFin ? new Date(filtreDateFin) : null;
+
+    if (debutFiltre && dateCotisation < debutFiltre) {
+      return false;
+    }
+    if (finFiltre && dateCotisation > finFiltre) {
+      return false;
+    }
+    return true;
+  });
+
   return (
     <Card>
       <Scrollbar>
         <Box sx={{ minWidth: 800 }}>
+        <div>
+            <label>Date de début: </label>
+            <input type="date" value={filtreDateDebut} onChange={e => setFiltreDateDebut(e.target.value)} />
+            <label>Date de fin: </label>
+            <input type="date" value={filtreDateFin} onChange={e => setFiltreDateFin(e.target.value)} />
+        </div>
           <Table>
             <TableHead>
               <TableRow>
                 <TableCell>
-                  NOM
+                  Date & ID
                 </TableCell>
                 <TableCell>
-                  TONTINE
+                  Type Meeting
                 </TableCell>
                 <TableCell>
-                  CONTRIBUTION PLAT
+                 Nbre Tontinard
                 </TableCell>
                 <TableCell>
-                  FOND DE CAISSE
+                Nbre non Tontinard
                 </TableCell>
                 <TableCell>
-                  SANCTIONS
-                </TableCell>
-                <TableCell>
-                  EVENEMENT
-                </TableCell>
-                <TableCell>
-                  DATE
-                </TableCell>
-                <TableCell>
-                  STATUS
+                Effectif
                 </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {items.map((finance) => {
+              {filteredCotisations.map((finance) => {
                 const isSelected = selected.includes(finance.id);
-                const createdAt = format(finance.createdAt, 'dd/MM/yyyy');
+                const createdAt = format(new Date(finance.date), 'dd/MM/yyyy');
 
                 return (
                   <>
                   <TableRow
                     hover
-                    key={finance.id}
+                    key={finance._id}
                     selected={isSelected}
                   >
                     <TableCell>
-                    {finance.name}
+                    {createdAt}
                     </TableCell>
                     <TableCell>
-                      {finance.tontine}
+                    {finance.type_seance}
                     </TableCell>
                     <TableCell>
-                      {finance.rappel_tontine}
+                      {finance.nbre_pers_tontinard}
                     </TableCell>
                     <TableCell>
-                      {finance.contribution_au_plat}
+                    {finance.nbre_pers_non_tontinard }
                     </TableCell>
                     <TableCell>
-                      {createdAt}
+                    {finance.effectif }
                     </TableCell>
                   </TableRow>
                   </>
@@ -111,7 +125,7 @@ export const FinancesTable = (props) => {
   );
 };
 
-FinancesTable.propTypes = {
+FinancesSeances.propTypes = {
   count: PropTypes.number,
   items: PropTypes.array,
   onDeselectAll: PropTypes.func,

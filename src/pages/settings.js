@@ -3,6 +3,7 @@ import { Box, Container, Stack, Typography } from '@mui/material';
 import { SettingsNotifications } from 'src/sections/settings/settings-notifications';
 import { SettingsPassword } from 'src/sections/settings/settings-password';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
+// import { Layout as AuthLayout } from 'src/layouts/auth/layout';
 import Forgot from '../sections/settings/forgot-password';
 
 const Page = () => (
@@ -33,10 +34,10 @@ const Page = () => (
   </>
 );
 
-// Page.getLayout = (page) => (
-//   // <DashboardLayout>
-//     page
-//   // </DashboardLayout>
-// );
+Page.getLayout = (page) => (
+  <DashboardLayout>
+  {page}
+</DashboardLayout>
+);
 
 export default Page;

@@ -5,7 +5,8 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { Box, Button, Card, CardContent, CardHeader, Snackbar,Link, Stack, TextField, Typography } from '@mui/material';
 import { useAuth } from 'src/hooks/use-auth';
-import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
+// import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
+import { Layout as AuthLayout } from 'src/layouts/auth/layout';
 import axios from 'axios';
 import { useState } from 'react';
 
@@ -73,7 +74,7 @@ const Verification = () => {
             message: `${values.codepin}`,
             severity: 'success'
           });
-          router.push('/reset-password');
+          router.push('/auth/reset_password');
           
         } catch (err) {
           helpers.setStatus({ success: false });
@@ -202,9 +203,9 @@ const Verification = () => {
   };
   
   Verification.getLayout = (page) => (
-    <DashboardLayout>
+    <AuthLayout>
     {page}
-  </DashboardLayout>
+  </AuthLayout>
   );
   
   export default Verification;

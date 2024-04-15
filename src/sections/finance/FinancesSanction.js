@@ -18,15 +18,15 @@ import {
 } from '@mui/material';
 
 export const FinancesSanction = (props) => {
-  const { sanctions = [], sx } = props;
+  const { orders = [], sx } = props;
 
   return (
     <Card sx={sx}>
-      <CardHeader title="Status des Sanctions" />
+      <CardHeader title="Bilan des dettes pour les sanctions par membre" />
       <List>
-        {sanctions.map((sanction, index) => {
-          const hasDivider = index < sanctions.length - 1;
-          const ago = formatDistanceToNow(sanction.updatedAt);
+        {orders.map((sanction, index) => {
+          const hasDivider = index < orders.length - 1;
+          const ago = formatDistanceToNow(sanction.createdAt);
 
           return (
             <ListItem
@@ -34,9 +34,9 @@ export const FinancesSanction = (props) => {
               key={sanction.id}
             >
               <ListItemText
-                primary={sanction.name}
+                primary={sanction.customer.name}
                 primaryTypographyProps={{ variant: 'subtitle1' }}
-                secondary={`termine il y'a de cela ${ago} jours`}
+                secondary={`Total Dette Sanction: ${sanction.amount} F CFA`}
                 secondaryTypographyProps={{ variant: 'body2' }}
               />
               <IconButton edge="end">

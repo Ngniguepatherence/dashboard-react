@@ -16,8 +16,9 @@ import {
 } from '@mui/material';
 import { Scrollbar } from 'src/components/scrollbar';
 import { getInitials } from 'src/utils/get-initials';
+import { useState } from 'react';
 
-export const FinancesTable = (props) => {
+export const FinancesSanctions = (props) => {
   const {
     count = 0,
     items = [],
@@ -30,10 +31,34 @@ export const FinancesTable = (props) => {
     selected = []
   } = props;
 
+  const [filtreDateDebut, setFiltreDateDebut] = useState('');
+  const [filtreDateFin, setFiltreDateFin] = useState('');
+  
+  // Fonction de filtrage des cotisations
+  const filteredCotisations = items.filter(cotisation => {
+    const dateCotisation = new Date(cotisation.createdAt);
+    const debutFiltre = filtreDateDebut ? new Date(filtreDateDebut) : null;
+    const finFiltre = filtreDateFin ? new Date(filtreDateFin) : null;
+
+    if (debutFiltre && dateCotisation < debutFiltre) {
+      return false;
+    }
+    if (finFiltre && dateCotisation > finFiltre) {
+      return false;
+    }
+    return true;
+  });
+
   return (
     <Card>
       <Scrollbar>
         <Box sx={{ minWidth: 800 }}>
+        <div>
+            <label>Date de début: </label>
+            <input type="date" value={filtreDateDebut} onChange={e => setFiltreDateDebut(e.target.value)} />
+            <label>Date de fin: </label>
+            <input type="date" value={filtreDateFin} onChange={e => setFiltreDateFin(e.target.value)} />
+        </div>
           <Table>
             <TableHead>
               <TableRow>
@@ -41,19 +66,13 @@ export const FinancesTable = (props) => {
                   NOM
                 </TableCell>
                 <TableCell>
-                  TONTINE
+                  Type Cotisation
                 </TableCell>
                 <TableCell>
-                  CONTRIBUTION PLAT
+                  Montant
                 </TableCell>
                 <TableCell>
-                  FOND DE CAISSE
-                </TableCell>
-                <TableCell>
-                  SANCTIONS
-                </TableCell>
-                <TableCell>
-                  EVENEMENT
+                 Beneficiaire ?
                 </TableCell>
                 <TableCell>
                   DATE
@@ -64,31 +83,35 @@ export const FinancesTable = (props) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {items.map((finance) => {
+              {filteredCotisations.map((finance) => {
                 const isSelected = selected.includes(finance.id);
-                const createdAt = format(finance.createdAt, 'dd/MM/yyyy');
+                const createdAt = format(new Date(finance.createat), 'dd/MM/yyyy');
 
                 return (
                   <>
                   <TableRow
                     hover
-                    key={finance.id}
+                    key={finance._id}
                     selected={isSelected}
                   >
                     <TableCell>
-                    {finance.name}
+                    {finance.membre}
                     </TableCell>
                     <TableCell>
-                      {finance.tontine}
+                    {finance.type_cotisation}
                     </TableCell>
                     <TableCell>
-                      {finance.rappel_tontine}
+                      {finance.Montant}
                     </TableCell>
                     <TableCell>
-                      {finance.contribution_au_plat}
+                    {finance.Beneficiaire }
                     </TableCell>
+                    
                     <TableCell>
                       {createdAt}
+                    </TableCell>
+                    <TableCell>
+                      {finance.status}
                     </TableCell>
                   </TableRow>
                   </>
@@ -111,7 +134,7 @@ export const FinancesTable = (props) => {
   );
 };
 
-FinancesTable.propTypes = {
+FinancesSanctions.propTypes = {
   count: PropTypes.number,
   items: PropTypes.array,
   onDeselectAll: PropTypes.func,

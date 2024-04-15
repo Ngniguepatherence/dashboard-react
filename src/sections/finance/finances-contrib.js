@@ -1,5 +1,7 @@
 import PropTypes from 'prop-types';
 import { format } from 'date-fns';
+const { startOfMonth, endOfMonth, getMonth, getYear } = require('date-fns');
+
 import {
   Avatar,
   Box,
@@ -16,8 +18,9 @@ import {
 } from '@mui/material';
 import { Scrollbar } from 'src/components/scrollbar';
 import { getInitials } from 'src/utils/get-initials';
+import { useState } from 'react';
 
-export const FinancesTable = (props) => {
+export const FinancesContrib = (props) => {
   const {
     count = 0,
     items = [],
@@ -29,6 +32,36 @@ export const FinancesTable = (props) => {
     rowsPerPage = 5,
     selected = []
   } = props;
+  
+  function totalTontineParMois() {
+    const totals = {};
+  
+    items.forEach(entry => {
+      const date = new Date(entry.createat);
+      const mois = getMonth(date) + 1; // Ajouter 1 car les mois sont indexés à partir de 0
+      // console.log(mois)
+      // Créer une clé de mois et d'année
+      const key = `${mois}-${getYear(date)}`;
+      // console.log(key)
+      // Si la clé de mois n'existe pas encore, initialiser le total à 0
+      if (!totals[key]) {
+        totals[key] = 0;
+      }
+  
+      // Ajouter le montant de tontine à la somme totale pour ce mois
+      totals[key] += parseInt(entry.Montant);
+    });
+    // console.log(totals)
+  
+    return totals;
+  }
+
+  const [filtreDateDebut, setFiltreDateDebut] = useState('');
+  const [filtreDateFin, setFiltreDateFin] = useState('');
+
+  // Calculer la somme des montants de tontine par mois
+  const totauxTontineParMois = totalTontineParMois();
+
 
   return (
     <Card>
@@ -38,57 +71,43 @@ export const FinancesTable = (props) => {
             <TableHead>
               <TableRow>
                 <TableCell>
-                  NOM
+                  Seance
                 </TableCell>
                 <TableCell>
-                  TONTINE
+                  Total Montant non tontinard
                 </TableCell>
                 <TableCell>
-                  CONTRIBUTION PLAT
+                  Reversement Fond Social
                 </TableCell>
                 <TableCell>
-                  FOND DE CAISSE
-                </TableCell>
-                <TableCell>
-                  SANCTIONS
-                </TableCell>
-                <TableCell>
-                  EVENEMENT
-                </TableCell>
-                <TableCell>
-                  DATE
-                </TableCell>
-                <TableCell>
-                  STATUS
+                 Solde contrib Sociale/Seance
                 </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {items.map((finance) => {
-                const isSelected = selected.includes(finance.id);
-                const createdAt = format(finance.createdAt, 'dd/MM/yyyy');
-
+           
+            {Object.keys(totauxTontineParMois).map((moisAnnee, index) => {
+            const [mois, annee] = moisAnnee.split('-');
+            const moisLabel = new Date(annee, mois - 1).toLocaleString('default', { month: 'long' });
+                
                 return (
                   <>
                   <TableRow
                     hover
-                    key={finance.id}
-                    selected={isSelected}
+                    key={index}
+                    // selected={isSelected}
                   >
                     <TableCell>
-                    {finance.name}
+                    {moisLabel} {annee}
                     </TableCell>
                     <TableCell>
-                      {finance.tontine}
+                    {totauxTontineParMois[moisAnnee]}
                     </TableCell>
                     <TableCell>
-                      {finance.rappel_tontine}
+                     0
                     </TableCell>
                     <TableCell>
-                      {finance.contribution_au_plat}
-                    </TableCell>
-                    <TableCell>
-                      {createdAt}
+                    0
                     </TableCell>
                   </TableRow>
                   </>
@@ -111,7 +130,7 @@ export const FinancesTable = (props) => {
   );
 };
 
-FinancesTable.propTypes = {
+FinancesContrib.propTypes = {
   count: PropTypes.number,
   items: PropTypes.array,
   onDeselectAll: PropTypes.func,

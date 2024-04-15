@@ -1,58 +1,102 @@
+import { useCallback, useState } from 'react';
+import {
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  CardHeader,
+  Divider,
+  Stack,
+  TextField,
+  Snackbar,
+  Box,
+  Typography
+} from '@mui/material';
+import * as Yup from 'yup';
+import { useAuth } from 'src/hooks/use-auth';
+import axios from 'axios';
+import getConfig from 'next/config';
 import Head from 'next/head';
-import NextLink from 'next/link';
+const { publicRuntimeConfig } = getConfig();
+import { signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useFormik } from 'formik';
-import * as Yup from 'yup';
-import { Box, Button, Link, Stack, TextField, Typography } from '@mui/material';
-import { useAuth } from 'src/hooks/use-auth';
+// import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
 import { Layout as AuthLayout } from 'src/layouts/auth/layout';
-import axios from 'axios';
+
+const ResetPassword = () => {
+  const auth = useAuth();
+  const router = useRouter();
+
+  const [notification, setNotification] = useState({
+    open: false,
+    message: '',
+    severity: 'success'
+  });
 
 
-const Page = () => {
-    const router = useRouter();
-    const auth = useAuth();
-    const formik = useFormik({
-      initialValues: {
-        new_password: '',
-        confirm_password: '',
-        submit: null
-      },
-      validationSchema: Yup.object({
-        new_password: Yup
-          .string()
-          .min(8)
-          .max(255)
-          .required('password is required'),
-        confirm_password: Yup
-          .string()
-          .min(8)
-          .max(16)
-          .required('password is required'),
-      }),
-      onSubmit: async (values, helpers) => {
-        try {
-         
-          if(response.data.success){
-            await auth.signIn(values.new_password, values.confirm_password);
-            router.push('/');
-          }else {
-            helpers.setStatus({ success: false });
-          helpers.setErrors({ submit: response.data.message });
-          helpers.setSubmitting(false);
-          }
-          router.push('/');
-        } catch (err) {
-          helpers.setStatus({ success: false });
-          helpers.setErrors({ submit: err.message });
-          helpers.setSubmitting(false);
-        }
-      }
+
+  const handleCloseNotification = () => {
+    setNotification({
+      ...notification,
+      open: false
     });
-  
-    return (
-      <>
-        <Head>
+  };
+
+  const formik = useFormik({
+    initialValues: {
+      password: '',
+      confirm: '',
+      submit: null
+    },
+    validationSchema: Yup.object({
+      password: Yup
+        .string()
+        .min(8)
+        .max(255)
+        .required('Password is required'),
+      confirm: Yup
+        .string()
+        .min(8)
+        .max(255)
+        .required('Password is required'),
+    }),
+    onSubmit: async (values, helpers) => {
+        console.log(values);
+        if(values.password != values.confirm) {
+            setNotification({
+                open: true,
+                message: 'Mot de passe incorrect.',
+                severity: 'error'
+              });
+        }
+        else {
+
+            try {
+                console.log(values)
+            const response = await axios.post(`${publicRuntimeConfig.api.baseURL}/api/profiles/reset-password/${auth.user.id}`, {
+                password: values.password
+              })
+              if(response.status == 201) {
+
+                  auth.signOut();
+                  signOut();
+                  router.push('/');
+              }
+            
+          } catch (err) {
+            helpers.setStatus({ success: false });
+            helpers.setErrors({ submit: err.message });
+            helpers.setSubmitting(false);
+          }
+        }
+    }
+  });
+
+
+  return (
+    <>
+    <Head>
           <title>
             Modification de mot de passe| Association GTR
           </title>
@@ -65,6 +109,7 @@ const Page = () => {
             justifyContent: 'center'
           }}
         >
+          
           <Box
             sx={{
               maxWidth: 550,
@@ -73,47 +118,46 @@ const Page = () => {
               width: '100%'
             }}
           >
-            <div>
-              <Stack
-                spacing={1}
-                sx={{ mb: 3 }}
-              >
-                <Typography variant="h4">
-                  Reset Password
-                </Typography>
-                
-              </Stack>
-              <form
-                noValidate
-                onSubmit={formik.handleSubmit}
-              >
-                <Stack spacing={3}>
-                  
-                  <TextField
-                    error={!!(formik.touched.new_password && formik.errors.new_password)}
-                    fullWidth
-                    helperText={formik.touched.new_password && formik.errors.new_password}
-                    label="Entrez le nouveau mot de passe"
-                    name="new_password"
-                    onBlur={formik.handleBlur}
-                    onChange={formik.handleChange}
-                    type="password"
-                    value={formik.values.new_password}
-                  />
-                  <TextField
-                    error={!!(formik.touched.confirm_password && formik.errors.confirm_password)}
-                    fullWidth
-                    helperText={formik.touched.confirm_password && formik.errors.confirm_password}
-                    label="Confirme ton mot de passe"
-                    name="confirm_password"
-                    type="password"
-                    onBlur={formik.handleBlur}
-                    onChange={formik.handleChange}
-                    value={formik.values.confirm_password}
-                  />
-                  
-                </Stack>
-                {formik.errors.submit && (
+    <form noValidate
+            onSubmit={formik.handleSubmit}>
+      <Card>
+        <CardHeader
+          subheader="Mettre à jour le mot de passe"
+          title="Password" 
+        />
+        <Divider />
+        <CardContent>
+          <Stack
+            spacing={3}
+            sx={{ maxWidth: 400 }}
+          >
+            <TextField
+              error={!!(formik.touched.password && formik.errors.password)}
+              fullWidth
+              helperText={formik.touched.password && formik.errors.password}
+              label="Mot de passe"
+              name="password"
+              onBlur={formik.handleBlur}
+              onChange={formik.handleChange}
+              type="password"
+              required
+              value={formik.password}
+            />
+            <TextField
+              error={!!(formik.touched.password && formik.errors.password)}
+              fullWidth
+              helperText={formik.touched.password && formik.errors.password}
+              label="Mot de passe (veuillez confirmer)"
+              name="confirm"
+              onBlur={formik.handleBlur}
+              onChange={formik.handleChange}
+              type="password"
+              required
+              value={formik.confirm}
+            />
+            
+          </Stack>
+          {formik.errors.submit && (
                   <Typography
                     color="error"
                     sx={{ mt: 3 }}
@@ -122,29 +166,33 @@ const Page = () => {
                     {formik.errors.submit}
                   </Typography>
                 )}
-                <Button
-                  fullWidth
-                  size="large"
-                  sx={{ mt: 3 }}
-                  type="submit"
-                  variant="contained"
-                >
-                  Reintialiser son mot de passe
-                </Button>
-              </form>
-              
-            </div>
-          </Box>
+        </CardContent>
+        <Divider />
+        <CardActions sx={{ justifyContent: 'flex-end' }}>
+          <Button variant="contained" type="submit">
+            Mettre à jour
+          </Button>
+        </CardActions>
+      </Card>
+
+      <Snackbar
+        open={notification.open}
+        autoHideDuration={6000}
+        onClose={handleCloseNotification}
+        message={notification.message}
+        severity={notification.severity}
+      />
+    </form>
+    </Box>
         </Box>
-      </>
-    );
-  };
-  
-  Page.getLayout = (page) => (
-    <AuthLayout>
-      {page}
-    </AuthLayout>
+    </>
   );
-  
-  export default Page;
-  
+};
+
+ResetPassword.getLayout = (page) => (
+  <AuthLayout>
+  {page}
+</AuthLayout>
+);
+
+export default ResetPassword;

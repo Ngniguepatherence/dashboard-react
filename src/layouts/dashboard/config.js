@@ -7,13 +7,18 @@ import UserPlusIcon from '@heroicons/react/24/solid/UserPlusIcon';
 import UsersIcon from '@heroicons/react/24/solid/UsersIcon';
 import XCircleIcon from '@heroicons/react/24/solid/XCircleIcon';
 import { SvgIcon } from '@mui/material';
-
+import { useState } from 'react';
+import ChevronDownIcon from '@heroicons/react/24/solid/ChevronDownIcon';
 
 export const items = (roles) =>{
   const isUser = roles.includes('user');
   const isAdmin = roles.includes('admin');
   const isSuperAdmin = roles.includes('super-admin');
-  console.log(isUser);
+  const [menuOpen, setMenuOpen] = useState({
+    projets: false,
+    membres: false,
+    finances: false,
+  });
 
   return [
    
@@ -35,7 +40,12 @@ export const items = (roles) =>{
         <SvgIcon fontSize="small">
           <ShoppingBagIcon />
         </SvgIcon>
-      )
+      ),
+      iconOpen: <SvgIcon fontSize="small"><ChevronDownIcon /></SvgIcon>,
+        // Utilisation de l'état local pour déterminer si le menu est ouvert
+        isOpen: menuOpen.projets,
+        // Fonction pour changer l'état du menu
+        toggleMenu: () => setMenuOpen({ ...menuOpen, projets: !menuOpen.projets })
     },
     {
       title: 'Membres',
@@ -92,7 +102,12 @@ export const items = (roles) =>{
         <SvgIcon fontSize="small">
           <ShoppingBagIcon />
         </SvgIcon>
-      )
+      ),
+      iconOpen: <SvgIcon fontSize="small"><ChevronDownIcon /></SvgIcon>,
+        // Utilisation de l'état local pour déterminer si le menu est ouvert
+        isOpen: menuOpen.projets,
+        // Fonction pour changer l'état du menu
+        toggleMenu: () => setMenuOpen({ ...menuOpen, projets: !menuOpen.projets })
     },
     {
       title: 'Membres',
@@ -102,7 +117,20 @@ export const items = (roles) =>{
           <UsersIcon />
         </SvgIcon>
       ),
-      visible: roles.includes('user') || roles.includes('admin'),
+      visible: isUser || isAdmin,
+      children: [
+        {
+          title: 'Revenus',
+          path: '/revenus',
+          icon: <SvgIcon fontSize="small">{/* Icône pour les revenus */}</SvgIcon>
+        },
+        {
+          title: 'Dépenses',
+          path: '/depenses',
+          icon: <SvgIcon fontSize="small">{/* Icône pour les dépenses */}</SvgIcon>
+        },
+        // Ajoutez d'autres sous-menus au besoin
+      ]
     },
     {
       title: 'Evenements',
@@ -124,8 +152,8 @@ export const items = (roles) =>{
       visible: roles.includes('user') || roles.includes('admin'),
       children: [
         {
-          title: 'Revenus',
-          path: '/revenus',
+          title: 'Entree/Sortie',
+          path: '/cotisation',
           icon: (
             <SvgIcon fontSize="small">
               {/* Icône pour les revenus */}
@@ -133,8 +161,53 @@ export const items = (roles) =>{
           )
         },
         {
-          title: 'Dépenses',
-          path: '/depenses',
+          title: 'Seances',
+          path: '/seance',
+          icon: (
+            <SvgIcon fontSize="small">
+              {/* Icône pour les revenus */}
+            </SvgIcon>
+          )
+        },
+        {
+          title: 'Sanctions',
+          path: '/sanction',
+          icon: (
+            <SvgIcon fontSize="small">
+              {/* Icône pour les dépenses */}
+            </SvgIcon>
+          )
+        },
+        {
+          title: 'Contribution Social',
+          path: '/contribution_social',
+          icon: (
+            <SvgIcon fontSize="small">
+              {/* Icône pour les dépenses */}
+            </SvgIcon>
+          )
+        },
+        {
+          title: 'PRET',
+          path: '/pret',
+          icon: (
+            <SvgIcon fontSize="small">
+              {/* Icône pour les dépenses */}
+            </SvgIcon>
+          )
+        },
+        {
+          title: 'TONTINE',
+          path: '/tontine',
+          icon: (
+            <SvgIcon fontSize="small">
+              {/* Icône pour les dépenses */}
+            </SvgIcon>
+          )
+        },
+        {
+          title: 'PLAT',
+          path: '/plat',
           icon: (
             <SvgIcon fontSize="small">
               {/* Icône pour les dépenses */}

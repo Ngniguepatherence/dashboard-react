@@ -17,7 +17,7 @@ import {
 import { Scrollbar } from 'src/components/scrollbar';
 import { getInitials } from 'src/utils/get-initials';
 
-export const FinancesTable = (props) => {
+export const Pret = (props) => {
   const {
     count = 0,
     items = [],
@@ -38,25 +38,19 @@ export const FinancesTable = (props) => {
             <TableHead>
               <TableRow>
                 <TableCell>
-                  NOM
+                  Beneficiare
                 </TableCell>
                 <TableCell>
-                  TONTINE
+                  Date Remboursement
                 </TableCell>
                 <TableCell>
-                  CONTRIBUTION PLAT
+                  Date du Prêt
                 </TableCell>
                 <TableCell>
-                  FOND DE CAISSE
+                  Libelé
                 </TableCell>
                 <TableCell>
-                  SANCTIONS
-                </TableCell>
-                <TableCell>
-                  EVENEMENT
-                </TableCell>
-                <TableCell>
-                  DATE
+                  MONTANT
                 </TableCell>
                 <TableCell>
                   STATUS
@@ -64,31 +58,31 @@ export const FinancesTable = (props) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {items.map((finance) => {
-                const isSelected = selected.includes(finance.id);
-                const createdAt = format(finance.createdAt, 'dd/MM/yyyy');
+              {items.map((pret) => {
+                const isSelected = selected.includes(pret.id);
+                const createdAt = format(pret.createdAt, 'dd/MM/yyyy');
 
                 return (
                   <>
                   <TableRow
                     hover
-                    key={finance.id}
+                    key={pret.id}
                     selected={isSelected}
                   >
                     <TableCell>
-                    {finance.name}
+                    {pret.name}
                     </TableCell>
                     <TableCell>
-                      {finance.tontine}
+                    {pret.motif}
                     </TableCell>
                     <TableCell>
-                      {finance.rappel_tontine}
-                    </TableCell>
-                    <TableCell>
-                      {finance.contribution_au_plat}
+                      {pret.tontine}
                     </TableCell>
                     <TableCell>
                       {createdAt}
+                    </TableCell>
+                    <TableCell>
+                      {pret.status}
                     </TableCell>
                   </TableRow>
                   </>
@@ -111,7 +105,7 @@ export const FinancesTable = (props) => {
   );
 };
 
-FinancesTable.propTypes = {
+Pret.propTypes = {
   count: PropTypes.number,
   items: PropTypes.array,
   onDeselectAll: PropTypes.func,

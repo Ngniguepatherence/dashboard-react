@@ -16,46 +16,29 @@ import {
   ListItemText,
   SvgIcon
 } from '@mui/material';
-import getConfig from 'next/config';
-const { publicRuntimeConfig } = getConfig();
-import { useState,useEffect } from 'react';
 
-export const OverviewLatestProducts = (props) => {
-  const { products = [], sx } = props;
-  const [events, setEvents] = useState([]);
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(`${publicRuntimeConfig.api.baseURL}/api/events`);
-        const data = await response.json();
-        setEvents(data);
-      } catch (error) {
-        console.error('Erreur lors de la récupération des événements :', error);
-      }
-    };
-
-    fetchData();
-  }, []);
+export const FinancesSanction = (props) => {
+  const { orders = [], sx } = props;
 
   return (
     <Card sx={sx}>
-      <CardHeader title="Evenements recents" />
+      <CardHeader title="Beneficiaire recents..." />
       <List>
-        {events.map((product, index) => {
-          const hasDivider = index < events.length - 1;
-          // const ago = formatDistanceToNow(product.da);
-          
+        {orders.map((sanction, index) => {
+          const hasDivider = index < orders.length - 1;
+          const ago = formatDistanceToNow(sanction.createdAt);
+
           return (
             <ListItem
               divider={hasDivider}
-              key={index}
+              key={sanction.id}
             >
-              
               <ListItemText
-                primary={product.title}
+                primary={sanction.customer.name}
                 primaryTypographyProps={{ variant: 'subtitle1' }}
-                secondary={product.user}
+                secondary={`Montant a boufer: ${sanction.amount} F CFA`}
                 secondaryTypographyProps={{ variant: 'body2' }}
+                
               />
               <IconButton edge="end">
                 <SvgIcon>
@@ -85,7 +68,7 @@ export const OverviewLatestProducts = (props) => {
   );
 };
 
-OverviewLatestProducts.propTypes = {
-  products: PropTypes.array,
+FinancesSanction.propTypes = {
+  sanctions: PropTypes.array,
   sx: PropTypes.object
 };

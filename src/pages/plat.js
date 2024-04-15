@@ -2,22 +2,17 @@ import React, { useState,useCallback,useMemo } from "react";
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
 import { FinancesTable } from 'src/sections/finance/finance-table';
 import { CustomersSearch } from 'src/sections/customer/customers-search';
-// import { FinancesSanction } from 'src/sections/finance/FinancesSanction';
+
 import Head from "next/head";
-import { FinanceBouffe } from 'src/sections/finance/FinanceBouffe';
-import { FinancesSanction } from 'src/sections/finance/FinancesSanction';
+import { FinancesSanction } from 'src/sections/finance/FinancesPlat';
 import { applyPagination } from 'src/utils/apply-pagination';
 import { useSelection } from 'src/hooks/use-selection';
-import { FinancesSanctions } from "../sections/finance/finances-sanctions";
-import { FinanceFondDeCaisse } from 'src/sections/finance/finance-fond-de-caisse';
-import { FinanceFondSanction } from 'src/sections/finance/finance-fond-sanctions';
-import { FinanceTotalCotisation } from 'src/sections/finance/finance-total-cotisation'
-import NextLink from 'next/link';
+import { FinancesPlat } from "../sections/finance/finances-plat";
+import { FinanceFondPlat } from 'src/sections/finance/finance-fond-plat';
 import { subDays, subHours } from 'date-fns';
-import Link from "@mui/material";
+import NextLink from 'next/link';
 import PlusIcon from '@heroicons/react/24/solid/PlusIcon';
-import ArrowDownOnSquareIcon from '@heroicons/react/24/solid/ArrowDownOnSquareIcon';
-import { Box, Container,Grid, Stack, Typography,Button,SvgIcon } from "@mui/material";
+import { Box, Container,Grid, Stack,Link, Typography,Button,SvgIcon } from "@mui/material";
 
 const now = new Date();
 
@@ -27,7 +22,7 @@ const data = [
     motif: "Absence Seance",
     createdAt: subDays(subHours(now, 7), 1).getTime(),
     contribution_au_plat: '3000',
-    name: 'MBOGNE  FOTSI RODRIGUE',
+    name: 'MOKTO NEGUE WILFRIED HYACINTHE',
     tontine: '10000',
     status: 'Non'
   },
@@ -35,7 +30,7 @@ const data = [
     id: '5e887ac47eed253091be10Oa',
     motif: "Retard",
     createdAt: subDays(subHours(now, 7), 1).getTime(),
-    name: 'SEULE TCHONANG GLADYS STÉPHANE',
+    name: 'KEPSEU JASPERS',
     tontine: '200',
     status: 'oui'
   },
@@ -45,9 +40,9 @@ const total = [
   {
     id: 'f69f88012978187a6c12897f',
     ref: 'DEV1049',
-    amount: 30.5,
+    amount: 50000,
     customer: {
-      name: 'Ekaterina Tankova'
+      name: 'SOUGANG TCHIMWA CEDRIC'
     },
     createdAt: 1555016400000,
     status: 'pending'
@@ -55,9 +50,9 @@ const total = [
   {
     id: '9eaa1c7dd4433f413c308ce2',
     ref: 'DEV1048',
-    amount: 25.1,
+    amount: 50000,
     customer: {
-      name: 'Cao Yu'
+      name: 'TAPE JEAN CALVIN'
     },
     createdAt: 1555016400000,
     status: 'delivered'
@@ -107,7 +102,12 @@ const Page = () => {
   const SanctionsIds = useEventSanctioonIds(sanctions);
   const financesSelection = useSelection(financesIds);
   const sanctionsSelection = useSelection(SanctionsIds);
+  const [isAdding, setIsAdding] = useState(false);
 
+
+  const handleAddButtonClick = () => {
+    setIsAdding(true);
+  };
 
   const handlePageChange = useCallback(
     (event, value) => {
@@ -127,7 +127,7 @@ const Page = () => {
       <>
       <Head>
         <title>
-          Sanctions | Pouapeu
+          Plat | Pouapeu
         </title>
       </Head>
       <Box
@@ -147,12 +147,13 @@ const Page = () => {
             >
               <Stack spacing={1}>
                 <Typography variant="h4">
-                  Bilan Cotisation
+                  Finance Plat
                 </Typography>
                 
               </Stack>
               <div>
-                <Button
+                
+                <Button onClick={handleAddButtonClick}
                   startIcon={(
                     <SvgIcon fontSize="small">
                       <PlusIcon />
@@ -160,7 +161,14 @@ const Page = () => {
                   )}
                   variant="contained"
                 >
-                 Add
+                 <Link
+                      style={{ color: 'white', textDecoration: 'none' }}
+                      color='white'
+                      component={NextLink}
+                      underline="none"
+                      href="/addPlat">
+                      Add
+                    </Link>
                 </Button>
               </div>
             </Stack>
@@ -170,7 +178,7 @@ const Page = () => {
             sm={6}
             lg={4}
           >
-            <FinanceFondSanction
+            <FinanceFondPlat
               difference={23}
               positive={true}
               sx={{ height: '100%' }}
@@ -179,10 +187,10 @@ const Page = () => {
           </Grid>
             
             <Typography variant="h6">
-            Recensement des Cotisation de la saison
+            Recensement des Plats de la saison
             </Typography> 
 
-            <FinancesSanctions
+            <FinancesPlat
               count={data.length}
               items={finances}
               onDeselectAll={financesSelection.handleDeselectAll}
@@ -195,11 +203,11 @@ const Page = () => {
               rowsPerPage={rowsPerPage}
               selected={financesSelection.selected}
             />
-            {/* <FinancesSanction
+            <FinancesSanction
             count={total.length}
             orders={sanctions}
             
-            /> */}
+            />
           </Stack>
         </Container>
       </Box>

@@ -39,10 +39,13 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Close';
+import { useRouter } from 'next/router';
 import { ArrowBack, ArrowRight, Details } from '@mui/icons-material';
 const { publicRuntimeConfig } = getConfig();
 
 export const CustomersTable = (props) => {
+  const {customer } = props;
+  const router =  useRouter();
   const {
     count = 0,
     items = [],
@@ -60,6 +63,9 @@ export const CustomersTable = (props) => {
   const selectedSome = (selected.length > 0) && (selected.length < items.length);
   const selectedAll = (items.length > 0) && (selected.length === items.length);
   // const gridRootProps = useGridRootProps();
+  const handleCardClick = () => {
+    router.push(`/customers-details?customerId=${customer._id}`);
+  }
 
   return (
     <Card>
@@ -152,7 +158,7 @@ export const CustomersTable = (props) => {
                       
                       <IconButton aria-label="edit"><EditIcon /></IconButton>
                       <IconButton aria-label="delete"><DeleteIcon /></IconButton>
-                      <IconButton aria-label="details"><ArrowRight /></IconButton>
+                      <IconButton aria-label="details" onClick={handleCardClick}><ArrowRight /></IconButton>
                     
                     
                     </TableCell>

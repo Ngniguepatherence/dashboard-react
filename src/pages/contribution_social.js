@@ -1,23 +1,16 @@
-import React, { useState,useCallback,useMemo } from "react";
+import React, { useState,useCallback,useMemo, useEffect } from "react";
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
-import { FinancesTable } from 'src/sections/finance/finance-table';
-import { CustomersSearch } from 'src/sections/customer/customers-search';
-// import { FinancesSanction } from 'src/sections/finance/FinancesSanction';
 import Head from "next/head";
-import { FinanceBouffe } from 'src/sections/finance/FinanceBouffe';
-import { FinancesSanction } from 'src/sections/finance/FinancesSanction';
 import { applyPagination } from 'src/utils/apply-pagination';
 import { useSelection } from 'src/hooks/use-selection';
-import { FinancesSanctions } from "../sections/finance/finances-sanctions";
-import { FinanceFondDeCaisse } from 'src/sections/finance/finance-fond-de-caisse';
-import { FinanceFondSanction } from 'src/sections/finance/finance-fond-sanctions';
-import { FinanceTotalCotisation } from 'src/sections/finance/finance-total-cotisation'
-import NextLink from 'next/link';
+import { FinancesSocial } from "../sections/finance/finances-social";
 import { subDays, subHours } from 'date-fns';
-import Link from "@mui/material";
 import PlusIcon from '@heroicons/react/24/solid/PlusIcon';
-import ArrowDownOnSquareIcon from '@heroicons/react/24/solid/ArrowDownOnSquareIcon';
 import { Box, Container,Grid, Stack, Typography,Button,SvgIcon } from "@mui/material";
+import { FinancesContrib } from "../sections/finance/finances-contrib";
+import getConfig from 'next/config';
+const { publicRuntimeConfig } = getConfig();
+import axios from "axios";
 
 const now = new Date();
 
@@ -64,7 +57,7 @@ const total = [
   },
 ];
 
-const useEvents = (page, rowsPerPage) => {
+const useEvents = (data,page, rowsPerPage) => {
   return useMemo(
     () => {
       return applyPagination(data, page, rowsPerPage);
@@ -100,14 +93,31 @@ const useEventSanctioonIds = (sanctions) => {
 
 const Page = () => {
   const [page, setPage] = useState(0);
+  // const [data, setData] = useState([]) ;
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const finances = useEvents(page, rowsPerPage);
+  const finances = useEvents(data, page, rowsPerPage);
   const sanctions = useEventSanctions(page, rowsPerPage);
   const financesIds = useEventIds(finances);
   const SanctionsIds = useEventSanctioonIds(sanctions);
   const financesSelection = useSelection(financesIds);
   const sanctionsSelection = useSelection(SanctionsIds);
 
+
+
+  useEffect(() =>{
+    const fetchData = async () => {
+      try {
+        const response = await fetch(`${publicRuntimeConfig.api.baseURL}/api/tontine`);
+        const result = await response.json();
+        console.log(result);
+        // setData(result);
+      }
+      catch(error) {
+        console.error('Error fetching data: ',error);
+      }
+    };
+    fetchData();
+  },[]);
 
   const handlePageChange = useCallback(
     (event, value) => {
@@ -127,7 +137,7 @@ const Page = () => {
       <>
       <Head>
         <title>
-          Sanctions | Pouapeu
+          Contribution Sociale | Pouapeu
         </title>
       </Head>
       <Box
@@ -147,7 +157,7 @@ const Page = () => {
             >
               <Stack spacing={1}>
                 <Typography variant="h4">
-                  Bilan Cotisation
+                  Contribution Sociale
                 </Typography>
                 
               </Stack>
@@ -170,19 +180,19 @@ const Page = () => {
             sm={6}
             lg={4}
           >
-            <FinanceFondSanction
+            {/* <FinanceFondSanction
               difference={23}
               positive={true}
               sx={{ height: '100%' }}
               value="100,000 F CFA"
-            />
+            /> */}
           </Grid>
             
             <Typography variant="h6">
-            Recensement des Cotisation de la saison
+            Recensement des Contributions Sociales de la saison
             </Typography> 
 
-            <FinancesSanctions
+            <FinancesSocial
               count={data.length}
               items={finances}
               onDeselectAll={financesSelection.handleDeselectAll}
@@ -195,11 +205,20 @@ const Page = () => {
               rowsPerPage={rowsPerPage}
               selected={financesSelection.selected}
             />
-            {/* <FinancesSanction
-            count={total.length}
-            orders={sanctions}
-            
-            /> */}
+           
+            <FinancesContrib
+              count={data.length}
+              items={finances}
+              onDeselectAll={financesSelection.handleDeselectAll}
+              onDeselectOne={financesSelection.handleDeselectOne}
+              onPageChange={handlePageChange}
+              onRowsPerPageChange={handleRowsPerPageChange}
+              onSelectAll={financesSelection.handleSelectAll}
+              onSelectOne={financesSelection.handleSelectOne}
+              page={page}
+              rowsPerPage={rowsPerPage}
+              selected={financesSelection.selected}
+            />
           </Stack>
         </Container>
       </Box>

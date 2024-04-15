@@ -241,6 +241,28 @@ export const AuthProvider = (props) => {
     }
 
   };
+  const AddTontine = async (membre,montant, typeCotisation,beneficiare, date) =>{
+    try {
+      console.log(membre,typeCotisation,beneficiare, montant
+        ,date);
+      const response = await axios.post(`${publicRuntimeConfig.api.baseURL}/api/tontine`,{membre, typeCotisation, montant,beneficiare, date});
+      console.log(response);
+
+    }catch(error) {
+      console.log('Erreur lors de l\'ajout d\'un enregistrement');
+      throw new Error('Échec de l\'ajout');
+    }
+  };
+  const AddMeeting = async (date, type_seance, nbre_pers_tontinard, nbre_pers_non_tontinard,effectif) => {
+    try {
+      const response = await axios.post(`${publicRuntimeConfig.api.baseURL}/api/seance`, {date, type_seance, nbre_pers_tontinard, nbre_pers_non_tontinard,effectif});
+      console.log(response);
+    }catch(error) {
+      console.error('Erreur lors de l\'ajout du meeting');
+      throw new Error('Echec d\'enregistrement');
+    }
+  };
+  
   const AddProjet = async (title,description,acteurs,logo,dateinit) => {
     console.log(title,description,acteurs,logo,dateinit);
     try {
@@ -443,7 +465,9 @@ const AddMembers = async (avatar, name, surname, email, phone,country, ville,rol
         AddMembers,
         GoogleSession,
         forgotPassword,
-        VerificationCode
+        VerificationCode,
+        AddTontine,
+        AddMeeting
       }}
     >
       {children}
