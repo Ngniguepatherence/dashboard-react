@@ -18,13 +18,14 @@ const Page = () => {
   const router = useRouter();
   const auth = useAuth();
   const [responsables, setResponsables] = useState([]);
+  const [seances, setSeances] = useState([]);
   const [type, setType] = useState([]);
   const [acteurs, setActeurs] = useState([]);
 
   const [values, setValues] = useState({
     montant: '',
     type: '',
-    beneficiaire: '',
+    seance: '',
     date: new Date().toISOString().slice(0, 10),
     submit: null,
   });
@@ -32,14 +33,27 @@ const Page = () => {
   const [errors, setErrors] = useState({
     montant: '',
     type: '',
-    beneficiaire: '',
+    seance: '',
     date: '',
   });
 
   const fetchResponsable = async () => {
     try {
       const response = await axios.get(`${publicRuntimeConfig.api.baseURL}/api/profiles`);
-      setResponsables(response.data);
+      const rep = await response.data
+      setResponsables(rep);
+      console.log(rep)
+    } catch (error) {
+      console.error("Error fetching Responsable: ",error);
+    }
+  };
+
+  const fetchSeance = async () => {
+    try {
+      const response = await axios.get(`${publicRuntimeConfig.api.baseURL}/api/seance`);
+      const seances = await response.data
+      setSeances(seances);
+      console.log(seances)
     } catch (error) {
       console.error("Error fetching Responsable: ",error);
     }
@@ -47,6 +61,7 @@ const Page = () => {
 
   useEffect(() => {
     fetchResponsable();
+    fetchSeance();
   }, []);
 
   const handleChange = (event) => {
@@ -60,7 +75,7 @@ const Page = () => {
 
   const handleSubmit = async () => {
     try {
-      await auth.AddTontine(acteurs.name,values.montant,values.type,values.beneficiaire,values.date);
+      await auth.AddTontine(acteurs.name,values.montant,values.type,values.seance,values.date);
       router.push('/tontine');
     }catch(error) {
       throw new Error('Error');
@@ -132,6 +147,36 @@ const Page = () => {
               onSubmit={handleSubmits()}
             > */}
               <Stack spacing={3}>
+
+              <Autocomplete
+                disablePortal
+                  id="seancess"
+                  options={seances}
+                  
+                  getOptionLabel={(seance) => `${seance.type_seance} - ${seance.date}`}
+                  value={values.seances}
+                  onChange={(event, newValue) => {
+                    setValues({
+                      ...values,
+                      seance: newValue._id
+                    });
+                    console.log(newValue);
+                    console.log(values);
+                    
+                  }}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      fullWidth
+                      label="Seance"
+                      name="seances"
+                      error={!!errors.seance}
+                      helperText={errors.seance}
+                    />
+                  )}
+              />
+
+
               <Autocomplete
                 disablePortal
                   id="responsables"
@@ -154,7 +199,7 @@ const Page = () => {
                       helperText={errors.responsables}
                     />
                   )}
-                />
+              />
                 
                 
                 <TextField
@@ -170,7 +215,8 @@ const Page = () => {
                   helperText={errors.type}
                   >
                   {options.map(option => (
-                    <MenuItem key={option.value} value={option.value}>
+                    <MenuItem key={option.value} 
+                      value={option.value}>
                       {option.label}
                     </MenuItem>
                   ))}
@@ -186,7 +232,7 @@ const Page = () => {
                   error={!!errors.montant}
                   helperText={errors.montant}
                 />
-                <TextField
+                {/* <TextField
                   
                   fullWidth
                   label="Beneficiaire ?"
@@ -204,7 +250,7 @@ const Page = () => {
                       {option.label}
                     </MenuItem>
                   ))}
-                  </TextField>
+                </TextField> */}
                 
                 <TextField
                   

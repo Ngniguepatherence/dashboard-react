@@ -82,7 +82,7 @@ const useEvents = (data,page, rowsPerPage) => {
     () => {
       return applyPagination(data, page, rowsPerPage);
     },
-    [page, rowsPerPage]
+    [data, page, rowsPerPage]
   );
 };
 const useEventSanctions = (page, rowsPerPage) => {

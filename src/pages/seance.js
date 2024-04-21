@@ -54,7 +54,7 @@ const useEvents = (data,page, rowsPerPage) => {
     () => {
       return applyPagination(data, page, rowsPerPage);
     },
-    [page, rowsPerPage]
+    [data,page, rowsPerPage]
   );
 };
 const useEventSanctions = (page, rowsPerPage) => {
@@ -87,7 +87,7 @@ const Page = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [data, setData] = useState([]);
-  const [ final, setFinal] = useState([]);
+  const [final, setFinal] = useState([]);
   const finances = useEvents(final,page, rowsPerPage);
   const financesIds = useEventIds(finances);
   const financesSelection = useSelection(financesIds);
@@ -99,9 +99,9 @@ const Page = () => {
       try {
         const response = await axios.get(`${publicRuntimeConfig.api.baseURL}/api/seance`);
         const result = await response.data;
-       setFinal(result)
-        console.log(result);
-        console.log(final);
+        setFinal(result);
+        // console.log(result);
+        // console.log(final);
         // console.log(result)
       }
       catch(error) {
@@ -112,7 +112,7 @@ const Page = () => {
   },[]);
 
   const handleAddButtonClick = () => {
-    setIsAdding(true);
+    // setIsAdding(true);
   };
 
   const handlePageChange = useCallback(
@@ -172,7 +172,7 @@ const Page = () => {
                       color='white'
                       component={NextLink}
                       underline="none"
-                      href="/addSeance">
+                      href="/seance_detail">
                       Add
                     </Link>
                 </Button>

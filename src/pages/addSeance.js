@@ -1,17 +1,29 @@
 import Head from 'next/head';
 import NextLink from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Box, Button, Link, Stack,MenuItem, TextField, Typography, SvgIcon } from '@mui/material';
+import { Box, Button, Link, Stack,MenuItem, TextField, Typography, SvgIcon, Autocomplete } from '@mui/material';
 import { useAuth } from 'src/hooks/use-auth';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
 import { useEffect, useState } from 'react';
 import getConfig from 'next/config';
+import axios from 'axios';
 import { ArrowBack } from '@mui/icons-material';
 const { publicRuntimeConfig } = getConfig();
+
+export const fetchMembres = async () => {
+  try {
+    const response = await axios.get(`${publicRuntimeConfig.api.baseURL}/api/profiles`);
+    const rep = await response.data
+    return rep
+  } catch (error) {
+      new Error(error)    
+  }
+};
 
 const Page = () => {
   const router = useRouter();
   const auth = useAuth();
+  const [beneficiaires, setBeneficiaire] = useState([]);
 
   const [values, setValues] = useState({
     type: '',
@@ -19,6 +31,7 @@ const Page = () => {
     effectif: '',
     tontine: '',
     cotise: '',
+    beneficiaire: '',
     date: new Date().toISOString().slice(0, 10),
     submit: null,
   });
@@ -30,8 +43,19 @@ const Page = () => {
     effectif: '',
     tontine: '',
     cotise: '',
+    beneficiaire: '',
     date: '',
   });
+
+ 
+
+  useEffect(() => {
+    try{
+      setBeneficiaire(fetchMembres())
+    }catch(error){
+      console.error(error)
+    }
+  }, []);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -44,7 +68,7 @@ const Page = () => {
 
   const handleSubmit = async () => {
     try {
-      await auth.AddMeeting(values.date,values.type,values.cotise,values.tontine, values.effectif);
+      await auth.AddMeeting(values.date,values.type,values.cotise,values.tontine, values.effectif, values.beneficiaire._id);
       router.push('/seance');
     }catch(error) {
       throw new Error('Error');
@@ -130,11 +154,14 @@ const Page = () => {
                   helperText={errors.type}
                   >
                   {options.map(option => (
-                    <MenuItem key={option.value} value={option.value}>
+                    <MenuItem key={option.value} 
+                      value={option.value}>
                       {option.label}
                     </MenuItem>
                   ))}
-                  </TextField>
+                </TextField>
+
+
                 <TextField
                   
                   fullWidth
@@ -168,7 +195,42 @@ const Page = () => {
                   error={!!errors.effectif}
                   helperText={errors.effectif}
                 />
-                
+
+                 <Autocomplete
+                disablePortal
+                  id="beneficiaire"
+                  options={beneficiaires}
+                  
+                  getOptionLabel={(beneficiaire) => {
+                    if(beneficiaire && beneficiaire.name)
+                      return  `${beneficiaire.name} ${beneficiaire.surname}`
+                    else return ""
+                  }}
+                  value={values.beneficiaire.name}
+                  onChange={(event, newValue) => {
+                    setValues({
+                      ...values,
+                      beneficiaire: {
+                        _id: newValue._id,
+                        name: newValue.name,
+                        surname: newValue.surname,
+                      }
+                    });
+                    console.log(newValue);
+                    console.log(values);
+                    
+                  }}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      fullWidth
+                      label="Beneficiaire"
+                      name="beneficiaire"
+                      error={!!errors.beneficiaire}
+                      helperText={errors.beneficiaire}
+                    />
+                  )}
+                />
                 
                 
                 <TextField

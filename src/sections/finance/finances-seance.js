@@ -17,8 +17,10 @@ import {
 import { Scrollbar } from 'src/components/scrollbar';
 import { getInitials } from 'src/utils/get-initials';
 import { useState } from 'react';
+import { useRouter } from 'next/router';
 
 export const FinancesSeances = (props) => {
+  
   const {
     count = 0,
     items = [],
@@ -31,7 +33,7 @@ export const FinancesSeances = (props) => {
 
   const [filtreDateDebut, setFiltreDateDebut] = useState('');
   const [filtreDateFin, setFiltreDateFin] = useState('');
-  
+  const router = useRouter()
   // Fonction de filtrage des cotisations
   const filteredCotisations = items.filter(cotisation => {
     const dateCotisation = new Date(cotisation.date);
@@ -46,6 +48,10 @@ export const FinancesSeances = (props) => {
     }
     return true;
   });
+
+  const openSeance = (seance_id) => {
+    router.push(`/seance_detail?seance_id=${seance_id}`)
+  }
 
   return (
     <Card>
@@ -103,6 +109,11 @@ export const FinancesSeances = (props) => {
                     </TableCell>
                     <TableCell>
                     {finance.effectif }
+                    </TableCell>
+                    <TableCell
+                      onClick={()=>openSeance(finance._id)}
+                    >
+                      Ouvrir
                     </TableCell>
                   </TableRow>
                   </>
