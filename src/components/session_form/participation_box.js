@@ -2,16 +2,25 @@ import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
 import CheckIcon from "@heroicons/react/24/solid/CheckIcon"
 import { Box, Button, Card, Checkbox, MenuItem, Select, Stack, SvgIcon, Table, TableBody, TableCell, TableHead, TableRow, TextField, Typography } from "@mui/material"
 import { Scrollbar } from 'src/components/scrollbar';
+import getConfig from 'next/config';
 
 import { useState } from "react"
+import { useEffect } from 'react';
+import axios from 'axios';
+
+const { publicRuntimeConfig } = getConfig();
 
 
 
 const ParticipationBox =  (props) => {
     const {seance, updateSeance} = props
 
-    const [participations, setParticipations ] = useState(seance.participations | [])
-    const [value, setValue] = useState()
+    const [participations, setParticipations ] = useState(seance.participations)
+    const [values, setValues] = useState({
+        montant_receptioniste: undefined,
+        montant_demi_non_decaisse: undefined
+
+    })
     const [errors, setErrors] = useState({
         participations: {
 
@@ -20,18 +29,38 @@ const ParticipationBox =  (props) => {
         montant_demi_non_decaisse: ''
     })
 
+    useEffect(()=>{
+        setParticipations(seance.participations)
+        setValues({
+            montant_receptioniste: seance.montant_receptioniste,
+            montant_demi_non_decaisse: seance.montant_demi_non_decaisse,
+        })
+
+    },[seance])
+
+
     const changeParticipations = (index, p) => {
         const tmp = [...participations]
         tmp[index] = p
 
         setParticipations([...tmp])
       };
-
+      const handleChanges = (event) => {
+        const { name, val} = event.target;
+        console.log("Change")
+        setValues({
+          ...values,
+          [name]: val,
+        });
+      };
     const submitParticipations = async () => {
         try{
-            const response = await axios.post(`${publicRuntimeConfig.api.baseURL}/api/saveParticipations`,{
+            const obj = {
                 participations: participations,
-                ...value
+                ...values
+            }
+            const response = await axios.post(`${publicRuntimeConfig.api.baseURL}/api/seance/${seance._id}/saveParticipations`,{
+                ...obj
             });
             const rep = await response.data
             updateSeance(rep)
@@ -122,14 +151,14 @@ const ParticipationBox =  (props) => {
                                             </TableCell>
                                             <TableCell>
                                                 <Select 
-                                                    fullwidth
+                                                    fullWidth
                                                     name="montant_tontine"
-                                                    value={participation.montant_tontine|0}
+                                                    value={participation.montant_tontine}
                                                     onChange={handleChange}
                                                     error={!!errors.participations.montant_tontine}
                                                     helperText={errors.participations.montant_tontine}
                                                     >
-                                                        {sessionOption.map(opt=>(
+                                                        {optionTontine.map(opt=>(
                                                             <MenuItem key={opt.value} value={opt.value}>{opt.label}</MenuItem>
                                                         ))}
                                                 </Select>
@@ -138,12 +167,12 @@ const ParticipationBox =  (props) => {
                                                 <Select 
                                                     fullwidth
                                                     name="montant_plat"
-                                                    value={participation.montant_plat|0}
+                                                    value={participation.montant_plat}
                                                     onChange={handleChange}
                                                     error={!!errors.participations.montant_plat}
                                                     helperText={errors.participations.montant_plat}
                                                     >
-                                                        {sessionOption.map(opt=>(
+                                                        {optionPlat.map(opt=>(
                                                             <MenuItem key={opt.value} value={opt.value}>{opt.label}</MenuItem>
                                                         ))}
                                                 </Select>
@@ -152,12 +181,12 @@ const ParticipationBox =  (props) => {
                                                 <Select 
                                                     fullwidth
                                                     name="montant_prelevement_social"
-                                                    value={participation.montant_prelevement_social|0}
+                                                    value={participation.montant_prelevement_social}
                                                     onChange={handleChange}
                                                     error={!!errors.participations.montant_prelevement_social}
                                                     helperText={errors.participations.montant_prelevement_social}
                                                     >
-                                                        {sessionOption.map(opt=>(
+                                                        {optionPs.map(opt=>(
                                                             <MenuItem key={opt.value} value={opt.value}>{opt.label}</MenuItem>
                                                         ))}
                                                 </Select>
@@ -167,7 +196,7 @@ const ParticipationBox =  (props) => {
                                                     fullwidth
                                                     name="montant_sanction"
                                                     type="number"
-                                                    value={participation.montant_sanction|''}
+                                                    value={participation.montant_sanction}
                                                     onChange={handleChange}
                                                     error={!!errors.participations.montant_sanction}
                                                     helperText={errors.participations.montant_sanction}
@@ -178,7 +207,7 @@ const ParticipationBox =  (props) => {
                                                     fullwidth
                                                     name="motif_sanction"
                                                     type="text"
-                                                    value={participation.motif_sanction|''}
+                                                    value={participation.motif_sanction}
                                                     onChange={handleChange}
                                                     error={!!errors.participations.motif_sanction}
                                                     helperText={errors.participations.motif_sanction}
@@ -208,8 +237,8 @@ const ParticipationBox =  (props) => {
                                 fullwidth
                                 name="montant_receptioniste"
                                 type="number"
-                                value={value.montant_receptioniste|''}
-                                onChange={handleChange}
+                                value={values.montant_receptioniste}
+                                onChange={handleChanges}
                                 error={!!errors.montant_receptioniste}
                                 helperText={errors.montant_receptioniste}
                             />
@@ -225,8 +254,8 @@ const ParticipationBox =  (props) => {
                                 fullwidth
                                 name="montant_demi_non_decaisse"
                                 type="number"
-                                value={value.montant_demi_non_decaisse|''}
-                                onChange={handleChange}
+                                value={values.montant_demi_non_decaisse}
+                                onChange={handleChanges}
                                 error={!!errors.montant_demi_non_decaisse}
                                 helperText={errors.montant_demi_non_decaisse}
                             />

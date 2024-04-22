@@ -9,6 +9,7 @@ import { Box, Container, Stack, Typography } from '@mui/material';
 import { useEffect } from 'react';
 import axios from 'axios';
 import Head from 'next/head';
+import SummaryInfo from '../components/session_form/summary_info';
 
 const { publicRuntimeConfig } = getConfig();
 
@@ -16,7 +17,15 @@ const { publicRuntimeConfig } = getConfig();
 
 const SeanceDetail = () => {
      
-     const [seance, setSeance] = useState()
+     const [seance, setSeance] = useState({
+        date: undefined,
+        session:undefined,
+        beneficaire_tontine: undefined,
+        beneficaire_plat: undefined,
+        participations: [],
+        montant_receptioniste: undefined,
+        montant_demi_non_decaisse: undefined
+     })
 
      const router = useRouter()
      const {seance_id} = router.query
@@ -38,6 +47,7 @@ const SeanceDetail = () => {
       },[]);
 
       const updateSeance = (newSeance) =>{
+        console.log(newSeance)
         if(newSeance)
             setSeance({...newSeance})
       }
@@ -53,11 +63,11 @@ const SeanceDetail = () => {
                 component="main"
                 sx={{
                 flexGrow: 1,
-                p: 8
+                py: 8
                 }}
             >
                 <Container maxWidth="l">
-                    <Container spacing={3}>
+                    <Stack spacing={3}>
                         <Stack
                         direction="row"
                         justifyContent="space-between"
@@ -69,17 +79,20 @@ const SeanceDetail = () => {
                                 </Typography>
                                 
                             </Stack>
-
-                            <SeanceBasicInfo updateSeance={updateSeance}
-                                             seance={seance} />
-                            {seance.participations && 
-                                <ParticipationBox updateSeance={updateSeance}
-                                                   seance={seance}
-                                />}
-
-                            {}
                         </Stack>
-                    </Container>
+                    </Stack>
+                        <SeanceBasicInfo updateSeance={updateSeance}
+                                             seance={seance} />
+                        {seance._id
+                         && 
+                            <ParticipationBox updateSeance={updateSeance}
+                                                seance={seance}
+                            />}
+
+                        {seance._id && 
+                            <SummaryInfo seance={seance} />}
+
+                        {}
                 </Container>
             </Box>
         </>
@@ -88,10 +101,10 @@ const SeanceDetail = () => {
 
 }
 
-seanceDetail.getLayout = (page) => (
+SeanceDetail.getLayout = (page) => (
     <DashboardLayout>
       {page}
     </DashboardLayout>
   );
   
-  export default seanceDetail;
+  export default SeanceDetail;

@@ -2,8 +2,11 @@ import { useEffect, useState } from "react"
 import { fetchMembres } from "../../pages/addSeance"
 import { Autocomplete, Box, Button, Grid, MenuItem, Select, Stack, SvgIcon, TextField } from "@mui/material"
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
+import getConfig from 'next/config';
+const { publicRuntimeConfig } = getConfig();
 
 import CheckIcon from '@heroicons/react/24/solid/CheckIcon';
+import axios from "axios";
 
 
 
@@ -12,7 +15,7 @@ const SeanceBasicInfo = (props) => {
     const {seance, updateSeance } = props
 
     const [membres, setMembres] = useState([]) 
-    const [value, setValue] = useState(seance)
+    const [values, setValues] = useState(seance)
     const [errors, setErrors] = useState({
         date: '',
         session:'',
@@ -22,7 +25,8 @@ const SeanceBasicInfo = (props) => {
 
     const submitSeance = async ()=>{
         try{
-            const response = await axios.post(`${publicRuntimeConfig.api.baseURL}/api/seance`,value);
+            console.log(values)
+            const response = await axios.post(`${publicRuntimeConfig.api.baseURL}/api/seance`, values);
             const rep = await response.data
             updateSeance(rep)
 
@@ -32,9 +36,10 @@ const SeanceBasicInfo = (props) => {
     }
 
     const handleChange = (event) => {
-        const { name, value } = event.target;
-        setValue({
-          ...value,
+        const { name, value} = event.target;
+        console.log("Change")
+        setValues({
+          ...values,
           [name]: value,
         });
       };
@@ -42,11 +47,20 @@ const SeanceBasicInfo = (props) => {
 
     useEffect(() => {
         try{
-            setMembres(fetchMembres())
+            (async () => {
+                setMembres(await fetchMembres())
+            })();
           }catch(error){
             console.error(error)
           }
     }, [])
+
+    useEffect(()=>{
+        setValues({
+            ...seance
+        })
+
+    },[seance])
 
     const sessionOption = [
         {value: '2024', label:"2024"}
@@ -57,24 +71,26 @@ const SeanceBasicInfo = (props) => {
             <Stack padding={3} spacing={3}>
                 <Grid container
                         spacing={2}
+                        gap={3}
                 >
                     <Grid items md={12} lg={5}>
+                        Date
                         <TextField
-                            fullwidth
-                            label="date"
+                            fullWidth
                             name="date"
-                            value={value.date|''}
+                            type="date"
+                            value={values.date}
                             onChange={handleChange}
                             error={!!errors.date}
                             helperText={errors.date}
                             />
                     </Grid>
                     <Grid items md={12} lg={5}>
+                        Session
                         <Select
-                            fullwidth
-                            label="Session"
+                            fullWidth
                             name="session"
-                            value={value.session|''}
+                            value={values.session}
                             onChange={handleChange}
                             error={!!errors.session}
                             helperText={errors.session}
@@ -85,77 +101,40 @@ const SeanceBasicInfo = (props) => {
                             </Select>
                     </Grid>
                     <Grid items md={12} lg={5}>
-                        <Autocomplete
-                            disablePortal
-                            id="bouffeur"
-                            options={membres}
+                        
+                        Bouffeur de la Tontine
+                        <Select
+                            value={values.beneficaire_tontine}
+                            fullWidth
+                            onChange={handleChange}
+                            label="Bouffeur de la Tontine"
+                            name="beneficaire_tontine"
+                            error={!!errors.beneficaire_tontine}
+                            helperText={errors.beneficaire_tontine}
+                        >
+                            {membres.map( m=> (
+                                <MenuItem key={m._id} value={m._id}>{m.name +" "+ m.surname}</MenuItem>
+                            ))}
+                        </Select>
                             
-                            getOptionLabel={(bouffeur) => {
-                                if(bouffeur && bouffeur.name)
-                                return  `${bouffeur.name} ${bouffeur.surname}`
-                                else return ""
-                            }}
-                            value={value.beneficaire_tontine}
-                            onChange={(event, newValue) => {
-                                // setValues({
-                                // ...values,
-                                // beneficiaire: {
-                                //     _id: newValue._id,
-                                //     name: newValue.name,
-                                //     surname: newValue.surname,
-                                // }
-                                // });
-                                console.log(newValue);
-                                
-                            }}
-                            renderInput={(params) => (
-                                <TextField
-                                {...params}
-                                fullWidth
-                                label="Bouffeur de la Tontine"
-                                name="beneficaire_tontine"
-                                error={!!errors.beneficaire_tontine}
-                                helperText={errors.beneficaire_tontine}
-                                />
-                            )}
-                        />
+
                 
                     </Grid>
                     <Grid items md={12} lg={5}>
-                        <Autocomplete
-                            disablePortal
-                            id="receptioniste"
-                            options={membres}
-                            
-                            getOptionLabel={(receptioniste) => {
-                                if(receptioniste && receptioniste.name)
-                                return  `${receptioniste.name} ${receptioniste.surname}`
-                                else return ""
-                            }}
-                            value={value.beneficaire_plat}
-                            onChange={(event, newValue) => {
-                                // setValues({
-                                // ...values,
-                                // beneficiaire: {
-                                //     _id: newValue._id,
-                                //     name: newValue.name,
-                                //     surname: newValue.surname,
-                                // }
-                                // });
-                                console.log(newValue);
-                                
-                            }}
-                            renderInput={(params) => (
-                                <TextField
-                                {...params}
-                                fullWidth
-                                label="Receveur de la Tontine"
-                                name="beneficaire_tontine"
-                                error={!!errors.beneficaire_tontine}
-                                helperText={errors.beneficaire_tontine}
-                                />
-                            )}
-                        />
+                        Receveur de la Tontine
+                        <Select
+                            value={values.beneficaire_plat}
+                            fullWidth
+                            onChange={handleChange}
+                            name="beneficaire_plat"
+                            error={!!errors.beneficaire_plat}
+                            helperText={errors.beneficaire_plat}
+                        >
+                            {membres.map( m=> (
+                                <MenuItem key={m._id} value={m._id}>{m.name +" "+ m.surname}</MenuItem>
+                            ))}
+                        </Select>
+                        
                     </Grid>
 
                 </Grid>
