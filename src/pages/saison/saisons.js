@@ -8,7 +8,7 @@ import { FinanceBouffe } from 'src/sections/finance/FinanceBouffe';
 import { FinancesSanction } from 'src/sections/finance/FinancesTontine';
 import { applyPagination } from 'src/utils/apply-pagination';
 import { useSelection } from 'src/hooks/use-selection';
-import { FinancesTontines } from "../sections/finance/finances-tontine";
+import { FinancesSanctions } from "../sections/finance/finances-tontine";
 import { FinancesTontinT } from "../sections/finance/finances-tontin";
 import { FinanceFondDeCaisse } from 'src/sections/finance/finance-fond-de-caisse';
 import { FinanceFondSanction } from 'src/sections/finance/finance-fond-tontine';
@@ -21,39 +21,11 @@ import { Box, Container,Grid, Stack,Link, Typography,Button,SvgIcon } from "@mui
 import getConfig from 'next/config';
 const { publicRuntimeConfig } = getConfig();
 import axios from "axios";
+import { SaisonList } from "../../sections/finance/saison-list";
 
 
 const now = new Date();
 
-
-// const data = [
-//   {
-//     id: '5e887ac47eed253091be10Ob',
-//     motif: "Un Nom",
-//     createdAt: subDays(subHours(now, 7), 1).getTime(),
-//     contribution_au_plat: '3000',
-//     name: 'MBOGNE  FOTSI RODRIGUE',
-//     tontine: '10000',
-//     status: 'Non'
-//   },
-//   {
-//     id: '5e887ac47eed253091be10Oa',
-//     motif: "Demi Nom",
-//     createdAt: subDays(subHours(now, 7), 1).getTime(),
-//     name: 'SEULE TCHONANG GLADYS STÉPHANE',
-//     tontine: '200',
-//     status: 'oui'
-//   },
-//   {
-//     id: '5e887ac47eed253091be10Oa',
-//     motif: "Demi Nom",
-//     createdAt: new Date('2024-03-23T10:00:00').getTime(),
-//     name: 'SEULE TCHONANG GLADYS STÉPHANE',
-//     tontine: '200',
-//     status: 'oui'
-//   },
-  
-// ];
 const total = [
   {
     id: 'f69f88012978187a6c12897f',
@@ -82,7 +54,7 @@ const useEvents = (data,page, rowsPerPage) => {
     () => {
       return applyPagination(data, page, rowsPerPage);
     },
-    [data, page, rowsPerPage]
+    [data,page, rowsPerPage]
   );
 };
 const useEventSanctions = (page, rowsPerPage) => {
@@ -115,23 +87,21 @@ const Page = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [data, setData] = useState([]);
-  const finances = useEvents(data,page, rowsPerPage);
-  const sanctions = useEventSanctions(page, rowsPerPage);
+  const [final, setFinal] = useState([]);
+  const finances = useEvents(final,page, rowsPerPage);
   const financesIds = useEventIds(finances);
-  const SanctionsIds = useEventSanctioonIds(sanctions);
   const financesSelection = useSelection(financesIds);
-  const sanctionsSelection = useSelection(SanctionsIds);
-  const [isAdding, setIsAdding] = useState(false);
-
+  
 
 
   useEffect(() =>{
     const fetchData = async () => {
       try {
-        const response = await fetch(`${publicRuntimeConfig.api.baseURL}/api/participations/tontines`);
-        const result = await response.json();
-        setData(result);
-        console.log(data);
+        const response = await axios.get(`${publicRuntimeConfig.api.baseURL}/api/saisons`);
+        const result = await response.data;
+        setFinal(result);
+        // console.log(result);
+        // console.log(final);
         // console.log(result)
       }
       catch(error) {
@@ -142,7 +112,7 @@ const Page = () => {
   },[]);
 
   const handleAddButtonClick = () => {
-    setIsAdding(true);
+    // setIsAdding(true);
   };
 
   const handlePageChange = useCallback(
@@ -163,7 +133,7 @@ const Page = () => {
       <>
       <Head>
         <title>
-          Tontine | Pouapeu
+          Saisons | Pouapeu
         </title>
       </Head>
       <Box
@@ -183,13 +153,13 @@ const Page = () => {
             >
               <Stack spacing={1}>
                 <Typography variant="h4">
-                  BILAN TONTINE
+                  BILAN MEETING
                 </Typography>
                 
               </Stack>
               <div>
                 
-                {/* <Button onClick={handleAddButtonClick}
+                <Button onClick={handleAddButtonClick}
                   startIcon={(
                     <SvgIcon fontSize="small">
                       <PlusIcon />
@@ -202,33 +172,22 @@ const Page = () => {
                       color='white'
                       component={NextLink}
                       underline="none"
-                      href="/addTontine">
+                      href="/saison_detail">
                       Add
                     </Link>
-                </Button> */}
+                </Button>
               </div>
             </Stack>
 
-            <Grid
-            xs={12}
-            sm={6}
-            lg={4}
-          >
-            <FinanceFondSanction
-              difference={23}
-              positive={true}
-              sx={{ height: '100%' }}
-              value="100,000 F CFA"
-            />
-          </Grid>
+            
             
             <Typography variant="h6">
-            TONTINE EN COURS
+            Liste des Saisons
             </Typography> 
 
-            <FinancesTontines
-              count={data.length}
-              items={data}
+            <SaisonList
+              count={final.length}
+              items={finances}
               onDeselectAll={financesSelection.handleDeselectAll}
               onDeselectOne={financesSelection.handleDeselectOne}
               onPageChange={handlePageChange}
@@ -239,24 +198,9 @@ const Page = () => {
               rowsPerPage={rowsPerPage}
               selected={financesSelection.selected}
             />
-            <FinancesSanction
-            count={total.length}
-            orders={sanctions}
             
-            />
-            <FinancesTontinT
-              count={data.length}
-              items={data}
-              onDeselectAll={financesSelection.handleDeselectAll}
-              onDeselectOne={financesSelection.handleDeselectOne}
-              onPageChange={handlePageChange}
-              onRowsPerPageChange={handleRowsPerPageChange}
-              onSelectAll={financesSelection.handleSelectAll}
-              onSelectOne={financesSelection.handleSelectOne}
-              page={page}
-              rowsPerPage={rowsPerPage}
-              selected={financesSelection.selected}
-            />
+           
+            
           </Stack>
         </Container>
       </Box>

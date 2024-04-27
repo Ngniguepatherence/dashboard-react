@@ -7,6 +7,7 @@ const { publicRuntimeConfig } = getConfig();
 
 import CheckIcon from '@heroicons/react/24/solid/CheckIcon';
 import axios from "axios";
+import { session } from "passport";
 
 
 
@@ -42,6 +43,8 @@ const SeanceBasicInfo = (props) => {
           ...values,
           [name]: value,
         });
+
+        console.log(values)
       };
 
 
@@ -56,9 +59,13 @@ const SeanceBasicInfo = (props) => {
     }, [])
 
     useEffect(()=>{
-        setValues({
-            ...seance
-        })
+        if(seance._id)
+            setValues({
+                date: seance.date,
+                beneficaire_plat: seance.beneficaire_plat._id,
+                beneficaire_tontine: seance.beneficaire_tontine._id,
+                session: seance.session
+            })
 
     },[seance])
 
@@ -89,8 +96,10 @@ const SeanceBasicInfo = (props) => {
                         Session
                         <Select
                             fullWidth
+                            labelId="session"
+                            id="session"
                             name="session"
-                            value={values.session}
+                            value={values.session || ''}
                             onChange={handleChange}
                             error={!!errors.session}
                             helperText={errors.session}
@@ -104,8 +113,10 @@ const SeanceBasicInfo = (props) => {
                         
                         Bouffeur de la Tontine
                         <Select
-                            value={values.beneficaire_tontine}
+                            value={values.beneficaire_tontine || ''}
                             fullWidth
+                            labelId="beneficaire_tontine"
+                            id="beneficaire_tontine"
                             onChange={handleChange}
                             label="Bouffeur de la Tontine"
                             name="beneficaire_tontine"
@@ -123,8 +134,10 @@ const SeanceBasicInfo = (props) => {
                     <Grid items md={12} lg={5}>
                         Receveur de la Tontine
                         <Select
-                            value={values.beneficaire_plat}
+                            value={values.beneficaire_plat || ''}
                             fullWidth
+                            labelId="beneficaire_plat"
+                            id="beneficaire_plat"
                             onChange={handleChange}
                             name="beneficaire_plat"
                             error={!!errors.beneficaire_plat}

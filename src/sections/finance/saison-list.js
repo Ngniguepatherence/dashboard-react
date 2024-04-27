@@ -17,15 +17,15 @@ import {
 import { Scrollbar } from 'src/components/scrollbar';
 import { getInitials } from 'src/utils/get-initials';
 import { useState } from 'react';
+import { useRouter } from 'next/router';
 
-export const FinancesTontines = (props) => {
+export const SaisonList = (props) => {
+  
   const {
     count = 0,
     items = [],
-    onDeselectOne,
     onPageChange = () => {},
     onRowsPerPageChange,
-    onSelectOne,
     page = 0,
     rowsPerPage = 5,
     selected = []
@@ -33,10 +33,10 @@ export const FinancesTontines = (props) => {
 
   const [filtreDateDebut, setFiltreDateDebut] = useState('');
   const [filtreDateFin, setFiltreDateFin] = useState('');
-  
+  const router = useRouter()
   // Fonction de filtrage des cotisations
   const filteredCotisations = items.filter(cotisation => {
-    const dateCotisation = new Date(cotisation.createdAt);
+    const dateCotisation = new Date(cotisation.date);
     const debutFiltre = filtreDateDebut ? new Date(filtreDateDebut) : null;
     const finFiltre = filtreDateFin ? new Date(filtreDateFin) : null;
 
@@ -48,6 +48,10 @@ export const FinancesTontines = (props) => {
     }
     return true;
   });
+
+  const openSeance = (seance_id) => {
+    router.push(`/seance_detail?seance_id=${seance_id}`)
+  }
 
   return (
     <Card>
@@ -63,29 +67,26 @@ export const FinancesTontines = (props) => {
             <TableHead>
               <TableRow>
                 <TableCell>
-                  NOM
+                  Date & ID
                 </TableCell>
-                {/* <TableCell>
-                  Type Cotisation
-                </TableCell> */}
                 <TableCell>
-                  Montant
+                  Type Meeting
                 </TableCell>
-                {/* <TableCell>
-                 Beneficiaire ?
-                </TableCell> */}
                 <TableCell>
-                  DATE
+                 Nbre Tontinard
                 </TableCell>
-                {/* <TableCell>
-                  STATUS
-                </TableCell> */}
+                <TableCell>
+                Nbre non Tontinard
+                </TableCell>
+                <TableCell>
+                Effectif
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {filteredCotisations.map((finance) => {
                 const isSelected = selected.includes(finance.id);
-                const createdAt = format(new Date(finance.createat), 'dd/MM/yyyy');
+                const createdAt = format(new Date(finance.date), 'dd/MM/yyyy');
 
                 return (
                   <>
@@ -95,24 +96,25 @@ export const FinancesTontines = (props) => {
                     selected={isSelected}
                   >
                     <TableCell>
-                    {`${finance.membre.name} ${finance.membre.surname}`}
+                    {createdAt}
                     </TableCell>
-                    {/* <TableCell>
-                    {finance.type_cotisation}
-                    </TableCell> */}
                     <TableCell>
-                      {finance.montant_tontine}
+                    {finance.type_seance}
                     </TableCell>
-                    {/* <TableCell>
-                    {finance.Beneficiaire }
-                    </TableCell> */}
-                    
                     <TableCell>
-                      {createdAt}
+                      {finance.nbre_pers_tontinard}
                     </TableCell>
-                    {/* <TableCell>
-                      {finance.status}
-                    </TableCell> */}
+                    <TableCell>
+                    {finance.nbre_pers_non_tontinard }
+                    </TableCell>
+                    <TableCell>
+                    {finance.effectif }
+                    </TableCell>
+                    <TableCell
+                      onClick={()=>openSeance(finance._id)}
+                    >
+                      Ouvrir
+                    </TableCell>
                   </TableRow>
                   </>
                 );
@@ -134,7 +136,7 @@ export const FinancesTontines = (props) => {
   );
 };
 
-FinancesTontines.propTypes = {
+SaisonList.propTypes = {
   count: PropTypes.number,
   items: PropTypes.array,
   onDeselectAll: PropTypes.func,

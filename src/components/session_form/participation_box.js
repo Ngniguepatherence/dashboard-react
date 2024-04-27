@@ -17,8 +17,8 @@ const ParticipationBox =  (props) => {
 
     const [participations, setParticipations ] = useState(seance.participations)
     const [values, setValues] = useState({
-        montant_receptioniste: undefined,
-        montant_demi_non_decaisse: undefined
+        montant_receptioniste: 50000,
+        montant_beneficiaire: 0
 
     })
     const [errors, setErrors] = useState({
@@ -26,14 +26,14 @@ const ParticipationBox =  (props) => {
 
         },
         montant_receptioniste: '',
-        montant_demi_non_decaisse: ''
+        montant_beneficiaire: ''
     })
 
     useEffect(()=>{
         setParticipations(seance.participations)
         setValues({
             montant_receptioniste: seance.montant_receptioniste,
-            montant_demi_non_decaisse: seance.montant_demi_non_decaisse,
+            montant_beneficiaire: seance.montant_beneficiaire,
         })
 
     },[seance])
@@ -46,22 +46,27 @@ const ParticipationBox =  (props) => {
         setParticipations([...tmp])
       };
       const handleChanges = (event) => {
-        const { name, val} = event.target;
+        const { name, value} = event.target;
         console.log("Change")
         setValues({
           ...values,
-          [name]: val,
+          [name]: value,
         });
+        console.log(values)
       };
     const submitParticipations = async () => {
         try{
             const obj = {
-                participations: participations,
-                ...values
+                ...values,
+                participations: participations.map( p => { 
+                    p.presence = (p.presence ===  'on' || p.presence === true)
+                    p.retardataire = (p.retardataire ===  'on' || p.retardataire === true)
+                    return p
+                }),
+
             }
-            const response = await axios.post(`${publicRuntimeConfig.api.baseURL}/api/seance/${seance._id}/saveParticipations`,{
-                ...obj
-            });
+            console.log("sending :", obj)
+            const response = await axios.post(`${publicRuntimeConfig.api.baseURL}/api/seance/${seance._id}/saveParticipations`,obj);
             const rep = await response.data
             updateSeance(rep)
 
@@ -132,7 +137,7 @@ const ParticipationBox =  (props) => {
                                           [name]: value,
                                         });
                                       };
-                                    
+                                    console.log(participation)
                                     return (
                                         
                                         <TableRow key={index}>
@@ -140,12 +145,14 @@ const ParticipationBox =  (props) => {
                                                 {participation.membre.name +" " +participation.membre.surname}
                                             </TableCell>
                                             <TableCell>
-                                                <Checkbox value={participation.presence}
-                                                           onChange={handleChange}            
+                                                <Checkbox name='presence'
+                                                        checked={participation.presence}
+                                                        onChange={handleChange}            
                                                 />
                                             </TableCell>
                                             <TableCell>
-                                                <Checkbox value={participation.presence}
+                                                <Checkbox name="retardataire"
+                                                        checked={participation.retardataire}
                                                            onChange={handleChange}            
                                                 />
                                             </TableCell>
@@ -247,17 +254,17 @@ const ParticipationBox =  (props) => {
                            spacing={2}
                     >
                             <Typography>
-                                Montant du demis nom decaissé   
+                                Montant decaissé au Bouffeur 
                             </Typography>
                             
                             <TextField
                                 fullwidth
-                                name="montant_demi_non_decaisse"
+                                name="montant_beneficiaire"
                                 type="number"
-                                value={values.montant_demi_non_decaisse}
+                                value={values.montant_beneficiaire}
                                 onChange={handleChanges}
-                                error={!!errors.montant_demi_non_decaisse}
-                                helperText={errors.montant_demi_non_decaisse}
+                                error={!!errors.montant_beneficiaire}
+                                helperText={errors.montant_beneficiaire}
                             />
                     </Stack>
                 </Stack>
