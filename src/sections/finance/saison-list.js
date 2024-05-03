@@ -3,6 +3,7 @@ import { format } from 'date-fns';
 import {
   Avatar,
   Box,
+  Button,
   Card,
   Checkbox,
   Stack,
@@ -49,8 +50,8 @@ export const SaisonList = (props) => {
     return true;
   });
 
-  const openSeance = (seance_id) => {
-    router.push(`/seance_detail?seance_id=${seance_id}`)
+  const openSaison = (saison_id) => {
+    router.push(`/saison/saison_detail?saison_id=${saison_id}`)
   }
 
   return (
@@ -67,53 +68,57 @@ export const SaisonList = (props) => {
             <TableHead>
               <TableRow>
                 <TableCell>
-                  Date & ID
+                  Libellé
                 </TableCell>
                 <TableCell>
-                  Type Meeting
+                  Début
                 </TableCell>
                 <TableCell>
-                 Nbre Tontinard
+                 Fin
                 </TableCell>
                 <TableCell>
-                Nbre non Tontinard
+                  Nbr inscrit
                 </TableCell>
-                <TableCell>
+                {/* <TableCell>
                 Effectif
-                </TableCell>
+                </TableCell> */}
               </TableRow>
             </TableHead>
             <TableBody>
-              {filteredCotisations.map((finance) => {
-                const isSelected = selected.includes(finance.id);
-                const createdAt = format(new Date(finance.date), 'dd/MM/yyyy');
+              {filteredCotisations.map((saison) => {
+                const isSelected = selected.includes(saison.id);
+                const date_debut = format(new Date(saison.date_debut), 'dd/MM/yyyy');
+                const date_fin = format(new Date(saison.date_fin), 'dd/MM/yyyy');
 
                 return (
                   <>
                   <TableRow
                     hover
-                    key={finance._id}
+                    key={saison._id}
                     selected={isSelected}
                   >
                     <TableCell>
-                    {createdAt}
+                    {saison.libelle}
                     </TableCell>
                     <TableCell>
-                    {finance.type_seance}
+                    {date_debut}
                     </TableCell>
                     <TableCell>
-                      {finance.nbre_pers_tontinard}
+                    {date_fin}
                     </TableCell>
                     <TableCell>
-                    {finance.nbre_pers_non_tontinard }
+                      {saison.participants.length}
                     </TableCell>
-                    <TableCell>
+                    {/* <TableCell>
                     {finance.effectif }
-                    </TableCell>
-                    <TableCell
-                      onClick={()=>openSeance(finance._id)}
-                    >
-                      Ouvrir
+                    </TableCell> */}
+                    <TableCell>
+                      <Button variant="text"
+                            onClick={()=>openSaison(saison._id)}
+                            >
+                        Ouvrir
+                    </Button>
+                      
                     </TableCell>
                   </TableRow>
                   </>

@@ -8,10 +8,7 @@ import { FinanceBouffe } from 'src/sections/finance/FinanceBouffe';
 import { FinancesSanction } from 'src/sections/finance/FinancesTontine';
 import { applyPagination } from 'src/utils/apply-pagination';
 import { useSelection } from 'src/hooks/use-selection';
-import { FinancesSanctions } from "../sections/finance/finances-tontine";
-import { FinancesTontinT } from "../sections/finance/finances-tontin";
 import { FinanceFondDeCaisse } from 'src/sections/finance/finance-fond-de-caisse';
-import { FinanceFondSanction } from 'src/sections/finance/finance-fond-tontine';
 import { FinanceTotalCotisation } from 'src/sections/finance/finance-total-cotisation'
 import { subDays, subHours } from 'date-fns';
 import NextLink from 'next/link';
@@ -172,7 +169,7 @@ const Page = () => {
                       color='white'
                       component={NextLink}
                       underline="none"
-                      href="/saison_detail">
+                      href="/saison/saison_detail">
                       Add
                     </Link>
                 </Button>

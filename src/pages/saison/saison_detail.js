@@ -2,14 +2,12 @@ const { useState } = require("react")
 import { useRouter } from 'next/router';
 import getConfig from 'next/config';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
-import SaisonBasicDetail from '../components/session_form/session_basic_info';
-import SaisonBasicInfo from '../components/session_form/session_basic_info';
-import ParticipationBox from '../components/session_form/participation_box';
 import { Box, Container, Stack, Typography } from '@mui/material';
 import { useEffect } from 'react';
 import axios from 'axios';
 import Head from 'next/head';
-import SummaryInfo from '../components/session_form/summary_info';
+import SaisonBasicInfo from '../../components/saison/saison_basic_info';
+import InscriptionBox from '../../components/saison/inscriptions_box';
 
 const { publicRuntimeConfig } = getConfig();
 
@@ -18,21 +16,21 @@ const { publicRuntimeConfig } = getConfig();
 const SaisonDetail = () => {
      
      const [saison, setSaison] = useState({
-        date: undefined,
-        session:undefined,
-        beneficaire_tontine: undefined,
-        beneficaire_plat: undefined,
-        participations: [],
-        montant_receptioniste: undefined,
-        montant_demi_non_decaisse: undefined
+        libelle: undefined,
+        date_debut:undefined,
+        date_fin: undefined,
+        montant_contribution_social: undefined,
+        montant_contribution_plat: undefined,
+        montant_un_nom: undefined,
+        participants: []
      })
 
      const router = useRouter()
-     const {seance_id} = router.query
+     const {saison_id} = router.query
 
-     const fetchSaison = async (seance_id) => {
+     const fetchSaison = async (saison_id) => {
         try {
-            const response = await axios.get(`${publicRuntimeConfig.api.baseURL}/api/saison/${seance_id}`);
+            const response = await axios.get(`${publicRuntimeConfig.api.baseURL}/api/saisons/${saison_id}`);
             const result = await response.data;
             setSaison(result);
         }
@@ -42,8 +40,8 @@ const SaisonDetail = () => {
      }
 
      useEffect(() =>{
-        if(seance_id)
-            fetchSaison(seance_id)
+        if(saison_id)
+            fetchSaison(saison_id)
       },[]);
 
       const updateSaison = (newSaison) =>{
@@ -75,24 +73,19 @@ const SaisonDetail = () => {
                         >
                             <Stack spacing={1}>
                                 <Typography variant="h4">
-                                    Détail de la Séance
+                                    Détail de la Saison
                                 </Typography>
                                 
                             </Stack>
                         </Stack>
                     </Stack>
-                        <SaisonBasicInfo updateSaison={updateSaison}
-                                             saison={saison} />
-                        {saison._id
-                         && 
-                            <ParticipationBox updateSaison={updateSaison}
-                                                saison={saison}
-                            />}
 
-                        {saison._id && 
-                            <SummaryInfo saison={saison} />}
-
-                        {}
+                    <SaisonBasicInfo saison={saison} />
+                    
+                    {saison._id && <InscriptionBox 
+                                        saison={saison} 
+                                        updateSaison={updateSaison} />}
+                        
                 </Container>
             </Box>
         </>

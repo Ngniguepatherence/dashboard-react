@@ -96,6 +96,15 @@ export const items = (roles) =>{
       )
     },
     {
+      title: 'Saison',
+      path: '/saison/saisons',
+      icon: (
+        <SvgIcon fontSize="small">
+          <XCircleIcon />
+        </SvgIcon>
+      )
+    }, 
+    {
       title: 'Projets',
       path: '/companies',
       icon: (
