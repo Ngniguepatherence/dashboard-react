@@ -37,8 +37,10 @@ const SummaryInfo = (props) => {
                             value: seance.echec_tontine},
                         {label: 'Montant remis au BOUFEUR',
                             value: seance.montant_beneficiaire},
-                        {label: 'Montant du demis nom decaissé ',
-                            value: seance.montant_demi_non_decaisse
+                        {label: 'Bouffeur Selectionner ',
+                            value: seance.beneficaire_tontine ? 
+                                (seance.beneficaire_tontine.membre.name + " " + seance.beneficaire_tontine.membre.surname)
+                                : ''
                         },
                     ]} />
 

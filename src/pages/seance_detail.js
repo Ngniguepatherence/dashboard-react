@@ -10,6 +10,8 @@ import { useEffect } from 'react';
 import axios from 'axios';
 import Head from 'next/head';
 import SummaryInfo from '../components/session_form/summary_info';
+import { SanctionsAccordeon } from '../components/sanctions/sanctions_accordion';
+import { TirageTontinard } from '../components/session_form/tirage_tontinard';
 
 const { publicRuntimeConfig } = getConfig();
 
@@ -80,7 +82,7 @@ const SeanceDetail = () => {
                                 
                             </Stack>
                         </Stack>
-                    </Stack>
+                    
                         <SeanceBasicInfo updateSeance={updateSeance}
                                              seance={seance} />
                         {seance._id
@@ -89,10 +91,32 @@ const SeanceDetail = () => {
                                                 seance={seance}
                             />}
 
+                        {seance._id
+                         && 
+                            <TirageTontinard 
+                                list_inscrits={seance.participations.map(elt=>elt.inscrit)}
+                                seance_id={seance._id}
+                                beneficaire_tontine = {seance.beneficaire_tontine}
+                                updateSeance={updateSeance}
+                            />}
+
+                        {seance._id && 
+                            <SanctionsAccordeon seance_id={seance._id}
+                                                sanctions={seance.sanctions}
+                                                initSanction = {
+                                                    {
+                                                        saison: seance.saison._id,
+                                                        date: seance.date
+                                                    }
+                                                }
+                                                />}
+
+
                         {seance._id && 
                             <SummaryInfo seance={seance} />}
 
-                        {}
+
+                    </Stack>
                 </Container>
             </Box>
         </>

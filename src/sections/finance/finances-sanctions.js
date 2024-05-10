@@ -3,6 +3,7 @@ import { format } from 'date-fns';
 import {
   Avatar,
   Box,
+  Button,
   Card,
   Checkbox,
   Stack,
@@ -27,7 +28,8 @@ export const FinancesSanctions = (props) => {
     onSelectOne,
     page = 0,
     rowsPerPage = 5,
-    selected = []
+    selected = [],
+    openSanction
   } = props;
 
   return (
@@ -38,7 +40,7 @@ export const FinancesSanctions = (props) => {
             <TableHead>
               <TableRow>
                 <TableCell>
-                  NOM
+                  NOM & PRENOM
                 </TableCell>
                 <TableCell>
                   MOTIF
@@ -52,34 +54,54 @@ export const FinancesSanctions = (props) => {
                 <TableCell>
                   STATUS
                 </TableCell>
+                <TableCell>
+                  ACTION
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {items.map((finance) => {
-                const isSelected = selected.includes(finance.id);
-                const createdAt = format(finance.createdAt, 'dd/MM/yyyy');
+              {items.map((sanction) => {
+                console.log(sanction)
+                const isSelected = selected.includes(sanction._id);
+                const date = format(new Date(sanction.date), 'yyyy-MM-dd');
 
                 return (
                   <>
                   <TableRow
                     hover
-                    key={finance.id}
+                    key={sanction._id}
                     selected={isSelected}
                   >
                     <TableCell>
-                    {finance.name}
+                    {`${sanction.inscrit.membre.name} ${sanction.inscrit.membre.surname}`}
                     </TableCell>
                     <TableCell>
-                    {finance.motif}
+                    {sanction.motif.libelle}
                     </TableCell>
                     <TableCell>
-                      {finance.tontine}
+                    {sanction.motif.cout}
                     </TableCell>
                     <TableCell>
-                      {createdAt}
+                      {date}
+                    </TableCell>
+                    <TableCell color={sanction.paye? 'green':'red'}>
+                      <Typography color={sanction.paye? 'green':'red'}>
+                        {sanction.paye? 'Payé':'Non Payé'}
+                      </Typography>
+                      
                     </TableCell>
                     <TableCell>
-                      {finance.status}
+                      <Button onClick={()=>openSanction({
+                        _id: sanction._id,
+                        saison: sanction.saison,
+                        inscrit: sanction.inscrit._id,
+                        motif: sanction.motif._id,
+                        date: date,
+                        paye: sanction.paye
+                      })}
+                            variant='text'>
+                        Ouvrir
+                      </Button>
                     </TableCell>
                   </TableRow>
                   </>
@@ -113,5 +135,6 @@ FinancesSanctions.propTypes = {
   onSelectOne: PropTypes.func,
   page: PropTypes.number,
   rowsPerPage: PropTypes.number,
-  selected: PropTypes.array
+  selected: PropTypes.array,
+  openSanction: PropTypes.func
 };

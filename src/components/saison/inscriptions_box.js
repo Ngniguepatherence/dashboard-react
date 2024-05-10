@@ -11,7 +11,7 @@ import { fetchMembres } from '../../pages/addSeance';
 
 const { publicRuntimeConfig } = getConfig();
 
-const style = {
+export const modal_style = {
     position: 'absolute',
     top: '50%',
     left: '50%',
@@ -100,7 +100,10 @@ const InscriptionBox =  (props) => {
                                         Nombre de Nom
                                     </TableCell>
                                     <TableCell>
-                                        Nombre de bouf
+                                        Noms déjà Bouffés
+                                    </TableCell>
+                                    <TableCell>
+                                        Nombre de reception
                                     </TableCell>
                                     
                                 </TableRow>
@@ -121,6 +124,9 @@ const InscriptionBox =  (props) => {
                                             </TableCell>
                                             <TableCell>
                                                 {participant.nombre_de_bouf}
+                                            </TableCell>
+                                            <TableCell>
+                                                {participant.nombre_de_reception}
                                             </TableCell>
                                         </TableRow>
                                     )
@@ -157,7 +163,7 @@ const InscriptionBox =  (props) => {
                 aria-labelledby="keep-mounted-modal-title"
                 aria-describedby="keep-mounted-modal-description">
                     
-                    <Box sx={style}>
+                    <Box sx={modal_style}>
                         <DialogTitle>Inscrire un Membre</DialogTitle>
                         {/* <DialogContent>Fill in the information of the project.</DialogContent> */}
                         <form>

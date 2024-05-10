@@ -1,6 +1,6 @@
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
 import CheckIcon from "@heroicons/react/24/solid/CheckIcon"
-import { Box, Button, Card, Checkbox, MenuItem, Select, Stack, SvgIcon, Table, TableBody, TableCell, TableHead, TableRow, TextField, Typography } from "@mui/material"
+import { Badge, Box, Button, Card, Checkbox, Chip, MenuItem, Select, Stack, SvgIcon, Table, TableBody, TableCell, TableHead, TableRow, TextField, Typography } from "@mui/material"
 import { Scrollbar } from 'src/components/scrollbar';
 import getConfig from 'next/config';
 
@@ -75,20 +75,20 @@ const ParticipationBox =  (props) => {
         }
     }
 
-    const optionTontine = [
-        {value: 0, label: "0"},
-        {value: 50000, label: "50 000"},
-        {value: 100000, label: "100 000"},
-    ]
-
     const optionPs = [
         {value: 0, label: "0"},
-        {value: 6000, label: "6 000"},
+        {
+            value: seance.saison.montant_contribution_social, 
+            label: seance.saison.montant_contribution_social
+        },
     ]
 
     const optionPlat = [
         {value: 0, label: "0"},
-        {value: 3000, label: "3 000"},
+        {
+            value: seance.saison.montant_contribution_plat, 
+            label: seance.saison.montant_contribution_plat
+        },
     ]
 
     return(
@@ -119,12 +119,12 @@ const ParticipationBox =  (props) => {
                                     <TableCell>
                                         Prélèvement Fond Social
                                     </TableCell>
-                                    <TableCell>
+                                    {/* <TableCell>
                                         Montant Sanction
                                     </TableCell>
                                     <TableCell>
                                         Motif Sanction
-                                    </TableCell>
+                                    </TableCell> */}
                                 </TableRow>
                             </TableHead>
 
@@ -132,28 +132,42 @@ const ParticipationBox =  (props) => {
                                 {participations.map( (participation, index) => {
                                     const handleChange = (event) => {
                                         const { name, value } = event.target;
+                                        console.log(name," : ", value)
                                         changeParticipations(index, {
                                           ...participation,
                                           [name]: value,
                                         });
                                       };
+
+                                    const is_tontinard = participation.inscrit.nombre_de_noms > 0
+                                    const optionTontine = [{value: 0, label: "0"}]
+                                    const montant_un_nom = seance.saison.montant_un_nom
+                                    if(participation.inscrit.nombre_de_noms == 0.5)
+                                        optionTontine.push({value: montant_un_nom*0.5, label: `${montant_un_nom*0.5}`})
+                                    else if(participation.inscrit.nombre_de_noms >= 1){
+                                        for(var i= 1; i <= participation.inscrit.nombre_de_noms; i++)
+                                            optionTontine.push({value: montant_un_nom*i, label: `${montant_un_nom*i}`})
+                                    }
+
+
                                     console.log(participation)
                                     return (
                                         
                                         <TableRow key={index}>
                                             <TableCell>
-                                                {participation.membre.name +" " +participation.membre.surname}
+                                                {participation.inscrit.membre.name +" " +participation.inscrit.membre.surname}
+                                                <Chip label={`X${participation.inscrit.nombre_de_noms}`} />
                                             </TableCell>
                                             <TableCell>
                                                 <Checkbox name='presence'
                                                         checked={participation.presence}
-                                                        onChange={handleChange}            
+                                                        onChange={(event)=>changeParticipations(index,{...participation, presence: !participation.presence })}            
                                                 />
                                             </TableCell>
                                             <TableCell>
                                                 <Checkbox name="retardataire"
                                                         checked={participation.retardataire}
-                                                           onChange={handleChange}            
+                                                           onChange={(event)=>changeParticipations(index,{...participation, retardataire: !participation.retardataire })}            
                                                 />
                                             </TableCell>
                                             <TableCell>
@@ -162,6 +176,7 @@ const ParticipationBox =  (props) => {
                                                     name="montant_tontine"
                                                     value={participation.montant_tontine}
                                                     onChange={handleChange}
+                                                    disabled={!is_tontinard}
                                                     error={!!errors.participations.montant_tontine}
                                                     helperText={errors.participations.montant_tontine}
                                                     >
@@ -189,6 +204,7 @@ const ParticipationBox =  (props) => {
                                                     fullwidth
                                                     name="montant_prelevement_social"
                                                     value={participation.montant_prelevement_social}
+                                                    disabled={is_tontinard}
                                                     onChange={handleChange}
                                                     error={!!errors.participations.montant_prelevement_social}
                                                     helperText={errors.participations.montant_prelevement_social}
@@ -198,7 +214,7 @@ const ParticipationBox =  (props) => {
                                                         ))}
                                                 </Select>
                                             </TableCell>
-                                            <TableCell>
+                                            {/* <TableCell>
                                                 <TextField
                                                     fullwidth
                                                     name="montant_sanction"
@@ -219,7 +235,7 @@ const ParticipationBox =  (props) => {
                                                     error={!!errors.participations.motif_sanction}
                                                     helperText={errors.participations.motif_sanction}
                                                 />
-                                            </TableCell>
+                                            </TableCell> */}
                                         </TableRow>
                                     )
                                     
@@ -274,6 +290,7 @@ const ParticipationBox =  (props) => {
                      justifyContent="end"
                 >
                     <Button variant="contained"
+                            color="success"
                             onClick={submitParticipations}
                             startIcon={(
                                 <SvgIcon fontSize="small">

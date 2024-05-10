@@ -12,7 +12,7 @@ import axios from "axios";
 
 
 const SaisonBasicInfo = (props) => {
-    const {saison } = props
+    const {saison, updateSaison } = props
 
     const [values, setValues] = useState(saison)
     const [errors, setErrors] = useState({
@@ -29,6 +29,7 @@ const SaisonBasicInfo = (props) => {
             console.log(values)
             const response = await axios.post(`${publicRuntimeConfig.api.baseURL}/api/saisons`, values);
             const rep = await response.data
+            updateSaison(rep)
         }catch(error){
             console.error(error)
         }

@@ -1,4 +1,4 @@
-import React, { useState,useCallback,useMemo } from "react";
+import React, { useState,useCallback,useMemo, useEffect } from "react";
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
 import { FinancesTable } from 'src/sections/finance/finance-table';
 import { CustomersSearch } from 'src/sections/customer/customers-search';
@@ -17,6 +17,13 @@ import NextLink from 'next/link';
 import PlusIcon from '@heroicons/react/24/solid/PlusIcon';
 import ArrowDownOnSquareIcon from '@heroicons/react/24/solid/ArrowDownOnSquareIcon';
 import { Box, Container,Grid, Stack,Link, Typography,Button,SvgIcon } from "@mui/material";
+import axios from "axios";
+
+import getConfig from 'next/config';
+import { MotifSanctionAccordion } from "../components/sanctions/motifs_accordeon";
+import { FormSanction } from "../components/sanctions/form_sanction";
+const { publicRuntimeConfig } = getConfig();
+
 
 const now = new Date();
 
@@ -63,12 +70,12 @@ const total = [
   },
 ];
 
-const useEvents = (page, rowsPerPage) => {
+const useEvents = (data, page, rowsPerPage) => {
   return useMemo(
     () => {
       return applyPagination(data, page, rowsPerPage);
     },
-    [page, rowsPerPage]
+    [data, page, rowsPerPage]
   );
 };
 const useEventSanctions = (page, rowsPerPage) => {
@@ -97,16 +104,32 @@ const useEventSanctioonIds = (sanctions) => {
   );
 };
 
+export const fetchSanctions = async () =>{
+  try {
+    const response = await axios.get(`${publicRuntimeConfig.api.baseURL}/api/sanctions`);
+    const rep = await response.data
+    return rep
+  } catch (error) {
+      console.error(error)    
+      return []
+  }
+}
 const Page = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const finances = useEvents(page, rowsPerPage);
+  const [dataSanctions, setDataSanctions] = useState([])
+
+  const [openSanctionModal, setOpenSanctionModal] = useState(false)
+  const [currentSanction, setCurrentSanction] = useState({})
+
+  const finances = useEvents(dataSanctions, page, rowsPerPage);
   const sanctions = useEventSanctions(page, rowsPerPage);
   const financesIds = useEventIds(finances);
   const SanctionsIds = useEventSanctioonIds(sanctions);
   const financesSelection = useSelection(financesIds);
   const sanctionsSelection = useSelection(SanctionsIds);
   const [isAdding, setIsAdding] = useState(false);
+
 
 
   const handleAddButtonClick = () => {
@@ -126,6 +149,25 @@ const Page = () => {
     },
     []
   );
+
+  const openSanction = (sanction) => {
+    console.log('Sanction to open: ',sanction)
+    setCurrentSanction({...sanction})
+    setOpenSanctionModal(true)
+  }
+
+  useEffect(() => {
+    try{
+        (async () => {
+          // setDataSanctions([])
+          setDataSanctions(await fetchSanctions())
+        })();
+      }catch(error){
+        console.error(error)
+      }
+
+      
+}, [])
 
     return (
       <>
@@ -155,26 +197,6 @@ const Page = () => {
                 </Typography>
                 
               </Stack>
-              <div>
-                
-                <Button onClick={handleAddButtonClick}
-                  startIcon={(
-                    <SvgIcon fontSize="small">
-                      <PlusIcon />
-                    </SvgIcon>
-                  )}
-                  variant="contained"
-                >
-                 <Link
-                      style={{ color: 'white', textDecoration: 'none' }}
-                      color='white'
-                      component={NextLink}
-                      underline="none"
-                      href="/addSanctions">
-                      Add
-                    </Link>
-                </Button>
-              </div>
             </Stack>
 
             <Grid
@@ -189,13 +211,38 @@ const Page = () => {
               value="100,000 F CFA"
             />
           </Grid>
-            
-            <Typography variant="h6">
-            Recensement des sanctions de la saison
-            </Typography> 
+
+          <MotifSanctionAccordion />
+            <Stack
+              direction="row"
+              justifyContent="space-between"
+              spacing={4}
+            >
+              <Typography variant="h6">
+              Recensement des sanctions de la saison
+              </Typography> 
+
+              <div>
+                  
+                  <Button 
+                    startIcon={(
+                      <SvgIcon fontSize="small">
+                        <PlusIcon />
+                      </SvgIcon>
+                    )}
+                    onClick={()=>{
+                      setOpenSanctionModal(true)
+                      console.log('open')
+                    }}
+                    variant="contained"
+                  >
+                    Ajouter
+                  </Button>
+                </div>
+              </Stack>
 
             <FinancesSanctions
-              count={data.length}
+              count={dataSanctions.length}
               items={finances}
               onDeselectAll={financesSelection.handleDeselectAll}
               onDeselectOne={financesSelection.handleDeselectOne}
@@ -206,6 +253,7 @@ const Page = () => {
               page={page}
               rowsPerPage={rowsPerPage}
               selected={financesSelection.selected}
+              openSanction={openSanction}
             />
             <FinancesSanction
             count={total.length}
@@ -215,6 +263,11 @@ const Page = () => {
           </Stack>
         </Container>
       </Box>
+
+      <FormSanction 
+        open={openSanctionModal}
+        setOpenModal = {setOpenSanctionModal}
+        sanction={currentSanction} />
     </>
     );
 }

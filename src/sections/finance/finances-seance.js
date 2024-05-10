@@ -3,6 +3,7 @@ import { format } from 'date-fns';
 import {
   Avatar,
   Box,
+  Button,
   Card,
   Checkbox,
   Stack,
@@ -110,10 +111,12 @@ export const FinancesSeances = (props) => {
                     <TableCell>
                     {finance.effectif }
                     </TableCell>
-                    <TableCell
-                      onClick={()=>openSeance(finance._id)}
-                    >
-                      Ouvrir
+                    <TableCell>
+                      <Button onClick={()=>openSeance(finance._id)}
+                        variant='text'>
+                        Ouvrir
+                      </Button>
+                      
                     </TableCell>
                   </TableRow>
                   </>

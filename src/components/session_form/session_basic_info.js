@@ -7,20 +7,28 @@ const { publicRuntimeConfig } = getConfig();
 
 import CheckIcon from '@heroicons/react/24/solid/CheckIcon';
 import axios from "axios";
-import { session } from "passport";
 
 
-
+export const fetchSaisons = async ()=>{
+    try {
+        const response = await axios.get(`${publicRuntimeConfig.api.baseURL}/api/saisons`);
+        const rep = await response.data
+        return rep
+      } catch (error) {
+          new Error(error)    
+      }
+}
 
 const SeanceBasicInfo = (props) => {
     const {seance, updateSeance } = props
 
     const [membres, setMembres] = useState([]) 
+    const [inscrits, setInscrits] = useState([])
+    const [saisons, setSaisons] = useState([]) 
     const [values, setValues] = useState(seance)
     const [errors, setErrors] = useState({
         date: '',
-        session:'',
-        beneficaire_tontine: "",
+        saison:'',
         beneficaire_plat: "",
     })
 
@@ -47,11 +55,19 @@ const SeanceBasicInfo = (props) => {
         console.log(values)
       };
 
+      useEffect(()=>{
+        const current_saison = saisons.find(elt => elt._id == values.saison)
+            if(current_saison){
+                console.log(current_saison)
+                setInscrits(current_saison.participants)
+            }
+    },[values.saison, saisons])
 
     useEffect(() => {
         try{
             (async () => {
                 setMembres(await fetchMembres())
+                setSaisons(await fetchSaisons())
             })();
           }catch(error){
             console.error(error)
@@ -62,16 +78,13 @@ const SeanceBasicInfo = (props) => {
         if(seance._id)
             setValues({
                 date: seance.date,
-                beneficaire_plat: seance.beneficaire_plat._id,
-                beneficaire_tontine: seance.beneficaire_tontine._id,
-                session: seance.session
+                beneficaire_plat: seance.beneficaire_plat ? seance.beneficaire_plat._id : '',
+                // beneficaire_tontine: seance.beneficaire_tontine._id,
+                saison: seance.saison._id
             })
 
     },[seance])
 
-    const sessionOption = [
-        {value: '2024', label:"2024"}
-    ]
 
     return(
         <>
@@ -93,23 +106,28 @@ const SeanceBasicInfo = (props) => {
                             />
                     </Grid>
                     <Grid items md={12} lg={5}>
-                        Session
+                        Saison
                         <Select
                             fullWidth
-                            labelId="session"
-                            id="session"
-                            name="session"
-                            value={values.session || ''}
+                            labelId="saison"
+                            id="saison"
+                            name="saison"
+                            value={values.saison || ''}
                             onChange={handleChange}
-                            error={!!errors.session}
-                            helperText={errors.session}
+                            error={!!errors.saison}
+                            helperText={errors.saison}
                             >
-                                {sessionOption.map(opt=>(
-                                    <MenuItem key={opt.value} value={opt.value}>{opt.label}</MenuItem>
+                                {saisons.map(opt=>(
+                                    <MenuItem 
+                                        key={opt._id} 
+                                        value={opt._id}
+                                    >
+                                        {opt.libelle}
+                                    </MenuItem>
                                 ))}
                             </Select>
                     </Grid>
-                    <Grid items md={12} lg={5}>
+                    {/* <Grid items md={12} lg={5}>
                         
                         Bouffeur de la Tontine
                         <Select
@@ -127,12 +145,9 @@ const SeanceBasicInfo = (props) => {
                                 <MenuItem key={m._id} value={m._id}>{m.name +" "+ m.surname}</MenuItem>
                             ))}
                         </Select>
-                            
-
-                
-                    </Grid>
+                    </Grid> */}
                     <Grid items md={12} lg={5}>
-                        Receveur de la Tontine
+                        Receveur de la Swance
                         <Select
                             value={values.beneficaire_plat || ''}
                             fullWidth
@@ -143,11 +158,11 @@ const SeanceBasicInfo = (props) => {
                             error={!!errors.beneficaire_plat}
                             helperText={errors.beneficaire_plat}
                         >
-                            {membres.map( m=> (
-                                <MenuItem key={m._id} value={m._id}>{m.name +" "+ m.surname}</MenuItem>
+                            {inscrits.map( m=> (
+                                <MenuItem key={m._id} 
+                                    value={m._id}>{m.membre.name +" "+ m.membre.surname}</MenuItem>
                             ))}
                         </Select>
-                        
                     </Grid>
 
                 </Grid>
@@ -155,8 +170,9 @@ const SeanceBasicInfo = (props) => {
                 <Box display="flex"
                      justifyContent="end"
                 >
-                    <Button variant="contained"
+                    {!seance._id && <Button variant="contained"
                             onClick={submitSeance}
+                            color="success"
                             startIcon={(
                                 <SvgIcon fontSize="small">
                                   <CheckIcon />
@@ -164,7 +180,7 @@ const SeanceBasicInfo = (props) => {
                               )}
                     >
                         Valider
-                    </Button>
+                    </Button>}
                 </Box>
             </Stack>
         </>

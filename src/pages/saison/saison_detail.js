@@ -80,7 +80,9 @@ const SaisonDetail = () => {
                         </Stack>
                     </Stack>
 
-                    <SaisonBasicInfo saison={saison} />
+                    <SaisonBasicInfo 
+                        saison={saison} 
+                        updateSaison={updateSaison}/>
                     
                     {saison._id && <InscriptionBox 
                                         saison={saison} 
