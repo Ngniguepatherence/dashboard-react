@@ -7,6 +7,7 @@ const { publicRuntimeConfig } = getConfig();
 
 import CheckIcon from '@heroicons/react/24/solid/CheckIcon';
 import axios from "axios";
+import { loadingAction, store } from "../../store/store";
 
 
 
@@ -25,6 +26,7 @@ const SaisonBasicInfo = (props) => {
     })
 
     const submitSaison = async ()=>{
+        store.dispatch(loadingAction)
         try{
             console.log(values)
             const response = await axios.post(`${publicRuntimeConfig.api.baseURL}/api/saisons`, values);
@@ -33,6 +35,8 @@ const SaisonBasicInfo = (props) => {
         }catch(error){
             console.error(error)
         }
+
+        store.dispatch(loadingAction)
     }
 
     const handleChange = (event) => {

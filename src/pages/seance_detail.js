@@ -12,6 +12,7 @@ import Head from 'next/head';
 import SummaryInfo from '../components/session_form/summary_info';
 import { SanctionsAccordeon } from '../components/sanctions/sanctions_accordion';
 import { TirageTontinard } from '../components/session_form/tirage_tontinard';
+import { loadingAction, store } from '../store/store';
 
 const { publicRuntimeConfig } = getConfig();
 
@@ -33,6 +34,7 @@ const SeanceDetail = () => {
      const {seance_id} = router.query
 
      const fetchSeance = async (seance_id) => {
+        store.dispatch(loadingAction)
         try {
             const response = await axios.get(`${publicRuntimeConfig.api.baseURL}/api/seance/${seance_id}`);
             const result = await response.data;
@@ -41,7 +43,11 @@ const SeanceDetail = () => {
         catch(error) {
             console.error('Error fetching data: ',error);
         }
+
+        store.dispatch(loadingAction)
      }
+
+     const reload_seance = ()=>fetchSeance(seance._id)
 
      useEffect(() =>{
         if(seance_id)
@@ -83,11 +89,11 @@ const SeanceDetail = () => {
                             </Stack>
                         </Stack>
                     
-                        <SeanceBasicInfo updateSeance={updateSeance}
+                        <SeanceBasicInfo reload_seance={reload_seance}
                                              seance={seance} />
                         {seance._id
                          && 
-                            <ParticipationBox updateSeance={updateSeance}
+                            <ParticipationBox reload_seance={reload_seance}
                                                 seance={seance}
                             />}
 
@@ -97,7 +103,7 @@ const SeanceDetail = () => {
                                 list_inscrits={seance.participations.map(elt=>elt.inscrit)}
                                 seance_id={seance._id}
                                 beneficaire_tontine = {seance.beneficaire_tontine}
-                                updateSeance={updateSeance}
+                                reload_seance={reload_seance}
                             />}
 
                         {seance._id && 
@@ -109,6 +115,7 @@ const SeanceDetail = () => {
                                                         date: seance.date
                                                     }
                                                 }
+                                                reload = {reload_seance}
                                                 />}
 
 

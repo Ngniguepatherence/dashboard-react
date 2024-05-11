@@ -19,6 +19,7 @@ import getConfig from 'next/config';
 const { publicRuntimeConfig } = getConfig();
 import axios from "axios";
 import { SaisonList } from "../../sections/finance/saison-list";
+import { useRouter } from "next/router";
 
 
 const now = new Date();
@@ -81,6 +82,7 @@ const useEventSanctioonIds = (sanctions) => {
 };
 
 const Page = () => {
+  const router = useRouter()
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [data, setData] = useState([]);
@@ -109,7 +111,7 @@ const Page = () => {
   },[]);
 
   const handleAddButtonClick = () => {
-    // setIsAdding(true);
+    router.push("/saison/saison_detail")
   };
 
   const handlePageChange = useCallback(
@@ -164,14 +166,7 @@ const Page = () => {
                   )}
                   variant="contained"
                 >
-                 <Link
-                      style={{ color: 'white', textDecoration: 'none' }}
-                      color='white'
-                      component={NextLink}
-                      underline="none"
-                      href="/saison/saison_detail">
-                      Add
-                    </Link>
+                      Ajouter
                 </Button>
               </div>
             </Stack>

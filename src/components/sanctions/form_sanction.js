@@ -8,11 +8,12 @@ import getConfig from 'next/config';
 import { fetchMotifsSanction } from "./motifs_accordeon";
 import { useRouter } from "next/router";
 import { fetchSaisons } from "../session_form/session_basic_info";
+import { loadingAction, store } from "../../store/store";
 const { publicRuntimeConfig } = getConfig();
 
 
 export const FormSanction = (props) => {
-    const {open, setOpenModal, sanction, seance_id} = props
+    const {open, setOpenModal, sanction, reload, seance_id} = props
 
     const router = useRouter()
     const [saisons, setSaisons] = useState([])
@@ -35,6 +36,7 @@ export const FormSanction = (props) => {
         saison: '',
     })
     const submit =  async () => {
+        store.dispatch(loadingAction)
         try {
             console.log("submitting: ", values)
             var response = undefined
@@ -59,10 +61,12 @@ export const FormSanction = (props) => {
             }
             const rep = await response.data
             setOpenModal(false)
-            router.reload()
+            if(reload)
+                reload()
         }catch(err){
             console.error(err)
         }
+        store.dispatch(loadingAction)
     }
     const handleChange = (event) => {
         const { name, value} = event.target;

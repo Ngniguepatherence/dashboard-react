@@ -7,13 +7,14 @@ import getConfig from 'next/config';
 import { useState } from "react"
 import { useEffect } from 'react';
 import axios from 'axios';
+import { loadingAction, store } from '../../store/store';
 
 const { publicRuntimeConfig } = getConfig();
 
 
 
 const ParticipationBox =  (props) => {
-    const {seance, updateSeance} = props
+    const {seance, reload_seance} = props
 
     const [participations, setParticipations ] = useState(seance.participations)
     const [values, setValues] = useState({
@@ -55,6 +56,7 @@ const ParticipationBox =  (props) => {
         console.log(values)
       };
     const submitParticipations = async () => {
+        store.dispatch(loadingAction)
         try{
             const obj = {
                 ...values,
@@ -68,12 +70,14 @@ const ParticipationBox =  (props) => {
             console.log("sending :", obj)
             const response = await axios.post(`${publicRuntimeConfig.api.baseURL}/api/seance/${seance._id}/saveParticipations`,obj);
             const rep = await response.data
-            updateSeance(rep)
 
+            reload_seance()
         }catch(error){
             console.error(error)
         }
+        store.dispatch(loadingAction)
     }
+
 
     const optionPs = [
         {value: 0, label: "0"},

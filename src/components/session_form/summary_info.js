@@ -51,7 +51,7 @@ const SummaryInfo = (props) => {
                         value: seance.cs_total
                         },
                         {label: 'Echec',
-                        value: seance.echec_tontine},
+                        value: seance.echec_cs},
                 ]} />
             </Box>
         </>

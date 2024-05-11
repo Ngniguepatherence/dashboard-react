@@ -22,6 +22,7 @@ import axios from "axios";
 import getConfig from 'next/config';
 import { MotifSanctionAccordion } from "../components/sanctions/motifs_accordeon";
 import { FormSanction } from "../components/sanctions/form_sanction";
+import { loadingAction, store } from "../store/store";
 const { publicRuntimeConfig } = getConfig();
 
 
@@ -105,14 +106,18 @@ const useEventSanctioonIds = (sanctions) => {
 };
 
 export const fetchSanctions = async () =>{
+  store.dispatch(loadingAction)
   try {
     const response = await axios.get(`${publicRuntimeConfig.api.baseURL}/api/sanctions`);
     const rep = await response.data
+    store.dispatch(loadingAction)
     return rep
   } catch (error) {
-      console.error(error)    
+      console.error(error)
+      store.dispatch(loadingAction)    
       return []
   }
+  
 }
 const Page = () => {
   const [page, setPage] = useState(0);
@@ -265,6 +270,7 @@ const Page = () => {
       </Box>
 
       <FormSanction 
+        reload={async ()=>setDataSanctions(await fetchSanctions())}
         open={openSanctionModal}
         setOpenModal = {setOpenSanctionModal}
         sanction={currentSanction} />

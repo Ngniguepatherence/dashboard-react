@@ -8,6 +8,7 @@ import { useEffect } from 'react';
 import axios from 'axios';
 import PlusIcon from '@heroicons/react/24/solid/PlusIcon';
 import { fetchMembres } from '../../pages/addSeance';
+import { loadingAction, store } from '../../store/store';
 
 const { publicRuntimeConfig } = getConfig();
 
@@ -58,14 +59,16 @@ const InscriptionBox =  (props) => {
         return true
     }
     const submitInscription = async () => {
+        store.dispatch(loadingAction)
         try {
-            console.log(values)
             const response = await axios.post(`${publicRuntimeConfig.api.baseURL}/api/saisons/${saison._id}/inscriptions`, values);
             const rep = await response.data
             updateSaison(rep)
         }catch(err){
-            console.error(error)
+            console.error(err)
         }
+        store.dispatch(loadingAction)
+        setOpenModal(false)
     }
 
     const handleChange = (event) => {
@@ -144,7 +147,14 @@ const InscriptionBox =  (props) => {
                      justifyContent="end"
                 >
                     <Button variant="contained"
-                            onClick={()=>setOpenModal(true)}
+                            onClick={()=>{
+                                setValues({
+                                    membre : undefined,
+                                    nombre_de_noms: 0,
+                                    nombre_de_bouf: 0
+                                })
+                                setOpenModal(true)
+                            }}
                             startIcon={(
                                 <SvgIcon fontSize="small">
                                   <PlusIcon />

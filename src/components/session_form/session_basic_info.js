@@ -7,9 +7,12 @@ const { publicRuntimeConfig } = getConfig();
 
 import CheckIcon from '@heroicons/react/24/solid/CheckIcon';
 import axios from "axios";
+import { loadingAction, store } from "../../store/store";
 
 
 export const fetchSaisons = async ()=>{
+
+    store.dispatch(loadingAction)
     try {
         const response = await axios.get(`${publicRuntimeConfig.api.baseURL}/api/saisons`);
         const rep = await response.data
@@ -17,10 +20,11 @@ export const fetchSaisons = async ()=>{
       } catch (error) {
           new Error(error)    
       }
+      store.dispatch(loadingAction)
 }
 
 const SeanceBasicInfo = (props) => {
-    const {seance, updateSeance } = props
+    const {seance, reload_seance } = props
 
     const [membres, setMembres] = useState([]) 
     const [inscrits, setInscrits] = useState([])
@@ -33,15 +37,17 @@ const SeanceBasicInfo = (props) => {
     })
 
     const submitSeance = async ()=>{
+        store.dispatch(loadingAction)
         try{
             console.log(values)
             const response = await axios.post(`${publicRuntimeConfig.api.baseURL}/api/seance`, values);
             const rep = await response.data
-            updateSeance(rep)
+            reload_seance()
 
         }catch(error){
             console.error(error)
         }
+        store.dispatch(loadingAction)
     }
 
     const handleChange = (event) => {

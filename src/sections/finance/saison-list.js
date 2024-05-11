@@ -79,9 +79,9 @@ export const SaisonList = (props) => {
                 <TableCell>
                   Nbr inscrit
                 </TableCell>
-                {/* <TableCell>
-                Effectif
-                </TableCell> */}
+                <TableCell>
+                ACTIONS
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>

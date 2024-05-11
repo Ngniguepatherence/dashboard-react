@@ -29,7 +29,7 @@ const useEvents = (data, page, rowsPerPage) => {
   };
 
 export const SanctionsAccordeon = (props) => {
-    const {seance_id, sanctions, initSanction} = props
+    const {seance_id, sanctions, initSanction, reload} = props
 
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -134,6 +134,7 @@ export const SanctionsAccordeon = (props) => {
                 open={openModal}
                 setOpenModal={setOpenModal}
                 sanction={sanction}
+                reload={reload}
             />
         </>
     )

@@ -5,11 +5,12 @@ const { publicRuntimeConfig } = getConfig();
 
 import axios from "axios"
 import { useState } from "react"
+import { loadingAction, store } from "../../store/store";
 
 
 
 export const TirageTontinard = (props) => {
-    const {list_inscrits, beneficaire_tontine, seance_id, updateSeance} = props
+    const {list_inscrits, beneficaire_tontine, seance_id, reload_seance} = props
 
     const list_eligibles = list_inscrits.map(elt => {
         elt.poids = elt.nombre_de_noms - elt.nombre_de_bouf
@@ -21,6 +22,7 @@ export const TirageTontinard = (props) => {
     const [vainqueur, setVainqueur] = useState(beneficaire_tontine)
 
     const startTirage = async () => {
+        store.dispatch(loadingAction)
         // Calcul de la somme des poids
         const participants = listTirrage.filter(elt => elt.is_candidat)
         console.log(participants)
@@ -54,11 +56,13 @@ export const TirageTontinard = (props) => {
                 'beneficaire_tontine':gagnant._id
             });
             const rep = await response.data
-            updateSeance(rep)
+            reload_seance()
 
         }catch(error){
             console.error(error)
         }
+
+        store.dispatch(loadingAction)
     }
 
     const changeCandState = (index) => {

@@ -22,6 +22,8 @@ import getConfig from 'next/config';
 const { publicRuntimeConfig } = getConfig();
 import axios from "axios";
 import { FinancesSeances } from "../sections/finance/finances-seance";
+import { useRouter } from "next/router";
+import { loadingAction, store } from "../store/store";
 
 
 const now = new Date();
@@ -91,11 +93,12 @@ const Page = () => {
   const finances = useEvents(final,page, rowsPerPage);
   const financesIds = useEventIds(finances);
   const financesSelection = useSelection(financesIds);
-  
+  const router = useRouter()
 
 
   useEffect(() =>{
     const fetchData = async () => {
+      store.dispatch(loadingAction)
       try {
         const response = await axios.get(`${publicRuntimeConfig.api.baseURL}/api/seance`);
         const result = await response.data;
@@ -107,6 +110,7 @@ const Page = () => {
       catch(error) {
         console.error('Error fetching data: ',error);
       }
+      store.dispatch(loadingAction)
     };
     fetchData();
   },[]);
@@ -159,22 +163,14 @@ const Page = () => {
               </Stack>
               <div>
                 
-                <Button onClick={handleAddButtonClick}
+                <Button onClick={()=>router.push("/seance_detail")}
                   startIcon={(
                     <SvgIcon fontSize="small">
                       <PlusIcon />
                     </SvgIcon>
                   )}
                   variant="contained"
-                >
-                 <Link
-                      style={{ color: 'white', textDecoration: 'none' }}
-                      color='white'
-                      component={NextLink}
-                      underline="none"
-                      href="/seance_detail">
-                      Add
-                    </Link>
+                >Ajouter
                 </Button>
               </div>
             </Stack>

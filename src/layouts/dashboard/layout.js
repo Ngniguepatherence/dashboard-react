@@ -4,6 +4,8 @@ import { styled } from '@mui/material/styles';
 import { withAuthGuard } from 'src/hocs/with-auth-guard';
 import { SideNav } from './side-nav';
 import { TopNav } from './top-nav';
+import { Backdrop, CircularProgress } from '@mui/material';
+import { store } from '../../store/store';
 
 const SIDE_NAV_WIDTH = 280;
 
@@ -27,6 +29,7 @@ export const Layout = withAuthGuard((props) => {
   const { children } = props;
   const pathname = usePathname();
   const [openNav, setOpenNav] = useState(false);
+  const [openBackdrop, setOpenBackdrop] = useState(false)
 
   const handlePathnameChange = useCallback(
     () => {
@@ -36,6 +39,16 @@ export const Layout = withAuthGuard((props) => {
     },
     [openNav]
   );
+
+  useEffect(()=>{
+    store.subscribe(
+      // cette fonction sera exécutée à chaque fois que le state change
+      () => {
+          const state = store.getState();
+          setOpenBackdrop(state.loading);
+      }
+  );
+  },[])
 
   useEffect(
     () => {
@@ -57,6 +70,13 @@ export const Layout = withAuthGuard((props) => {
           {children}
         </LayoutContainer>
       </LayoutRoot>
+
+      <Backdrop
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 100000 }}
+        open={openBackdrop}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
     </>
   );
 });

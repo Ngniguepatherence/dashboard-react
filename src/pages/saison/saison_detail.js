@@ -8,6 +8,7 @@ import axios from 'axios';
 import Head from 'next/head';
 import SaisonBasicInfo from '../../components/saison/saison_basic_info';
 import InscriptionBox from '../../components/saison/inscriptions_box';
+import { loadingAction, store } from '../../store/store';
 
 const { publicRuntimeConfig } = getConfig();
 
@@ -29,6 +30,7 @@ const SaisonDetail = () => {
      const {saison_id} = router.query
 
      const fetchSaison = async (saison_id) => {
+        store.dispatch(loadingAction)
         try {
             const response = await axios.get(`${publicRuntimeConfig.api.baseURL}/api/saisons/${saison_id}`);
             const result = await response.data;
@@ -37,6 +39,7 @@ const SaisonDetail = () => {
         catch(error) {
             console.error('Error fetching data: ',error);
         }
+        store.dispatch(loadingAction)
      }
 
      useEffect(() =>{
