@@ -3,9 +3,10 @@ import ArrowDownIcon from '@heroicons/react/24/solid/ArrowDownIcon';
 import ArrowUpIcon from '@heroicons/react/24/solid/ArrowUpIcon';
 import CurrencyDollarIcon from '@heroicons/react/24/solid/CurrencyDollarIcon';
 import { Avatar, Card, CardContent, Stack, SvgIcon, Typography } from '@mui/material';
+import { format_montant } from '../../utils/formatting';
 
 export const FinanceFondSanction = (props) => {
-  const { difference, positive = false, sx, value } = props;
+  const { difference, positive = false, sx, value, bilan } = props;
 
   return (
     <Card sx={sx}>
@@ -17,7 +18,6 @@ export const FinanceFondSanction = (props) => {
           spacing={3}
         >
           <Stack spacing={1}>
-            <Typography >
             <Typography
               color="text.primary"
               variant="h6"
@@ -25,8 +25,7 @@ export const FinanceFondSanction = (props) => {
               Total Sanctions 
             </Typography>
             <Typography variant="h8">
-              {value}
-            </Typography>
+              {format_montant(bilan.total) }
             </Typography>
             
             <Typography
@@ -35,8 +34,10 @@ export const FinanceFondSanction = (props) => {
             >
               Total payer
             </Typography>
-            <Typography variant="h8">
-              {value}
+            <Typography 
+              color="green"
+              variant="h8">
+              {format_montant(bilan.paye)}
             </Typography>
             <Typography
               color="text.primary"
@@ -44,8 +45,9 @@ export const FinanceFondSanction = (props) => {
             >
               Total Non Payer:
             </Typography>
-            <Typography variant="h8">
-              {value}
+            <Typography variant="h8"
+              color="red">
+              {format_montant(bilan.non_paye)}
             </Typography>
           </Stack>
           <Avatar

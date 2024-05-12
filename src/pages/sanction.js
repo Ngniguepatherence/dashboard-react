@@ -23,6 +23,7 @@ import getConfig from 'next/config';
 import { MotifSanctionAccordion } from "../components/sanctions/motifs_accordeon";
 import { FormSanction } from "../components/sanctions/form_sanction";
 import { loadingAction, store } from "../store/store";
+import { sum } from "pdf-lib";
 const { publicRuntimeConfig } = getConfig();
 
 
@@ -126,6 +127,11 @@ const Page = () => {
 
   const [openSanctionModal, setOpenSanctionModal] = useState(false)
   const [currentSanction, setCurrentSanction] = useState({})
+  const [bilan, setBBilan] = useState({
+    total: 0,
+    paye: 0,
+    non_paye:0 ,
+  })
 
   const finances = useEvents(dataSanctions, page, rowsPerPage);
   const sanctions = useEventSanctions(page, rowsPerPage);
@@ -156,7 +162,6 @@ const Page = () => {
   );
 
   const openSanction = (sanction) => {
-    console.log('Sanction to open: ',sanction)
     setCurrentSanction({...sanction})
     setOpenSanctionModal(true)
   }
@@ -172,7 +177,21 @@ const Page = () => {
       }
 
       
-}, [])
+  }, [])
+
+  useEffect(()=>{
+    const total = sum( dataSanctions.map(elt => elt.motif.cout))
+    const paye = sum(dataSanctions.filter(elt=>elt.paye).map(elt => elt.motif.cout))
+    const non_paye = sum(dataSanctions.filter(elt=> !elt.paye).map(elt => elt.motif.cout))
+
+    setBBilan({
+      total: total,
+      paye: paye,
+      non_paye:non_paye ,
+    })
+
+  },[dataSanctions])
+
 
     return (
       <>
@@ -212,6 +231,7 @@ const Page = () => {
             <FinanceFondSanction
               difference={23}
               positive={true}
+              bilan={bilan}
               sx={{ height: '100%' }}
               value="100,000 F CFA"
             />

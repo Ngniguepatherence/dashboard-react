@@ -1,4 +1,4 @@
-import React, { useState,useCallback,useMemo } from "react";
+import React, { useState,useCallback,useMemo, useEffect } from "react";
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
 import { FinancesTable } from 'src/sections/finance/finance-table';
 import { CustomersSearch } from 'src/sections/customer/customers-search';
@@ -13,66 +13,25 @@ import { subDays, subHours } from 'date-fns';
 import NextLink from 'next/link';
 import PlusIcon from '@heroicons/react/24/solid/PlusIcon';
 import { Box, Container,Grid, Stack,Link, Typography,Button,SvgIcon } from "@mui/material";
-
+import getConfig from 'next/config';
+const { publicRuntimeConfig } = getConfig();
 const now = new Date();
 
-const data = [
-  {
-    id: '5e887ac47eed253091be10Ob',
-    motif: "Absence Seance",
-    createdAt: subDays(subHours(now, 7), 1).getTime(),
-    contribution_au_plat: '3000',
-    name: 'MOKTO NEGUE WILFRIED HYACINTHE',
-    tontine: '10000',
-    status: 'Non'
-  },
-  {
-    id: '5e887ac47eed253091be10Oa',
-    motif: "Retard",
-    createdAt: subDays(subHours(now, 7), 1).getTime(),
-    name: 'KEPSEU JASPERS',
-    tontine: '200',
-    status: 'oui'
-  },
-  
-];
-const total = [
-  {
-    id: 'f69f88012978187a6c12897f',
-    ref: 'DEV1049',
-    amount: 50000,
-    customer: {
-      name: 'SOUGANG TCHIMWA CEDRIC'
-    },
-    createdAt: 1555016400000,
-    status: 'pending'
-  },
-  {
-    id: '9eaa1c7dd4433f413c308ce2',
-    ref: 'DEV1048',
-    amount: 50000,
-    customer: {
-      name: 'TAPE JEAN CALVIN'
-    },
-    createdAt: 1555016400000,
-    status: 'delivered'
-  },
-];
 
-const useEvents = (page, rowsPerPage) => {
+const useEvents = (data,page, rowsPerPage) => {
   return useMemo(
     () => {
       return applyPagination(data, page, rowsPerPage);
     },
-    [page, rowsPerPage]
+    [data,page, rowsPerPage]
   );
 };
-const useEventSanctions = (page, rowsPerPage) => {
+const useEventSanctions = (data,page, rowsPerPage) => {
   return useMemo(
     () => {
-      return applyPagination(total, page, rowsPerPage);
+      return applyPagination(data, page, rowsPerPage);
     },
-    [page, rowsPerPage]
+    [data,page, rowsPerPage]
   );
 };
 
@@ -96,8 +55,11 @@ const useEventSanctioonIds = (sanctions) => {
 const Page = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const finances = useEvents(page, rowsPerPage);
-  const sanctions = useEventSanctions(page, rowsPerPage);
+
+  const [data, setData] = useState([]);
+
+  const finances = useEvents(data, page, rowsPerPage);
+  const sanctions = useEventSanctions(data, page, rowsPerPage);
   const financesIds = useEventIds(finances);
   const SanctionsIds = useEventSanctioonIds(sanctions);
   const financesSelection = useSelection(financesIds);
@@ -123,6 +85,21 @@ const Page = () => {
     []
   );
 
+  useEffect(() =>{
+    const fetchData = async () => {
+      try {
+        const response = await fetch(`${publicRuntimeConfig.api.baseURL}/api/participations/tontines`);
+        const result = await response.json();
+        setData(result);
+        console.log(result  );
+        // console.log(result)
+      }
+      catch(error) {
+        console.error('Error fetching data: ',error);
+      }
+    };
+    fetchData();
+  },[]);
     return (
       <>
       <Head>
@@ -151,7 +128,7 @@ const Page = () => {
                 </Typography>
                 
               </Stack>
-              <div>
+              {/* <div>
                 
                 <Button onClick={handleAddButtonClick}
                   startIcon={(
@@ -170,21 +147,21 @@ const Page = () => {
                       Add
                     </Link>
                 </Button>
-              </div>
+              </div> */}
             </Stack>
 
-            <Grid
+            {/* <Grid
             xs={12}
             sm={6}
             lg={4}
-          >
-            <FinanceFondPlat
-              difference={23}
-              positive={true}
-              sx={{ height: '100%' }}
-              value="100,000 F CFA"
-            />
-          </Grid>
+            >
+              <FinanceFondPlat
+                difference={23}
+                positive={true}
+                sx={{ height: '100%' }}
+                value="100,000 F CFA"
+              />
+          </Grid> */}
             
             <Typography variant="h6">
             Recensement des Plats de la saison
@@ -192,7 +169,7 @@ const Page = () => {
 
             <FinancesPlat
               count={data.length}
-              items={finances}
+              items={data}
               onDeselectAll={financesSelection.handleDeselectAll}
               onDeselectOne={financesSelection.handleDeselectOne}
               onPageChange={handlePageChange}
@@ -203,11 +180,11 @@ const Page = () => {
               rowsPerPage={rowsPerPage}
               selected={financesSelection.selected}
             />
-            <FinancesSanction
+            {/* <FinancesSanction
             count={total.length}
             orders={sanctions}
             
-            />
+            /> */}
           </Stack>
         </Container>
       </Box>

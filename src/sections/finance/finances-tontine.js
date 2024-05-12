@@ -89,13 +89,13 @@ export const FinancesTontines = (props) => {
 
                 return (
                   <>
-                  <TableRow
+                  {finance.inscrit && <TableRow
                     hover
                     key={finance._id}
                     selected={isSelected}
                   >
                     <TableCell>
-                    {`${finance.membre.name} ${finance.membre.surname}`}
+                    {`${finance.inscrit.membre.name} ${finance.inscrit.membre.surname}`}
                     </TableCell>
                     {/* <TableCell>
                     {finance.type_cotisation}
@@ -113,7 +113,7 @@ export const FinancesTontines = (props) => {
                     {/* <TableCell>
                       {finance.status}
                     </TableCell> */}
-                  </TableRow>
+                  </TableRow>}
                   </>
                 );
               })}

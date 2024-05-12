@@ -18,14 +18,22 @@ import { getInitials } from 'src/utils/get-initials';
 
 export const FinancesSocial = (props) => {
   const {
+    count = 0,
     items = [],
+    onDeselectOne,
+    onPageChange = () => {},
+    onRowsPerPageChange,
+    onSelectOne,
+    page = 0,
+    rowsPerPage = 5,
     selected = []
   } = props;
-
+  console.log("items :")
+  console.log(items )
   // Organiser les finances par membre et par mois
   const financesByMemberAndMonth = items.reduce((acc, finance) => {
     const memberId = finance.memberId;
-    const monthYear = format(new Date(finance.createdAt), 'MM/yyyy');
+    const monthYear = format(new Date(finance.createat), 'dd/MM/yyyy');
     const amount = parseFloat(finance.tontine);
     
     if (!acc[memberId]) {
@@ -50,25 +58,26 @@ export const FinancesSocial = (props) => {
       <Scrollbar>
         <Box sx={{ minWidth: 800 }}>
           <Table>
+            
             <TableHead>
-              <TableRow>
-                <TableCell>
-                  Membre
-                </TableCell>
-                <TableCell>
-                  SEANCE
-                </TableCell>
-                <TableCell>
-                  TYPE COTISATION
-                </TableCell>
-               
-                <TableCell>
-                  MONTANT
-                </TableCell>
-                <TableCell>
-                  DATE
-                </TableCell>
-              </TableRow>
+                <TableRow>
+                  <TableCell>
+                    NOM
+                  </TableCell>
+                  
+                  <TableCell>
+                    MONTANT
+                  </TableCell>
+                  <TableCell>
+                    DATE
+                  </TableCell>
+                  {/* <TableCell>
+                    CONTRIBUTION CUMULE
+                  </TableCell>
+                  <TableCell>
+                    STATUS
+                  </TableCell> */}
+                </TableRow>
             </TableHead>
             
             <TableBody>
@@ -76,22 +85,32 @@ export const FinancesSocial = (props) => {
                 Object.entries(financesByMonth).map(([monthYear, data]) => (
                   data.finances.map((finance) => {
                     const isSelected = selected.includes(finance.id);
-                    const createdAt = format(new Date(finance.createdAt), 'dd/MM/yyyy');
+                    const createdAt = format(new Date(finance.createat), 'dd/MM/yyyy');
                     
                     return (
-                      <TableRow
-                        hover
-                        key={finance.id}
-                        selected={isSelected}
-                      >
-                        <TableCell>{finance.name}</TableCell>
-                        <TableCell>{monthYear}</TableCell>
-                        <TableCell>{monthYear}</TableCell>
-                        
-                        <TableCell>{finance.tontine}</TableCell>
-                        <TableCell>{createdAt}</TableCell>
-                        
-                      </TableRow>
+                      <>
+                        {finance.inscrit && <TableRow
+                          hover
+                          key={finance.id}
+                          selected={isSelected}
+                        >
+                          <TableCell>
+                          {`${finance.inscrit.membre.name} ${finance.inscrit.membre.surname}`}
+                          </TableCell>
+                          <TableCell>
+                            {finance.montant_prelevement_social}
+                          </TableCell>
+                          <TableCell>
+                            {createdAt}
+                          </TableCell>
+                          {/* <TableCell>
+                            {finance.tontine}
+                          </TableCell>
+                          <TableCell>
+                            {finance.status}
+                          </TableCell> */}
+                        </TableRow>}
+                      </>
                     );
                   })
                 ))

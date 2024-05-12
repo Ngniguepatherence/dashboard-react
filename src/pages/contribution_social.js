@@ -14,63 +14,63 @@ import axios from "axios";
 
 const now = new Date();
 
-const data = [
-  {
-    id: '5e887ac47eed253091be10Ob',
-    motif: "Absence Seance",
-    createdAt: subDays(subHours(now, 7), 1).getTime(),
-    contribution_au_plat: '3000',
-    name: 'MBOGNE  FOTSI RODRIGUE',
-    tontine: '10000',
-    status: 'Non'
-  },
-  {
-    id: '5e887ac47eed253091be10Oa',
-    motif: "Retard",
-    createdAt: subDays(subHours(now, 7), 1).getTime(),
-    name: 'SEULE TCHONANG GLADYS STÉPHANE',
-    tontine: '200',
-    status: 'oui'
-  },
+// const data = [
+//   {
+//     id: '5e887ac47eed253091be10Ob',
+//     motif: "Absence Seance",
+//     createdAt: subDays(subHours(now, 7), 1).getTime(),
+//     contribution_au_plat: '3000',
+//     name: 'MBOGNE  FOTSI RODRIGUE',
+//     tontine: '10000',
+//     status: 'Non'
+//   },
+//   {
+//     id: '5e887ac47eed253091be10Oa',
+//     motif: "Retard",
+//     createdAt: subDays(subHours(now, 7), 1).getTime(),
+//     name: 'SEULE TCHONANG GLADYS STÉPHANE',
+//     tontine: '200',
+//     status: 'oui'
+//   },
   
-];
-const total = [
-  {
-    id: 'f69f88012978187a6c12897f',
-    ref: 'DEV1049',
-    amount: 30.5,
-    customer: {
-      name: 'Ekaterina Tankova'
-    },
-    createdAt: 1555016400000,
-    status: 'pending'
-  },
-  {
-    id: '9eaa1c7dd4433f413c308ce2',
-    ref: 'DEV1048',
-    amount: 25.1,
-    customer: {
-      name: 'Cao Yu'
-    },
-    createdAt: 1555016400000,
-    status: 'delivered'
-  },
-];
+// ];
+// const total = [
+//   {
+//     id: 'f69f88012978187a6c12897f',
+//     ref: 'DEV1049',
+//     amount: 30.5,
+//     customer: {
+//       name: 'Ekaterina Tankova'
+//     },
+//     createdAt: 1555016400000,
+//     status: 'pending'
+//   },
+//   {
+//     id: '9eaa1c7dd4433f413c308ce2',
+//     ref: 'DEV1048',
+//     amount: 25.1,
+//     customer: {
+//       name: 'Cao Yu'
+//     },
+//     createdAt: 1555016400000,
+//     status: 'delivered'
+//   },
+// ];
 
 const useEvents = (data,page, rowsPerPage) => {
   return useMemo(
     () => {
       return applyPagination(data, page, rowsPerPage);
     },
-    [page, rowsPerPage]
+    [data, page, rowsPerPage]
   );
 };
-const useEventSanctions = (page, rowsPerPage) => {
+const useEventSanctions = (data,page, rowsPerPage) => {
   return useMemo(
     () => {
-      return applyPagination(total, page, rowsPerPage);
+      return applyPagination(data, page, rowsPerPage);
     },
-    [page, rowsPerPage]
+    [data,page, rowsPerPage]
   );
 };
 
@@ -93,10 +93,10 @@ const useEventSanctioonIds = (sanctions) => {
 
 const Page = () => {
   const [page, setPage] = useState(0);
-  // const [data, setData] = useState([]) ;
+  const [data, setData] = useState([]) ;
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const finances = useEvents(data, page, rowsPerPage);
-  const sanctions = useEventSanctions(page, rowsPerPage);
+  const sanctions = useEventSanctions(data,page, rowsPerPage);
   const financesIds = useEventIds(finances);
   const SanctionsIds = useEventSanctioonIds(sanctions);
   const financesSelection = useSelection(financesIds);
@@ -107,10 +107,10 @@ const Page = () => {
   useEffect(() =>{
     const fetchData = async () => {
       try {
-        const response = await fetch(`${publicRuntimeConfig.api.baseURL}/api/tontine`);
+        const response = await fetch(`${publicRuntimeConfig.api.baseURL}/api/participations/tontines`);
         const result = await response.json();
         console.log(result);
-        // setData(result);
+        setData(result);
       }
       catch(error) {
         console.error('Error fetching data: ',error);
@@ -161,7 +161,7 @@ const Page = () => {
                 </Typography>
                 
               </Stack>
-              <div>
+              {/* <div>
                 <Button
                   startIcon={(
                     <SvgIcon fontSize="small">
@@ -172,7 +172,7 @@ const Page = () => {
                 >
                  Add
                 </Button>
-              </div>
+              </div> */}
             </Stack>
 
             <Grid
@@ -194,7 +194,7 @@ const Page = () => {
 
             <FinancesSocial
               count={data.length}
-              items={finances}
+              items={data}
               onDeselectAll={financesSelection.handleDeselectAll}
               onDeselectOne={financesSelection.handleDeselectOne}
               onPageChange={handlePageChange}
@@ -206,7 +206,7 @@ const Page = () => {
               selected={financesSelection.selected}
             />
            
-            <FinancesContrib
+            {/* <FinancesContrib
               count={data.length}
               items={finances}
               onDeselectAll={financesSelection.handleDeselectAll}
@@ -218,7 +218,7 @@ const Page = () => {
               page={page}
               rowsPerPage={rowsPerPage}
               selected={financesSelection.selected}
-            />
+            /> */}
           </Stack>
         </Container>
       </Box>

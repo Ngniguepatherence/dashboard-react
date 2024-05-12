@@ -67,13 +67,16 @@ const SaisonBasicInfo = (props) => {
 
     return(
         <>
-            <Stack padding={3} spacing={3}>
+            <Stack padding={3} 
+                spacing={3}>
                 <Grid container
                         spacing={2}
                         gap={3}
                 >
 
-                    <Grid items md={12} lg={5}>
+                    <Grid items 
+                        md={12} 
+                        lg={5}>
                         Libellé
                         <TextField
                             fullWidth
@@ -86,8 +89,9 @@ const SaisonBasicInfo = (props) => {
                             />
                     </Grid>
 
-                    <Grid items md={12} lg={5}>
-                        Date Début
+                    <Grid items 
+                        md={12} 
+                        lg={5}>Date Début
                         <TextField
                             fullWidth
                             name="date_debut"

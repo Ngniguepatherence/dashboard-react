@@ -47,42 +47,42 @@ export const FinancesPlat = (props) => {
                 <TableCell>
                   DATE
                 </TableCell>
-                <TableCell>
+                {/* <TableCell>
                   CONTRIBUTION CUMULE
                 </TableCell>
                 <TableCell>
                   STATUS
-                </TableCell>
+                </TableCell> */}
               </TableRow>
             </TableHead>
             <TableBody>
               {items.map((finance) => {
                 const isSelected = selected.includes(finance.id);
-                const createdAt = format(finance.createdAt, 'dd/MM/yyyy');
+                const createdAt = format(new Date(finance.createat), 'dd/MM/yyyy');
 
                 return (
                   <>
-                  <TableRow
+                  {finance.inscrit && <TableRow
                     hover
                     key={finance.id}
                     selected={isSelected}
                   >
                     <TableCell>
-                    {finance.name}
+                    {`${finance.inscrit.membre.name} ${finance.inscrit.membre.surname}`}
                     </TableCell>
                     <TableCell>
-                    {finance.tontine}
+                      {finance.montant_plat}
                     </TableCell>
                     <TableCell>
                       {createdAt}
                     </TableCell>
-                    <TableCell>
+                    {/* <TableCell>
                       {finance.tontine}
                     </TableCell>
                     <TableCell>
                       {finance.status}
-                    </TableCell>
-                  </TableRow>
+                    </TableCell> */}
+                  </TableRow>}
                   </>
                 );
               })}

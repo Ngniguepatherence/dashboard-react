@@ -131,7 +131,7 @@ const Page = () => {
         const response = await fetch(`${publicRuntimeConfig.api.baseURL}/api/participations/tontines`);
         const result = await response.json();
         setData(result);
-        console.log(data);
+        console.log(result  );
         // console.log(result)
       }
       catch(error) {
@@ -214,12 +214,12 @@ const Page = () => {
             sm={6}
             lg={4}
           >
-            <FinanceFondSanction
+            {/* <FinanceFondSanction
               difference={23}
               positive={true}
               sx={{ height: '100%' }}
               value="100,000 F CFA"
-            />
+            /> */}
           </Grid>
             
             <Typography variant="h6">
@@ -239,12 +239,12 @@ const Page = () => {
               rowsPerPage={rowsPerPage}
               selected={financesSelection.selected}
             />
-            <FinancesSanction
+            {/* <FinancesSanction
             count={total.length}
             orders={sanctions}
             
-            />
-            <FinancesTontinT
+            /> */}
+            {/* <FinancesTontinT
               count={data.length}
               items={data}
               onDeselectAll={financesSelection.handleDeselectAll}
@@ -256,7 +256,7 @@ const Page = () => {
               page={page}
               rowsPerPage={rowsPerPage}
               selected={financesSelection.selected}
-            />
+            /> */}
           </Stack>
         </Container>
       </Box>
