@@ -97,14 +97,14 @@ const SeanceDetail = () => {
                                                 seance={seance}
                             />}
 
-                        {seance._id
+                        {/* {seance._id
                          && 
                             <TirageTontinard 
                                 list_inscrits={seance.participations.map(elt=>elt.inscrit)}
                                 seance_id={seance._id}
                                 beneficaire_tontine = {seance.beneficaire_tontine}
                                 reload_seance={reload_seance}
-                            />}
+                            />} */}
 
                         {seance._id && 
                             <SanctionsAccordeon seance_id={seance._id}

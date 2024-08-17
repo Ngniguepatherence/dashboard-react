@@ -1,6 +1,6 @@
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
 import CheckIcon from "@heroicons/react/24/solid/CheckIcon"
-import { Badge, Box, Button, Card, Checkbox, Chip, MenuItem, Select, Stack, SvgIcon, Table, TableBody, TableCell, TableHead, TableRow, TextField, Typography } from "@mui/material"
+import { Badge, Box, Button, Card, Checkbox, Chip, Grid, MenuItem, Select, Stack, SvgIcon, Table, TableBody, TableCell, TableHead, TableRow, TextField, Typography } from "@mui/material"
 import { Scrollbar } from 'src/components/scrollbar';
 import getConfig from 'next/config';
 
@@ -8,6 +8,7 @@ import { useState } from "react"
 import { useEffect } from 'react';
 import axios from 'axios';
 import { loadingAction, store } from '../../store/store';
+import { fetchMembres } from '../../pages/addSeance';
 
 const { publicRuntimeConfig } = getConfig();
 
@@ -15,11 +16,12 @@ const { publicRuntimeConfig } = getConfig();
 
 const ParticipationBox =  (props) => {
     const {seance, reload_seance} = props
-
+    const [membres, setMembres] = useState([]) 
     const [participations, setParticipations ] = useState(seance.participations)
     const [values, setValues] = useState({
         montant_receptioniste: 50000,
-        montant_beneficiaire: 0
+        montant_beneficiaire: 0,
+        beneficaire_tontine:''
 
     })
     const [errors, setErrors] = useState({
@@ -27,7 +29,8 @@ const ParticipationBox =  (props) => {
 
         },
         montant_receptioniste: '',
-        montant_beneficiaire: ''
+        montant_beneficiaire: '',
+        beneficaire_tontine: ''
     })
 
     useEffect(()=>{
@@ -35,9 +38,21 @@ const ParticipationBox =  (props) => {
         setValues({
             montant_receptioniste: seance.montant_receptioniste,
             montant_beneficiaire: seance.montant_beneficiaire,
+            beneficaire_tontine: seance.beneficaire_tontine._id,
         })
 
     },[seance])
+
+    useEffect(() => {
+        try{
+            (async () => {
+                setMembres(await fetchMembres())
+                // setSaisons(await fetchSaisons())
+            })();
+          }catch(error){
+            console.error(error)
+          }
+    }, [])
 
 
     const changeParticipations = (index, p) => {
@@ -251,6 +266,8 @@ const ParticipationBox =  (props) => {
 
                 </Card>
                 <Stack direction="row"
+                    display='flex'
+                    justifyContent='space-between'
                         padding={3}
                         spacing={3} 
                 >
@@ -269,6 +286,32 @@ const ParticipationBox =  (props) => {
                                 error={!!errors.montant_receptioniste}
                                 helperText={errors.montant_receptioniste}
                             />
+                    </Stack>
+
+                    
+                    <Stack direction="column"
+                           spacing={2}
+                    >
+                        
+                        <Typography>
+                            Bouffeur de la Tontine
+                        </Typography>
+                        
+                        <Select
+                            value={values.beneficaire_tontine || ''}
+                            fullWidth
+                            labelId="beneficaire_tontine"
+                            id="beneficaire_tontine"
+                            onChange={handleChanges}
+                            label="Bouffeur de la Tontine"
+                            name="beneficaire_tontine"
+                            error={!!errors.beneficaire_tontine}
+                            helperText={errors.beneficaire_tontine}
+                        >
+                            {participations.filter(elt => elt.inscrit.nombre_de_noms > 0 &&  elt.inscrit.nombre_de_bouf < elt.inscrit.nombre_de_noms ).map( m=> (
+                                <MenuItem key={m.inscrit._id} value={m.inscrit._id}>{m.inscrit.membre.name +" "+ m.inscrit.membre.surname}</MenuItem>
+                            ))}
+                        </Select>
                     </Stack>
                     <Stack direction="column"
                            spacing={2}

@@ -185,7 +185,29 @@ export const items = (roles) =>{
             <SvgIcon fontSize="small">
               {/* Icône pour les dépenses */}
             </SvgIcon>
-          )
+          ),
+          children: [
+            {
+              title: 'Automatisations',
+              path: '/automatisation',
+              icon: (
+                <SvgIcon fontSize="small">
+                  {/* Icône pour les revenus */}
+                </SvgIcon>
+              ),
+              visible: roles.includes('admin'),
+            }
+          ]
+        },
+        {
+          title: 'Automatisations',
+          path: '/auto_sanction',
+          icon: (
+            <SvgIcon fontSize="small">
+              {/* Icône pour les revenus */}
+            </SvgIcon>
+          ),
+          visible: roles.includes('admin'),
         },
         {
           title: 'Contribution Social',

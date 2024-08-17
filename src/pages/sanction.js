@@ -256,7 +256,9 @@ const Page = () => {
                       </SvgIcon>
                     )}
                     onClick={()=>{
+                      setCurrentSanction({})
                       setOpenSanctionModal(true)
+                      
                       console.log('open')
                     }}
                     variant="contained"
