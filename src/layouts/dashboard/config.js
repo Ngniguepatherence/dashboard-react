@@ -162,7 +162,7 @@ export const items = (roles) =>{
       children: [
         {
           title: 'Entree/Sortie',
-          path: '/cotisation',
+          path: '/transactions',
           icon: (
             <SvgIcon fontSize="small">
               {/* Icône pour les revenus */}

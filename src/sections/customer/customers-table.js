@@ -97,6 +97,9 @@ export const CustomersTable = (props) => {
                   Contact
                 </TableCell>
                 <TableCell>
+                  Fond de caisse (FCFA)
+                </TableCell>
+                <TableCell>
                   Rôle
                 </TableCell>
                 <TableCell>
@@ -149,6 +152,9 @@ export const CustomersTable = (props) => {
                     </TableCell>
                     <TableCell>
                       {customer.phone}
+                    </TableCell>
+                    <TableCell>
+                      {customer.fond_caisse} 
                     </TableCell>
                     <TableCell>
                       {customer.role}

@@ -1,7 +1,7 @@
 export function format_montant(montant){
     var chaine = ""
     var quotient = 0, reste = 0 , dividante = montant
-
+    if(montant === 0 || montant === -0) chaine = "0"
     while(dividante >= 1){
         reste = dividante % 1000
 
