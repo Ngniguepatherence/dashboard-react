@@ -14,7 +14,7 @@ import { subDays, subHours } from 'date-fns';
 import NextLink from 'next/link';
 import PlusIcon from '@heroicons/react/24/solid/PlusIcon';
 import ArrowDownOnSquareIcon from '@heroicons/react/24/solid/ArrowDownOnSquareIcon';
-import { Box, Container, Grid, Stack, Link, Typography, Button, SvgIcon } from "@mui/material";
+import { Box, Container, Grid, Stack, Link, Typography, Button, SvgIcon, FormControl, FormLabel, Select, MenuItem } from "@mui/material";
 import axios from "axios";
 
 import getConfig from 'next/config';
@@ -22,6 +22,8 @@ import { loadingAction, store } from "../store/store";
 import { sum } from "pdf-lib";
 import { FinanceFondTransaction } from "../sections/finance/finance-fond-transactions";
 import { FinancesTransactions } from "../sections/finance/finances-transactions";
+import { fetchSaisons } from "../components/session_form/session_basic_info";
+import { flexbox } from "@mui/system";
 const { publicRuntimeConfig } = getConfig();
 
 
@@ -104,10 +106,13 @@ const useEventSanctioonIds = (transactions) => {
     );
 };
 
-export const fetchTransactions = async () => {
+export const fetchTransactions = async (saison_id = undefined) => {
     store.dispatch(loadingAction)
     try {
-        const response = await axios.get(`${publicRuntimeConfig.api.baseURL}/api/transactions`);
+        let request_url = "/api/transactions"
+        console.log("Saison id: ",saison_id )
+        if (saison_id) request_url = `/api/transactions/saison/${saison_id}`
+        const response = await axios.get(`${publicRuntimeConfig.api.baseURL}${request_url}`);
         const rep = await response.data
         store.dispatch(loadingAction)
         return rep
@@ -125,11 +130,8 @@ const Page = () => {
 
     const [openTransactionsModal, setOpenTransactionsModal] = useState(false)
     const [currentTransactions, setCurrentTransactions] = useState({})
-    const [bilan, setBBilan] = useState({
-        diff: 0,
-        entrees: 0,
-        sorties: 0,
-    })
+    const [bilan, setBBilan] = useState([])
+    const [saisons, setSaisons] = useState([]) 
 
     const transactions = useEvents(dataTransactions, page, rowsPerPage);
     const transactionsSets = useEventTransactionss(page, rowsPerPage);
@@ -138,6 +140,7 @@ const Page = () => {
     const financesSelection = useSelection(financesIds);
     const transactionsSelection = useSelection(TransactionssIds);
     const [isAdding, setIsAdding] = useState(false);
+    const [saison_id, setSaison_id] = useState(undefined)
 
 
 
@@ -165,31 +168,29 @@ const Page = () => {
     }
 
     useEffect(() => {
+        try{
+            (async () => {
+                setSaisons(await fetchSaisons())
+            })();
+          }catch(error){
+            console.error(error)
+          }
+    }, [])
+
+    useEffect(() => {
         try {
             (async () => {
                 // setDataTransactions([])
-                setDataTransactions(await fetchTransactions())
+                const rep = await fetchTransactions(saison_id)
+                setDataTransactions(rep.transactions)
+                setBBilan(rep.bilan)
             })();
         } catch (error) {
             console.error(error)
         }
 
 
-    }, [])
-
-    useEffect(() => {
-
-        const entrees = sum(dataTransactions.filter(elt => elt.type === 'input').map(elt => elt.montant))
-        const sorties = sum(dataTransactions.filter(elt => elt.type === 'output').map(elt => elt.montant))
-        const diff = entrees - sorties
-
-        setBBilan({
-            diff: diff,
-            entrees: entrees,
-            sorties: sorties,
-        })
-
-    }, [dataTransactions])
+    }, [saison_id])
 
 
     return (
@@ -222,11 +223,35 @@ const Page = () => {
                             </Stack>
                         </Stack>
 
-                        <Grid
-                            xs={12}
-                            sm={6}
-                            lg={4}
-                        >
+                        <Stack spacing={3}>
+                            <Stack display={flexbox} direction="row"
+                                justifyContent='end'  >
+                                <Stack  display={flexbox} direction="row"
+                                    justifyContent='end' spacing={5} alignItems="center" width={{ xs: "100%", sm: "80%", md: "50%", lg:"30%" }}>
+                                    <Typography color='text.ptimary'
+                                        variant="h6">Saison </Typography>
+                                    <Select
+                                        value={saison_id || ""}
+                                        fullWidth
+                                        labelId="saison"
+                                        id="saison"
+                                        onChange={(event)=>setSaison_id(event.target.value)}
+                                        name="saison"
+                                        // error={!!errors.motif}
+                                        // helperText={errors.motif}
+                                    >
+                                        <MenuItem key={"152all"} value={undefined}>
+                                            Toutes les saisona
+                                        </MenuItem>
+                                        {saisons.map((m) => (
+                                            <MenuItem key={m._id} value={m._id}>
+                                                {m.libelle + " -> " + m.cout}
+                                            </MenuItem>
+                                        ))}
+                                    </Select>
+                                </Stack>
+                            </Stack>
+
                             <FinanceFondTransaction
                                 difference={23}
                                 positive={true}
@@ -234,7 +259,7 @@ const Page = () => {
                                 sx={{ height: '100%' }}
                                 value="100,000 F CFA"
                             />
-                        </Grid>
+                        </Stack>
 
                         <Stack
                             direction="row"

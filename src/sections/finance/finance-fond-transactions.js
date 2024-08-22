@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import ArrowDownIcon from '@heroicons/react/24/solid/ArrowDownIcon';
 import ArrowUpIcon from '@heroicons/react/24/solid/ArrowUpIcon';
 import CurrencyDollarIcon from '@heroicons/react/24/solid/CurrencyDollarIcon';
-import { Avatar, Card, CardContent, Stack, SvgIcon, Typography } from '@mui/material';
+import { Avatar, Card, CardContent, Grid, Stack, SvgIcon, Typography } from '@mui/material';
 import { format_montant } from '../../utils/formatting';
 
 export const FinanceFondTransaction = (props) => {
@@ -17,39 +17,25 @@ export const FinanceFondTransaction = (props) => {
           justifyContent="space-between"
           spacing={3}
         >
-          <Stack spacing={1}>
-            <Typography
-              color="text.primary"
-              variant="h6"
-            >
-              Différence 
-            </Typography>
-            <Typography variant="h8">
-              {format_montant(bilan.diff) }
-            </Typography>
-            
-            <Typography
-              color="text.primary"
-              variant="h6"
-            >
-              Total Des Entréess
-            </Typography>
-            <Typography 
-              color="green"
-              variant="h8">
-              {format_montant(bilan.entrees)}
-            </Typography>
-            <Typography
-              color="text.primary"
-              variant="h6"
-            >
-              Total Des Sorties:
-            </Typography>
-            <Typography variant="h8"
-              color="red">
-              {format_montant(bilan.sorties)}
-            </Typography>
-          </Stack>
+          <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 2, sm: 8, md: 12 }}>
+            {bilan.map((elt, index) => (
+              <Grid item xs={2} sm={4} md={4} key={index}>
+                <Typography
+                  color='text.ptimary'
+                  variant="h6"
+                >
+                  {elt.label}
+                </Typography>
+                <Typography
+                  variant="h8"
+                  color={elt.type == 'input' ? 'green' : 'red'}
+                >
+                  {format_montant(elt.value)}
+                </Typography>
+
+              </Grid>
+            ))}
+          </Grid>
           <Avatar
             sx={{
               backgroundColor: 'error.main',
@@ -61,40 +47,40 @@ export const FinanceFondTransaction = (props) => {
               <CurrencyDollarIcon />
             </SvgIcon>
           </Avatar>
-        </Stack>
-        {difference && (
-          <Stack
-            alignItems="center"
-            direction="row"
-            spacing={2}
-            sx={{ mt: 2 }}
-          >
+          </Stack >
+          {difference && (
             <Stack
               alignItems="center"
               direction="row"
-              spacing={0.5}
+              spacing={2}
+              sx={{ mt: 2 }}
             >
-              <SvgIcon
-                color={positive ? 'success' : 'error'}
-                fontSize="small"
+              <Stack
+                alignItems="center"
+                direction="row"
+                spacing={0.5}
               >
-                {positive ? <ArrowUpIcon /> : <ArrowDownIcon />}
-              </SvgIcon>
+                <SvgIcon
+                  color={positive ? 'success' : 'error'}
+                  fontSize="small"
+                >
+                  {positive ? <ArrowUpIcon /> : <ArrowDownIcon />}
+                </SvgIcon>
+                <Typography
+                  color={positive ? 'success.main' : 'error.main'}
+                  variant="body2"
+                >
+                  {difference}%
+                </Typography>
+              </Stack>
               <Typography
-                color={positive ? 'success.main' : 'error.main'}
-                variant="body2"
+                color="text.secondary"
+                variant="caption"
               >
-                {difference}%
+                Depuis le mois passe
               </Typography>
             </Stack>
-            <Typography
-              color="text.secondary"
-              variant="caption"
-            >
-              Depuis le mois passe
-            </Typography>
-          </Stack>
-        )}
+          )}
       </CardContent>
     </Card>
   );
