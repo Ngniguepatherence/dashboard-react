@@ -1,6 +1,6 @@
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
 import CheckIcon from "@heroicons/react/24/solid/CheckIcon"
-import { Box, Button, Card, Checkbox, DialogTitle, FormControl, FormLabel, Input, MenuItem, Modal, Select, Stack, SvgIcon, Table, TableBody, TableCell, TableHead, TableRow, TextField, Typography } from "@mui/material"
+import { Box, Button, Card, Checkbox, DialogTitle, FormControl, FormLabel, IconButton, Input, MenuItem, Modal, Select, Stack, SvgIcon, Table, TableBody, TableCell, TableHead, TableRow, TextField, Typography } from "@mui/material"
 import { Scrollbar } from 'src/components/scrollbar';
 import getConfig from 'next/config';
 import { useState } from "react"
@@ -9,6 +9,9 @@ import axios from 'axios';
 import PlusIcon from '@heroicons/react/24/solid/PlusIcon';
 import { fetchMembres } from '../../pages/addSeance';
 import { loadingAction, store } from '../../store/store';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/DeleteOutlined';
+import { ArrowBack, ArrowRight, Details } from '@mui/icons-material';
 
 const { publicRuntimeConfig } = getConfig();
 
@@ -30,15 +33,19 @@ const InscriptionBox =  (props) => {
     const [membres, setMembres] = useState([]) 
     const [participants, setParticipants ] = useState(saison.participants)
     const [openModal, setOpenModal] = useState(false)
+    const [openDeleteModal, setOpenDeleteModal] = useState(false)
+    const [current, setCurrent] = useState(undefined)
     const [values, setValues] = useState({
         membre : undefined,
         nombre_de_noms: undefined,
-        nombre_de_bouf: undefined
+        nombre_de_bouf: undefined,
+        fond_caisse: 0
     })
     const [errors, setErrors] = useState({
         membre : '',
         nombre_de_noms: '',
-        nombre_de_bouf: ''
+        nombre_de_bouf: '',
+        fond_caisse: ''
     })
 
     useEffect(() => {
@@ -61,14 +68,15 @@ const InscriptionBox =  (props) => {
     const submitInscription = async () => {
         store.dispatch(loadingAction)
         try {
+            console.log("sending: ",values )
             const response = await axios.post(`${publicRuntimeConfig.api.baseURL}/api/saisons/${saison._id}/inscriptions`, values);
             const rep = await response.data
-            updateSaison(rep)
+            updateSaison()
+            setOpenModal(false)
         }catch(err){
             console.error(err)
         }
         store.dispatch(loadingAction)
-        setOpenModal(false)
     }
 
     const handleChange = (event) => {
@@ -100,6 +108,9 @@ const InscriptionBox =  (props) => {
                                         Membres
                                     </TableCell>
                                     <TableCell>
+                                        Fond de caisse
+                                    </TableCell>
+                                    <TableCell>
                                         Nombre de Nom
                                     </TableCell>
                                     <TableCell>
@@ -107,6 +118,9 @@ const InscriptionBox =  (props) => {
                                     </TableCell>
                                     <TableCell>
                                         Nombre de reception
+                                    </TableCell>
+                                    <TableCell>
+                                        Actions
                                     </TableCell>
                                     
                                 </TableRow>
@@ -123,6 +137,9 @@ const InscriptionBox =  (props) => {
                                                 {participant.membre.name +" " +participant.membre.surname}
                                             </TableCell>
                                             <TableCell>
+                                                {participant.fond_caisse}
+                                            </TableCell>
+                                            <TableCell>
                                                 {participant.nombre_de_noms}
                                             </TableCell>
                                             <TableCell>
@@ -130,6 +147,24 @@ const InscriptionBox =  (props) => {
                                             </TableCell>
                                             <TableCell>
                                                 {participant.nombre_de_reception}
+                                            </TableCell>
+                                            <TableCell>
+                                                <IconButton aria-label="edit" 
+                                                        onClick={()=>{
+                                                            setValues({
+                                                                membre : participant.membre._id,
+                                                                fond_caisse: participant.fond_caisse,
+                                                                nombre_de_noms: participant.nombre_de_noms,
+                                                                nombre_de_bouf: participant.nombre_de_bouf,
+                                                            })
+                                                            setCurrent(participant)
+                                                            setOpenModal(true)
+                                                        }}><EditIcon /></IconButton>
+                                                <IconButton aria-label="delete" 
+                                                        onClick={()=>{
+                                                            setCurrent(participant)
+                                                            setOpenDeleteModal(true)
+                                                        }}><DeleteIcon /></IconButton>
                                             </TableCell>
                                         </TableRow>
                                     )
@@ -150,9 +185,11 @@ const InscriptionBox =  (props) => {
                             onClick={()=>{
                                 setValues({
                                     membre : undefined,
+                                    fond_caisse: 0,
                                     nombre_de_noms: 0,
                                     nombre_de_bouf: 0
                                 })
+                                setCurrent(undefined)
                                 setOpenModal(true)
                             }}
                             startIcon={(
@@ -180,7 +217,9 @@ const InscriptionBox =  (props) => {
                             <Stack spacing={2}>
                                 <FormControl>
                                     <FormLabel>Membre</FormLabel>
-                                    <Select
+                                    {current ? <TextField disabled 
+                                                value={current.membre.name +" " + current.membre.surname}/> 
+                                            :<Select
                                         value={values.membre || ''}
                                         fullWidth
                                         labelId="membre"
@@ -193,7 +232,18 @@ const InscriptionBox =  (props) => {
                                         {membres.filter(elt => nonInscrip(elt._id)).map( m=> (
                                             <MenuItem key={m._id} value={m._id}>{m.name +" "+ m.surname}</MenuItem>
                                         ))}
-                                    </Select>
+                                    </Select>}
+                                </FormControl>
+                                <FormControl>
+                                    <FormLabel>Fond de caisse</FormLabel>
+                                    <Input 
+                                        type='number' 
+                                        required
+                                        onChange={handleChange}
+                                        value={values.fond_caisse}
+                                        name='fond_caisse'
+                                        error={!!errors.fond_caisse}
+                                        helperText={errors.fond_caisse} />
                                 </FormControl>
                                 <FormControl>
                                     <FormLabel>Nombre de Noms</FormLabel>

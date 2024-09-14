@@ -47,10 +47,8 @@ const SaisonDetail = () => {
             fetchSaison(saison_id)
       },[]);
 
-      const updateSaison = (newSaison) =>{
-        console.log(newSaison)
-        if(newSaison)
-            setSaison({...newSaison})
+      const updateSaison = (saison_id=saison._id) =>{
+        fetchSaison(saison_id)
       }
 
       return (
@@ -64,7 +62,7 @@ const SaisonDetail = () => {
                 component="main"
                 sx={{
                 flexGrow: 1,
-                py: 8
+                py: 2
                 }}
             >
                 <Container maxWidth="l">

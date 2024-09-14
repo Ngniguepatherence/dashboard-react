@@ -14,6 +14,7 @@ import { loadingAction, store } from "../../store/store";
 
 const SaisonBasicInfo = (props) => {
     const {saison, updateSaison } = props
+    const [haveChange, setHaveChange] = useState(false)
 
     const [values, setValues] = useState(saison)
     const [errors, setErrors] = useState({
@@ -23,15 +24,23 @@ const SaisonBasicInfo = (props) => {
         montant_contribution_social: '',
         montant_contribution_plat: '',
         montant_un_nom: '',
+        fond_caisse_minimal: '',
     })
 
     const submitSaison = async ()=>{
         store.dispatch(loadingAction)
         try{
             console.log(values)
-            const response = await axios.post(`${publicRuntimeConfig.api.baseURL}/api/saisons`, values);
+            let response
+            if(!values._id){
+                response = await axios.post(`${publicRuntimeConfig.api.baseURL}/api/saisons`, values);
+            }else{
+                response = await axios.put(`${publicRuntimeConfig.api.baseURL}/api/saisons/${values._id}`, values);
+            }
+             
             const rep = await response.data
-            updateSaison(rep)
+            updateSaison(rep._id)
+            setHaveChange(false)
         }catch(error){
             console.error(error)
         }
@@ -48,6 +57,7 @@ const SaisonBasicInfo = (props) => {
         });
 
         console.log(values)
+        setHaveChange(true)
       };
 
 
@@ -154,13 +164,25 @@ const SaisonBasicInfo = (props) => {
                             helperText={errors.montant_un_nom}
                             />
                     </Grid>
+                    <Grid items md={12} lg={5}>
+                        Montant minimal du fond de caisse par membre
+                        <TextField
+                            fullWidth
+                            name="fond_caisse_minimal"
+                            type="number"
+                            value={values.fond_caisse_minimal}
+                            onChange={handleChange}
+                            error={!!errors.fond_caisse_minimal}
+                            helperText={errors.fond_caisse_minimal}
+                            />
+                    </Grid>
 
                 </Grid>
 
                 <Box display="flex"
                      justifyContent="end"
                 >
-                    {!saison._id && <Button variant="contained"
+                    {(!saison._id || haveChange ) &&  <Button variant="contained"
                             onClick={submitSaison}
                             startIcon={(
                                 <SvgIcon fontSize="small">

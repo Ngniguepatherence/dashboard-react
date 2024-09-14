@@ -37,10 +37,11 @@ import getConfig from 'next/config';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
+import { ArrowBack, ArrowRight, Details } from '@mui/icons-material';
+
 import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Close';
 import { useRouter } from 'next/router';
-import { ArrowBack, ArrowRight, Details } from '@mui/icons-material';
 const { publicRuntimeConfig } = getConfig();
 
 export const CustomersTable = (props) => {
