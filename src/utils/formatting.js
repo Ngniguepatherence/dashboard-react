@@ -1,5 +1,7 @@
 export function format_montant(montant){
     var chaine = ""
+    const isNegatif = montant < 0;
+    montant = Math.abs(montant)
     var quotient = 0, reste = 0 , dividante = montant
     if(montant === 0 || montant === -0) chaine = "0"
     while(dividante >= 1){
@@ -19,9 +21,10 @@ export function format_montant(montant){
         console.log("dividante :",dividante)
         console.log("reste :",reste)
 
-        dividante = dividante / 1000
-        
+        dividante = (dividante - reste) / 1000
     }
+
+    if(isNegatif) chaine = "- "+chaine
 
     return chaine +" F"
     

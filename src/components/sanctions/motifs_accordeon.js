@@ -91,7 +91,7 @@ export const MotifSanctionAccordion = () => {
                     expandIcon={<GridExpandMoreIcon />}
                     aria-controls="panel1bh-content"
                     id="panel1bh-header">
-                        <Typography sx={{ width: '33%', flexShrink: 0 }}>
+                        <Typography sx={{ width: '33%', flexShrink: 0 }} variant="h6">
                             Liste des motifs de sanction
                         </Typography>
 

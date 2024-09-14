@@ -1,4 +1,4 @@
-import { Box, Card, Table, TableBody, TableCell, TableRow, Typography } from "@mui/material"
+import { Box, Card, Stack, Table, TableBody, TableCell, TableRow, Typography } from "@mui/material"
 
 
 
@@ -35,13 +35,20 @@ const SummaryInfo = (props) => {
                         },
                         {label: 'Echec',
                             value: seance.echec_tontine},
-                        {label: 'Montant remis au BOUFEUR',
-                            value: seance.montant_beneficiaire},
-                        {label: 'Bouffeur Selectionner ',
-                            value: seance.beneficaire_tontine ? 
-                                (seance.beneficaire_tontine.membre.name + " " + seance.beneficaire_tontine.membre.surname)
+                        {label: 'Bouffeur 1  ',
+                            value: seance.beneficaire_tontine1 ? 
+                                (seance.beneficaire_tontine1.membre.name + " " + seance.beneficaire_tontine1.membre.surname)
                                 : ''
                         },
+                        {label: 'Montant remis au BOUFEUR 1',
+                            value: seance.montant_beneficiaire1},
+                        {label: 'Bouffeur 2 ',
+                            value: seance.beneficaire_tontine2 ? 
+                                (seance.beneficaire_tontine2.membre.name + " " + seance.beneficaire_tontine2.membre.surname)
+                                : ''
+                        },
+                        {label: 'Montant remis au BOUFEUR 2',
+                            value: seance.montant_beneficiaire2},
                     ]} />
 
                 <SummaryCard 
@@ -72,8 +79,8 @@ const SummaryCard = (props) => {
                         {subtitle}
                     </Typography>
 
-                    <Table>
-                        <TableBody>
+                    <Stack marginBlock={2} >
+                        <Stack spacing={2}>
                             {
                                 datas.map( data =>(
                                     <SummaryRow key={data.label} 
@@ -81,8 +88,8 @@ const SummaryCard = (props) => {
                                                 value={data.value}  />
                                 ))
                             }
-                        </TableBody>
-                    </Table>
+                        </Stack>
+                    </Stack>
 
                 </Box>
                 
@@ -96,19 +103,16 @@ const SummaryRow = (props) => {
     const {label, value} = props
 
     return(
-        <TableRow>
-            <TableCell>
+        <Stack  
+            direction="column">
                 <Typography fontWeight="bold">
                     {label}
                 </Typography>
-            </TableCell>
 
-            <TableCell>
                 <Typography fontStyle="italic">
                     {value}
                 </Typography>
-            </TableCell>
-        </TableRow>
+        </Stack>
     )
 }
 

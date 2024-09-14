@@ -20,25 +20,37 @@ const ParticipationBox =  (props) => {
     const [participations, setParticipations ] = useState(seance.participations)
     const [values, setValues] = useState({
         montant_receptioniste: 50000,
-        montant_beneficiaire: 0,
-        beneficaire_tontine:''
-
+        montant_enchere1: 0,
+        montant_enchere2: 0,
+        montant_beneficiaire1: undefined,
+        montant_beneficiaire2: undefined,
+        // beneficaire_tontine1: 0,
+        // beneficaire_tontine2: 0,
     })
+
     const [errors, setErrors] = useState({
         participations: {
 
         },
         montant_receptioniste: '',
-        montant_beneficiaire: '',
-        beneficaire_tontine: ''
+        montant_enchere1: '',
+        montant_enchere2: '',
+        montant_beneficiaire1: '',
+        montant_beneficiaire2: '',
+        // beneficaire_tontine1: '',
+        // beneficaire_tontine2: '',
     })
 
     useEffect(()=>{
         setParticipations(seance.participations)
         setValues({
-            montant_receptioniste: seance.montant_receptioniste,
-            montant_beneficiaire: seance.montant_beneficiaire,
-            beneficaire_tontine: seance.beneficaire_tontine._id,
+            montant_receptioniste: seance.montant_receptioniste | 0,
+            montant_enchere1: seance.montant_enchere1 | 0 ,
+            montant_enchere2: seance.montant_enchere2 | 0,
+            // montant_beneficiaire1: seance.montant_beneficiaire1,
+            // montant_beneficiaire2: seance.montant_beneficiaire2,
+            beneficaire_tontine1: seance.beneficaire_tontine1? seance.beneficaire_tontine1._id : "",
+            beneficaire_tontine2: seance.beneficaire_tontine2? seance.beneficaire_tontine2._id : "",
         })
 
     },[seance])
@@ -169,7 +181,6 @@ const ParticipationBox =  (props) => {
                                     }
 
 
-                                    console.log(participation)
                                     return (
                                         
                                         <TableRow key={index}>
@@ -233,28 +244,7 @@ const ParticipationBox =  (props) => {
                                                         ))}
                                                 </Select>
                                             </TableCell>
-                                            {/* <TableCell>
-                                                <TextField
-                                                    fullwidth
-                                                    name="montant_sanction"
-                                                    type="number"
-                                                    value={participation.montant_sanction}
-                                                    onChange={handleChange}
-                                                    error={!!errors.participations.montant_sanction}
-                                                    helperText={errors.participations.montant_sanction}
-                                                />
-                                            </TableCell>
-                                            <TableCell>
-                                                <TextField
-                                                    fullwidth
-                                                    name="motif_sanction"
-                                                    type="text"
-                                                    value={participation.motif_sanction}
-                                                    onChange={handleChange}
-                                                    error={!!errors.participations.motif_sanction}
-                                                    helperText={errors.participations.motif_sanction}
-                                                />
-                                            </TableCell> */}
+                                            
                                         </TableRow>
                                     )
                                     
@@ -271,6 +261,99 @@ const ParticipationBox =  (props) => {
                         padding={3}
                         spacing={3} 
                 >
+
+                    <Stack direction="column"
+                            spacing={2}>
+
+                        <Stack direction="column"
+                            spacing={2}
+                        >
+                            
+                            <Typography>
+                                Bouffeur 1 de la Tontine
+                            </Typography>
+                            
+                            <Select
+                                value={values.beneficaire_tontine1 || ''}
+                                fullWidth
+                                labelId="beneficaire_tontine1"
+                                id="beneficaire_tontine1"
+                                onChange={handleChanges}
+                                label="Bouffeur de la Tontine"
+                                name="beneficaire_tontine1"
+                                error={!!errors.beneficaire_tontine1}
+                                helperText={errors.beneficaire_tontine1}
+                            >
+                                {participations.filter(elt => elt.inscrit.nombre_de_noms > 0 &&  elt.inscrit.nombre_de_bouf < elt.inscrit.nombre_de_noms ).map( m=> (
+                                    <MenuItem key={m.inscrit._id} value={m.inscrit._id}>{m.inscrit.membre.name +" "+ m.inscrit.membre.surname}</MenuItem>
+                                ))}
+                            </Select>
+                        </Stack>
+                        <Stack direction="column"
+                            spacing={2}
+                        >
+                                <Typography>
+                                    Montant Enchère 1
+                                </Typography>
+                                
+                                <TextField
+                                    fullwidth
+                                    name="montant_enchere1"
+                                    type="number"
+                                    value={values.montant_enchere1}
+                                    onChange={handleChanges}
+                                    error={!!errors.montant_enchere1}
+                                    helperText={errors.montant_enchere1}
+                                />
+                        </Stack>
+                    </Stack>
+                    
+                    <Stack direction="column"
+                            spacing={2}>
+                        <Stack direction="column"
+                            spacing={2}
+                        >
+                            
+                            <Typography>
+                                Bouffeur 2 de la Tontine
+                            </Typography>
+                            
+                            <Select
+                                value={values.beneficaire_tontine2 || ''}
+                                fullWidth
+                                labelId="beneficaire_tontine2"
+                                id="beneficaire_tontine2"
+                                onChange={handleChanges}
+                                label="Bouffeur de la Tontine"
+                                name="beneficaire_tontine2"
+                                error={!!errors.beneficaire_tontine2}
+                                helperText={errors.beneficaire_tontine2}
+                            >
+                                {participations.filter(elt => elt.inscrit.nombre_de_noms > 0 &&  elt.inscrit.nombre_de_bouf < elt.inscrit.nombre_de_noms ).map( m=> (
+                                    <MenuItem key={m.inscrit._id} value={m.inscrit._id}>{m.inscrit.membre.name +" "+ m.inscrit.membre.surname}</MenuItem>
+                                ))}
+                            </Select>
+                        </Stack>
+                        <Stack direction="column"
+                            spacing={2}
+                        >
+                                <Typography>
+                                    Montant Enchère 2
+                                </Typography>
+                                
+                                <TextField
+                                    fullwidth
+                                    name="montant_enchere2"
+                                    type="number"
+                                    value={values.montant_enchere2}
+                                    onChange={handleChanges}
+                                    error={!!errors.montant_enchere2}
+                                    helperText={errors.montant_enchere2}
+                                />
+                        </Stack>
+                    </Stack>
+                    
+
                     <Stack direction="column"
                            spacing={2}>
                             <Typography>
@@ -287,49 +370,7 @@ const ParticipationBox =  (props) => {
                                 helperText={errors.montant_receptioniste}
                             />
                     </Stack>
-
-                    
-                    <Stack direction="column"
-                           spacing={2}
-                    >
                         
-                        <Typography>
-                            Bouffeur de la Tontine
-                        </Typography>
-                        
-                        <Select
-                            value={values.beneficaire_tontine || ''}
-                            fullWidth
-                            labelId="beneficaire_tontine"
-                            id="beneficaire_tontine"
-                            onChange={handleChanges}
-                            label="Bouffeur de la Tontine"
-                            name="beneficaire_tontine"
-                            error={!!errors.beneficaire_tontine}
-                            helperText={errors.beneficaire_tontine}
-                        >
-                            {participations.filter(elt => elt.inscrit.nombre_de_noms > 0 &&  elt.inscrit.nombre_de_bouf < elt.inscrit.nombre_de_noms ).map( m=> (
-                                <MenuItem key={m.inscrit._id} value={m.inscrit._id}>{m.inscrit.membre.name +" "+ m.inscrit.membre.surname}</MenuItem>
-                            ))}
-                        </Select>
-                    </Stack>
-                    <Stack direction="column"
-                           spacing={2}
-                    >
-                            <Typography>
-                                Montant decaissé au Bouffeur 
-                            </Typography>
-                            
-                            <TextField
-                                fullwidth
-                                name="montant_beneficiaire"
-                                type="number"
-                                value={values.montant_beneficiaire}
-                                onChange={handleChanges}
-                                error={!!errors.montant_beneficiaire}
-                                helperText={errors.montant_beneficiaire}
-                            />
-                    </Stack>
                 </Stack>
 
 

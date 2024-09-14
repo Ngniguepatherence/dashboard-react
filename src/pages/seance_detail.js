@@ -47,7 +47,7 @@ const SeanceDetail = () => {
         store.dispatch(loadingAction)
      }
 
-     const reload_seance = ()=>fetchSeance(seance._id)
+     const reload_seance = (seance_id=seance._id)=>fetchSeance(seance_id)
 
      useEffect(() =>{
         if(seance_id)

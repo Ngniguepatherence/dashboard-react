@@ -140,7 +140,7 @@ export const SideNav = (props) => {
                 color="neutral.400"
                 variant="body2"
               >
-                GTR
+                RT08 IUT-FV
               </Typography>
             </div>
             <SvgIcon

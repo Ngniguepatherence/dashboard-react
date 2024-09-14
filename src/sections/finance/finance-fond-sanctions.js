@@ -17,38 +17,53 @@ export const FinanceFondSanction = (props) => {
           justifyContent="space-between"
           spacing={3}
         >
-          <Stack spacing={1}>
-            <Typography
-              color="text.primary"
-              variant="h6"
-            >
-              Total Sanctions 
-            </Typography>
-            <Typography variant="h8">
-              {format_montant(bilan.total) }
-            </Typography>
+          <Stack spacing={1} 
+              display="flex"
+              justifyContent="space-between"
+              flexGrow="1"
+              direction={{ xs: "column", md:"row"}}>
+                <Stack spacing={1}>
+                  <Typography
+                    color="text.primary"
+                    variant="h6"
+                  >
+                    Total Sanctions 
+                  </Typography>
+                  <Typography variant="h8">
+                    {format_montant(bilan.total) }
+                  </Typography>
+                </Stack>
+                  
+                <Stack spacing={1}>
+                  <Typography
+                    color="text.primary"
+                    variant="h6"
+                  >
+                    Total payer
+                  </Typography>
+                  <Typography 
+                    color="green"
+                    variant="h8">
+                    {format_montant(bilan.paye)}
+                  </Typography>
+                </Stack>
+
+                <Stack spacing={1}>
+                  <Typography
+                    color="text.primary"
+                    variant="h6"
+                  >
+                  Total Non Payer:
+                </Typography>
+                <Typography variant="h8"
+                  color="red">
+                  {format_montant(bilan.non_paye)}
+                </Typography>
+
+                </Stack>
             
-            <Typography
-              color="text.primary"
-              variant="h6"
-            >
-              Total payer
-            </Typography>
-            <Typography 
-              color="green"
-              variant="h8">
-              {format_montant(bilan.paye)}
-            </Typography>
-            <Typography
-              color="text.primary"
-              variant="h6"
-            >
-              Total Non Payer:
-            </Typography>
-            <Typography variant="h8"
-              color="red">
-              {format_montant(bilan.non_paye)}
-            </Typography>
+           
+            
           </Stack>
           <Avatar
             sx={{
@@ -62,7 +77,7 @@ export const FinanceFondSanction = (props) => {
             </SvgIcon>
           </Avatar>
         </Stack>
-        {difference && (
+        {/* {difference && (
           <Stack
             alignItems="center"
             direction="row"
@@ -94,7 +109,7 @@ export const FinanceFondSanction = (props) => {
               Depuis le mois passe
             </Typography>
           </Stack>
-        )}
+        )} */}
       </CardContent>
     </Card>
   );

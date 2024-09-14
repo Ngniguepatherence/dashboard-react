@@ -9,6 +9,9 @@ import XCircleIcon from '@heroicons/react/24/solid/XCircleIcon';
 import { SvgIcon } from '@mui/material';
 import { useState } from 'react';
 import ChevronDownIcon from '@heroicons/react/24/solid/ChevronDownIcon';
+import CurrencyDollarIcon from '@heroicons/react/24/solid/CurrencyDollarIcon';
+import { CalendarMonth, CalendarViewDay } from '@mui/icons-material';
+import EventIcon from '@mui/icons-material/Event';
 
 export const items = (roles) =>{
   const isUser = roles.includes('user');
@@ -72,7 +75,7 @@ export const items = (roles) =>{
       path: '/evenements',
       icon: (
         <SvgIcon fontSize="small">
-          <XCircleIcon />
+          <EventIcon />
         </SvgIcon>
       )
     },
@@ -100,7 +103,7 @@ export const items = (roles) =>{
       path: '/saison/saisons',
       icon: (
         <SvgIcon fontSize="small">
-          <XCircleIcon />
+          <CalendarMonth />
         </SvgIcon>
       )
     }, 
@@ -146,7 +149,7 @@ export const items = (roles) =>{
       path: '/evenements',
       icon: (
         <SvgIcon fontSize="small">
-          <XCircleIcon />
+          <EventIcon />
         </SvgIcon>
       )
     }, 
@@ -155,7 +158,7 @@ export const items = (roles) =>{
       path: '/finances',
       icon: (
         <SvgIcon fontSize="small">
-          <XCircleIcon />
+           <CurrencyDollarIcon />
         </SvgIcon>
       ),
       visible: roles.includes('user') || roles.includes('admin'),
@@ -174,7 +177,7 @@ export const items = (roles) =>{
           path: '/seance',
           icon: (
             <SvgIcon fontSize="small">
-              {/* Icône pour les revenus */}
+             
             </SvgIcon>
           )
         },

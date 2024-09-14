@@ -48,7 +48,7 @@ export const FinanceFondTransaction = (props) => {
             </SvgIcon>
           </Avatar>
           </Stack >
-          {difference && (
+          {/* {difference && (
             <Stack
               alignItems="center"
               direction="row"
@@ -80,7 +80,7 @@ export const FinanceFondTransaction = (props) => {
                 Depuis le mois passe
               </Typography>
             </Stack>
-          )}
+          )} */}
       </CardContent>
     </Card>
   );

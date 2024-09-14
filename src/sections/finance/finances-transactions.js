@@ -91,7 +91,7 @@ export const FinancesTransactions = (props) => {
                                             <TableCell>
                                                 {transaction.description}
                                             </TableCell>
-                                            <TableCell>
+                                            {/* <TableCell>
                                                 <Button onClick={() => openSanction({
                                                     _id: transaction._id,
                                                     saison: transaction.saison,
@@ -103,7 +103,7 @@ export const FinancesTransactions = (props) => {
                                                     variant='text'>
                                                     Ouvrir
                                                 </Button>
-                                            </TableCell>
+                                            </TableCell> */}
                                         </TableRow>
                                     </>
                                 );

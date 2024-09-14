@@ -42,7 +42,7 @@ const SeanceBasicInfo = (props) => {
             console.log(values)
             const response = await axios.post(`${publicRuntimeConfig.api.baseURL}/api/seance`, values);
             const rep = await response.data
-            reload_seance()
+            reload_seance(rep._id)
 
         }catch(error){
             console.error(error)
